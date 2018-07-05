@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>分类管理</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1><a href="<?php echo apth_url('?act=adminfrom');?>" target="_parent">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; <input type="button" value="添加分类 " class="cearter_key" onclick="cearter_key();"/></h1>	
+</div>
+<div class="addfl">
+<form id="ify_frm">
+	<p>分类名称： <input type="text" name="title" value="" class="ad_fls"/></p>
+	<p>分类排序： <input type="text" name="sort" value="0" class="ad_fls"/></p>
+	<p>
+		添加父类：
+		<select name="pid" class="ad_fls2">
+			<option value="0">添加为顶级类</option>
+			<option value="分类别名">分类别名</option>
+			<option value="分类别名">分类别名</option>
+			<option value="分类别名">分类别名</option>
+			<option value="分类别名">分类别名</option>
+		</select>
+	</p>
+	<p>分类描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
+	<p>分类状态： <label><input type="radio" name="state" value="0"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
+	<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="添加" class="sbm_fl" onclick="sbm_fl();"/></div>
+</form>
+</div>
+<table class="key_tablebox">
+		<tr>
+			<td>序号</td>
+			<td>PID</td>
+			<td>分类名称</td>
+			<td>排序</td>
+			<td>创间时间</td>
+			<td>状态</td>
+			<td>操作</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>PID</td>
+			<td>建筑考试类</td>
+			<td>1</td>
+			<td>2018.07.05 16:31</td>
+			<td>显示</td>
+			<td><a href="">修改</a> | <a href="">删除</a></td>
+		</tr>
+</table>
+<script>
+function cearter_key(){
+	$(".addfl").show();
+}
+function sbm_fl(){
+	alert(123);
+}
+</script>
+</body>
+</html>

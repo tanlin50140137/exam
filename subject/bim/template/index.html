@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>火天信考试系统管理后台</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+</head>
+<body class="gradient">
+<div class="hhh_boxs">
+	<div class="hhh_boxsins">会员登录器</div>
+	<div class="user_loginbox">
+		<div class="user_zh first"><span>帐号：</span><input type="text" name="users1" value="" class="inputs"/><span class="tishiinfo"></span></div>
+		<div class="user_zh"><span>密码：</span><input type="password" name="pwd" value="" class="inputs"/><span class="tishiinfo"></span></div>
+		<div class="user_zh"> &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;&nbsp;<input type="button" value="登录" onclick="Logins(this);" class="btn_login" set-url="<?php echo apth_url('index.php');?>"/></div>
+	</div>
+</div>
+</body>
+</html>

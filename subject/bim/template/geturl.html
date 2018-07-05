@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>绑带域名</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1><a href="<?php echo apth_url('?act=adminfrom');?>" target="_parent">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; <input type="button" value="绑定域名" class="cearter_key" onclick="cearter_key();"/></h1>	
+</div>
+<div class="shengcheng">
+	<p>绑定域名：<input type="text" name="OPENID" value="" class="openid_sls"/></p>
+	<p>
+	OPENID：
+	<select name="openid" class="select_opid">
+		<option value="-1">-- 请选择OPENID --</option>
+		<option value="2018070316345469">2018070316345469</option>
+		<option value="2018070316345469">2018070316345469</option>
+		<option value="2018070316345469">2018070316345469</option>
+		<option value="2018070316345469">2018070316345469</option>
+	</select>
+	</p>
+	<p> &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;<input type="button" value="点击绑定" class="btn_cearter"/></p>
+</div>
+<script>
+function cearter_key(){
+	$(".shengcheng").show();
+}
+</script>
+<table class="key_tablebox">
+		<tr>
+			<td>序号</td>
+			<td>域名</td>
+			<td>OPENID</td>
+			<td>绑定时间</td>
+			<td>操作</td>
+		</tr>
+		
+		<tr>
+			<td>1</td>
+			<td>f.htxgcw.com</td>
+			<td>2018070316345469</td>
+			<td>2018-07-03 17:16:30</td>
+			<td><a href="#">修改</a> &nbsp; | &nbsp; <a href="#">删除</a></td>
+		</tr>
+		
+		<tr>
+			<td>2</td>
+			<td>bim.htxgcw.com</td>
+			<td>2018070316345469</td>
+			<td>2018-07-03 17:16:30</td>
+			<td><a href="#">修改</a> &nbsp; | &nbsp; <a href="#">删除</a></td>
+		</tr>
+		
+		<tr>
+			<td>3</td>
+			<td>www.htxgcw.com</td>
+			<td>2018070316345469</td>
+			<td>2018-07-03 17:16:30</td>
+			<td><a href="#">修改</a> &nbsp; | &nbsp; <a href="#">删除</a></td>
+		</tr>
+</table>
+</body>
+</html>

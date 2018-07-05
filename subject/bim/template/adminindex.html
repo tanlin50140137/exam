@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>后台首页面</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<link rel="StyleSheet" href="<?php echo apth_url('subject/bim/dtree/dtree.css');?>" type="text/css" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/dtree/dtree.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1>后台首页</h1>	
+</div>
+<div class="key_tablebox" set-url="<?php echo apth_url('');?>">
+	<script type="text/javascript">
+		d = new dTree('d');
+		d.add(0,-1,'查看所有考试分类');
+		d.add(1,0,'建筑考试类','example01.html');
+		d.add(2,1,'工程咨询类','example01.html');
+		d.add(3,1,'工程咨询类','example01.html');
+		d.add(4,0,'律师考试类','example01.html');
+		d.add(5,4,'Node 1.2','example01.html');
+		d.add(6,2,'工程咨询类','example01.html');
+		
+		document.write(d);
+	</script>
+</div>
+</body>
+</html>

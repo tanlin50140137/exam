@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>火天信添值服务后台框架</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+</head>
+<body style="height:100%;">
+<div class="admin_box">
+	<a href="<?php echo apth_url('?act=adminfrom');?>">
+		<div class="adming_logo"></div>
+	</a>
+	<ul class="right_allboxs">
+		<li class="pic_imgs"><img src="<?php echo apth_url('subject/bim/'.$row['pic']);?>" alt="<?php echo $usersname;?>"/></li>
+		<li class="pic_imgs2"><?php echo $usersname;?></li>
+		<li class="pic_imgs2"><a href="<?php echo apth_url('?act=log_on');?>">注销</a></li>
+	</ul>
+</div>
+<table class="adming_all">
+	<tr>
+		<td class="ta_left">
+			<iframe src="<?php echo apth_url('?act=menu');?>" width="100%" height="100%" scrolling="no" frameborder="0"></iframe>
+		</td>
+		<td class="ta_right">
+			<iframe src="<?php echo apth_url('?act=adminindex');?>" name="show_winds" width="100%" height="100%" scrolling="no" frameborder="0"></iframe>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
