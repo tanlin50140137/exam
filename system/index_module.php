@@ -36,7 +36,7 @@ function adminfrom()
 	{
 		header('location:'.apth_url(''));exit;
 	}
-		
+	
 	$row = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
@@ -63,7 +63,76 @@ function getkey()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	#获取数据
+	$flRows1 = GetFenLai(0,2);
+	$flRows2 = GetFenLai2(0,2);
+	$TotalRows = count($flRows2);
+	$TotalShow = 10;
+	$TotalPage = ceil($TotalRows/$TotalShow);
+	$page = $_GET['page']==null?1:$_GET['page'];
+	if( $page >= $TotalPage ){ $page=$TotalPage; }
+	if( $page<=1 || !is_numeric( $page ) ){ $page=1; }
+	$offset = ($page-1)*$TotalShow;
+	$rows = array_slice($flRows2, $offset, $TotalShow);
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+#无限级别分类
+function GetFenLai($pid,$multiplier=0)
+{
+	static $rows;	
+	
+	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
+	
+	$multiplier = $rows==null?0:$multiplier+2;
+	$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid} and state=0";
+	$rs = mysql_query($sql);
+	while ($array = mysql_fetch_assoc($rs))
+	{
+		$array['title'] = str_repeat('&nbsp;', $multiplier).'|－'.$array['title'];
+		$rows[] = $array;
+		GetFenLai($array['id'],$multiplier);//递归
+	}
+	return $rows;
+}
+#无限级别分类
+function GetFenLai2($pid,$multiplier=0)
+{
+	static $rows;	
+	
+	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
+	
+	$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid} and state=0";
+	$rs = mysql_query($sql);
+	while ($array = mysql_fetch_assoc($rs))
+	{
+		$rows[] = $array;
+		GetFenLai2($array['id'],$multiplier);//递归
+	}
+	return $rows;
+}
+#状态
+function GetState( $int )
+{
+	switch ( $int )
+	{
+		case 0:
+			$str = '显示';
+		break;
+		case 1:
+			$str = '隐藏';
+		break;
+	}
+	return $str;
+}
+#记录显示条数
+function SetShwoTotal()
+{
+	$spot = SPOT;
+	$c = $_POST['c'];//记录总数
+	
+	echo base_url();
+	
 }
 #绑定域名
 function geturl()
@@ -90,6 +159,69 @@ function gethelp()
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
+#添加分类
+function form_sbm()
+{
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+	}
+	$int = db()->select('*')->from(PRE.'classify')->where(array('title'=>$data['title']))->get()->array_nums();
+	if( $int > 0 )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
+	}
+	$data['sort'] = $_POST['sort'];
+	if( $data['sort'] === '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+	}
+	$data['pid'] = $_POST['pid'];
+	$data['descri'] = $_POST['descri'];
+	$data['state'] = $_POST['state'];
+	$data['publitime'] = time();
+	#记录数据
+	$int = db()->insert(PRE.'classify',$data);
+	if( $int )
+	{
+		#获取数据
+		$rows = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->order_by('sort desc')->limit('0,30')->get()->array_rows();
+		$html = '';
+		$html .= '<table class="key_tablebox">';
+		$html .= '<tr>';
+		$html .= '<td>序号</td>';
+		$html .= '<td>PID</td>';
+		$html .= '<td>分类名称</td>';
+		$html .= '<td>排序</td>';
+		$html .= '<td>创间时间</td>';
+		$html .= '<td>状态</td>';
+		$html .= '<td>操作</td>';
+		$html .= '</tr>';
+		if( !empty( $rows ) )
+		{
+			foreach( $rows as $k => $v )
+			{
+				$html .= '<tr>';
+				$html .= '<td>'.($k+1).'</td>';
+				$html .= '<td>'.$v['pid'].'</td>';
+				$html .= '<td>'.$v['title'].'</td>';
+				$html .= '<td>'.$v['sort'].'</td>';
+				$html .= '<td>'.date('Y.m.d H:i:s',$v['publitime']).'</td>';
+				$html .= '<td>'.GetState($v['state']).'</td>';
+				$html .= '<td><a href="">修改</a> | <a href="">删除</a></td>';
+				$html .= '</tr>';
+			}
+		}
+		$html .= '</table>';
+		
+		echo json_encode(array("error"=>0,'txt'=>$html));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
+	}
+}
 #用户登录
 function form_logins()
 {

@@ -79,7 +79,7 @@ html{height:100%;}
 .key_box h1 a:hover{text-decoration: underline;}
 .cearter_key{border: 1px solid #3571cc;width:5rem;height:2rem;background:#3571cc;border-radius:4px;outline:none;cursor:pointer;color:antiquewhite;}
 .cearter_key:hover{background:#86b2f5;color:#383535;}
-.key_tablebox{margin-top:50px;width:100%;}
+.key_tablebox{margin-top:15px;width:100%;}
 .key_tablebox tr{height:3.5rem;text-align:center;}
 .key_tablebox td{border:1px solid #ded5d5;}
 
@@ -102,7 +102,8 @@ html{height:100%;}
 .sbm_fl{border:1px solid #e2d0d0;background:#aadee6;height:2.5rem;width:15rem;border-radius:0.4rem;cursor:pointer;font-size:1rem;outline:none;}
 .sbm_fl:hover{background:#7acfdc;color:#e21212;}
 
-
+#g{width:1.3rem;text-align:center;}
+.btn_g{padding:0 0.5rem;}
 
 
 
