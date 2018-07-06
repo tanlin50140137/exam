@@ -34,7 +34,22 @@
 </form>
 </div>
 <div class="key_tablebox_all">
-<table class="key_tablebox">
+<div class="key_tablebox_allins">
+	搜索分类：
+	<select onchange="search_ify(this);" class="ad_fls2">
+			<option value="">所有分类</option>
+<?php if(!empty($flRows1)) { ?>
+	<?php foreach( $flRows1 as $k => $v ) { ?>
+		<?php if($id == $v['id']) { ?>	
+			<option value="<?php echo $v['id'];?>" selected="selected"><?php echo $v['title'];?></option>
+		<?php } else { ?>
+			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+		<?php } ?>	
+	<?php } ?>		
+<?php } ?>
+	</select>
+</div>
+<table class="key_tablebox tableBox">
 		<tr>
 			<td>序号</td>
 			<td>PID</td>
@@ -64,22 +79,27 @@
 			<a href="<?php echo apth_url('?act=getkey&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=getkey&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
 			<select onchange="SetShwoTotal(this);">
-				<option value="10" selected="selected">显示10条</option>
-				<option value="20">显示20条</option>
-				<option value="30">显示30条</option>
-				<option value="50">显示50条</option>
-				<option value="100">显示100条</option>
+				<option value="10" <?php echo $TotalShow==10?'selected="selected"':''?> >显示10条</option>
+				<option value="20" <?php echo $TotalShow==20?'selected="selected"':''?> >显示20条</option>
+				<option value="30" <?php echo $TotalShow==30?'selected="selected"':''?> >显示30条</option>
+				<option value="50" <?php echo $TotalShow==50?'selected="selected"':''?> >显示50条</option>
+				<option value="100" <?php echo $TotalShow==100?'selected="selected"':''?> >显示100条</option>
 			</select>
 			</td>
 		</tr>			
 </table>
 </div>
 <script>
+function search_ify(t)
+{
+	var d = $(t).val();
+	location.href="<?php echo apth_url('?act=getkey&page='.$page.'&id=');?>"+d;
+}
 function SetShwoTotal(t)
 {
 	var c = $(t).val();
 	$.post('<?php echo apth_url("index.php");?>',{'act':'SetShwoTotal','c':c},function(d){
-		alert(d);
+		location.reload();
 	});
 }
 function btn_g()
@@ -121,7 +141,9 @@ function sbm_fl()
 			if( obj.error == 0 )
 			{
 				$("#ify_frm")[0].reset();
-				$(".key_tablebox_all").html(obj.txt);
+				layer.msg(obj.txt,{time:2000},function(){
+					location.reload();
+				});
 			}
 			else
 			{
@@ -129,6 +151,15 @@ function sbm_fl()
 			}	
 	});
 }
+$(function(){
+	$(".tableBox p:eq(0),.tableBox p:eq(1)").css({"font-weight":"bold"});
+	$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	$(".tableBox tr").hover(function(){
+		$(this).css({"background":"#FFFFDD"});
+	},function(){
+		$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	});
+});
 </script>
 </body>
 </html>

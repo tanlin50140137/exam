@@ -216,3 +216,11 @@ function substr_tel($tel)
 	$str2 = substr($tel,-3);
 	return $str1.'***'.$str2;
 }
+#获取路径
+function GetFilePath()
+{
+	$spot = SPOT;
+	$filename = base_url($spot.'settings/'.$spot.'org'.$spot.'nums');
+	$str = file_get_contents($filename);
+	return $str;
+}

@@ -63,16 +63,19 @@ function getkey()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$id = $_GET['id']==null?null:$_GET['id'];
+	
 	#获取数据
 	$flRows1 = GetFenLai(0,2);
-	$flRows2 = GetFenLai2(0,2);
+	$flRows2 = GetFenLai2(0,2,$id);
 	$TotalRows = count($flRows2);
-	$TotalShow = 10;
+	$TotalShow = GetFilePath();
 	$TotalPage = ceil($TotalRows/$TotalShow);
 	$page = $_GET['page']==null?1:$_GET['page'];
 	if( $page >= $TotalPage ){ $page=$TotalPage; }
 	if( $page<=1 || !is_numeric( $page ) ){ $page=1; }
 	$offset = ($page-1)*$TotalShow;
+		
 	$rows = array_slice($flRows2, $offset, $TotalShow);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
@@ -96,18 +99,27 @@ function GetFenLai($pid,$multiplier=0)
 	return $rows;
 }
 #无限级别分类
-function GetFenLai2($pid,$multiplier=0)
+function GetFenLai2($pid,$multiplier=0,$id=null)
 {
 	static $rows;	
 	
 	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
 	
-	$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid} and state=0";
-	$rs = mysql_query($sql);
-	while ($array = mysql_fetch_assoc($rs))
+	$where = $id==null?'':" and id='{$id}' ";
+	if( $where == null )
 	{
-		$rows[] = $array;
-		GetFenLai2($array['id'],$multiplier);//递归
+		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid} and state=0";
+		$rs = mysql_query($sql);
+		while ($array = mysql_fetch_assoc($rs))
+		{
+			$rows[] = $array;
+			GetFenLai2($array['id'],$multiplier);//递归
+		}
+	}
+	else
+	{
+		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where state=0 {$where} ";
+		$rows = db()->query($sql)->array_rows();
 	}
 	return $rows;
 }
@@ -129,10 +141,12 @@ function GetState( $int )
 function SetShwoTotal()
 {
 	$spot = SPOT;
+	
 	$c = $_POST['c'];//记录总数
 	
-	echo base_url();
+	$path = base_url($spot.'settings/'.$spot.'org'.$spot.'nums');
 	
+	file_put_contents( $path, $c );	
 }
 #绑定域名
 function geturl()
@@ -184,38 +198,8 @@ function form_sbm()
 	#记录数据
 	$int = db()->insert(PRE.'classify',$data);
 	if( $int )
-	{
-		#获取数据
-		$rows = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->order_by('sort desc')->limit('0,30')->get()->array_rows();
-		$html = '';
-		$html .= '<table class="key_tablebox">';
-		$html .= '<tr>';
-		$html .= '<td>序号</td>';
-		$html .= '<td>PID</td>';
-		$html .= '<td>分类名称</td>';
-		$html .= '<td>排序</td>';
-		$html .= '<td>创间时间</td>';
-		$html .= '<td>状态</td>';
-		$html .= '<td>操作</td>';
-		$html .= '</tr>';
-		if( !empty( $rows ) )
-		{
-			foreach( $rows as $k => $v )
-			{
-				$html .= '<tr>';
-				$html .= '<td>'.($k+1).'</td>';
-				$html .= '<td>'.$v['pid'].'</td>';
-				$html .= '<td>'.$v['title'].'</td>';
-				$html .= '<td>'.$v['sort'].'</td>';
-				$html .= '<td>'.date('Y.m.d H:i:s',$v['publitime']).'</td>';
-				$html .= '<td>'.GetState($v['state']).'</td>';
-				$html .= '<td><a href="">修改</a> | <a href="">删除</a></td>';
-				$html .= '</tr>';
-			}
-		}
-		$html .= '</table>';
-		
-		echo json_encode(array("error"=>0,'txt'=>$html));
+	{	
+		echo json_encode(array("error"=>0,'txt'=>'添加成功'));
 	}
 	else
 	{

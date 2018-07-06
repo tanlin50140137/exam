@@ -20,9 +20,9 @@ img{
 	max-width: 100%;
 	margin: 0 auto;
 }
-html{height:100%;}
+html{height:92%;}
 .gradient{
-	height:100%;
+	height:92%;
     background: -webkit-linear-gradient(#a2d1f1, #03325d); /* Safari 5.1 - 6.0 */
     background: -o-linear-gradient(#a2d1f1, #03325d); /* Opera 11.1 - 12.0 */
     background: -moz-linear-gradient(#a2d1f1, #03325d); /* Firefox 3.6 - 15 */
@@ -79,8 +79,8 @@ html{height:100%;}
 .key_box h1 a:hover{text-decoration: underline;}
 .cearter_key{border: 1px solid #3571cc;width:5rem;height:2rem;background:#3571cc;border-radius:4px;outline:none;cursor:pointer;color:antiquewhite;}
 .cearter_key:hover{background:#86b2f5;color:#383535;}
-.key_tablebox{margin-top:15px;width:100%;}
-.key_tablebox tr{height:3.5rem;text-align:center;}
+.key_tablebox{width:100%;}
+.key_tablebox tr{height:2.8rem;text-align:center;}
 .key_tablebox td{border:1px solid #ded5d5;}
 
 .right_allboxs{float:right;height:4rem;position:absolute;top:0;right:50px;}
@@ -105,6 +105,7 @@ html{height:100%;}
 #g{width:1.3rem;text-align:center;}
 .btn_g{padding:0 0.5rem;}
 
+.key_tablebox_allins{border:1px solid #ded5d5;margin:6px 0;height:50px;background:#f4f4f4;line-height:50px;padding:0 10px;}
 
 
 
