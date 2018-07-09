@@ -19,12 +19,11 @@
 	<script type="text/javascript">
 		d = new dTree('d');
 		d.add(0,-1,'查看所有考试分类');
-		d.add(1,0,'建筑考试类','example01.html');
-		d.add(2,1,'工程咨询类','example01.html');
-		d.add(3,1,'工程咨询类','example01.html');
-		d.add(4,0,'律师考试类','example01.html');
-		d.add(5,4,'Node 1.2','example01.html');
-		d.add(6,2,'工程咨询类','example01.html');		
+<?php if(!empty($wxfl)){?>	
+	<?php foreach($wxfl as $k=>$v){?>
+		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"];?>','<?php echo apth_url("?act=getkey_update&id=".$v["id"]);?>');
+	<?php } ?>	
+<?php } ?>			
 		document.write(d);
 	</script>
 </div>

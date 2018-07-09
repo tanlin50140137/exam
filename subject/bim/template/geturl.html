@@ -11,59 +11,99 @@
 </head>
 <body>
 <div class="key_box">
-	<h1><a href="<?php echo apth_url('?act=adminfrom');?>" target="_parent">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; <input type="button" value="绑定域名" class="cearter_key" onclick="cearter_key();"/></h1>	
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; <input type="button" value="添加用户" class="cearter_key" onclick="cearter_key();"/></h1>	
 </div>
-<div class="shengcheng">
-	<p>绑定域名：<input type="text" name="OPENID" value="" class="openid_sls"/></p>
-	<p>
-	OPENID：
-	<select name="openid" class="select_opid">
-		<option value="-1">-- 请选择OPENID --</option>
-		<option value="2018070316345469">2018070316345469</option>
-		<option value="2018070316345469">2018070316345469</option>
-		<option value="2018070316345469">2018070316345469</option>
-		<option value="2018070316345469">2018070316345469</option>
-	</select>
-	</p>
-	<p> &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;<input type="button" value="点击绑定" class="btn_cearter"/></p>
+<div class="key_tablebox_allins">
+	搜索用户：<input type="text" id="search" placeholder="请输入帐号/手机/邮箱" class="ad_fls"/> <input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();"/>
 </div>
 <script>
 function cearter_key(){
-	$(".shengcheng").show();
+	location.href = "<?php echo apth_url('?act=addusers');?>";
 }
 </script>
-<table class="key_tablebox">
+<script>
+function Diachronic(){
+	window.history.go(-1);
+}
+</script>
+<table class="key_tablebox tableBox">
 		<tr>
 			<td>序号</td>
-			<td>域名</td>
-			<td>OPENID</td>
-			<td>绑定时间</td>
+			<td>头像</td>
+			<td>帐号</td>
+			<td>手机</td>
+			<td>邮箱</td>
+			<td>注册时间</td>
 			<td>操作</td>
 		</tr>
-		
+<?php if(!empty($rows)){?>	
+	<?php foreach( $rows as $k => $v ){?>	
 		<tr>
-			<td>1</td>
-			<td>f.htxgcw.com</td>
-			<td>2018070316345469</td>
-			<td>2018-07-03 17:16:30</td>
+			<td><?php echo ($k+1);?></td>
+			<td><img src="<?php echo apth_url('subject/bim/'.$v['pic']);?>" class="pic_useradin"/></td>
+			<td><?php echo $v['users'];?></td>
+			<td><?php echo $v['tel'];?></td>
+			<td><?php echo $v['email'];?></td>
+			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><a href="#">修改</a> &nbsp; | &nbsp; <a href="#">删除</a></td>
 		</tr>
-		
-		<tr>
-			<td>2</td>
-			<td>bim.htxgcw.com</td>
-			<td>2018070316345469</td>
-			<td>2018-07-03 17:16:30</td>
-			<td><a href="#">修改</a> &nbsp; | &nbsp; <a href="#">删除</a></td>
-		</tr>
-		
-		<tr>
-			<td>3</td>
-			<td>www.htxgcw.com</td>
-			<td>2018070316345469</td>
-			<td>2018-07-03 17:16:30</td>
-			<td><a href="#">修改</a> &nbsp; | &nbsp; <a href="#">删除</a></td>
-		</tr>
+	<?php }?>	
+<?php } ?>	
+		<tr>	
+			<td colspan="7">			
+			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
+<?php if($TotalRows>$TotalShow){?>			
+			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('?act=geturl&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=geturl&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
+			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
+<?php }?>			
+			<select onchange="SetShwoTotal(this);">
+				<option value="5" <?php echo $TotalShow==5?'selected="selected"':''?> >显示5条</option>
+				<option value="10" <?php echo $TotalShow==10?'selected="selected"':''?> >显示10条</option>
+				<option value="20" <?php echo $TotalShow==20?'selected="selected"':''?> >显示20条</option>
+				<option value="30" <?php echo $TotalShow==30?'selected="selected"':''?> >显示30条</option>
+				<option value="50" <?php echo $TotalShow==50?'selected="selected"':''?> >显示50条</option>
+				<option value="100" <?php echo $TotalShow==100?'selected="selected"':''?> >显示100条</option>
+			</select>
+			</td>
+		</tr>		
 </table>
+<script>
+function SetShwoTotal(t)
+{
+	var c = $(t).val();
+	$.post('<?php echo apth_url("index.php");?>',{'act':'SetShwoTotal','c':c},function(d){
+		location.reload();
+	});
+}
+function btn_g()
+{
+	var d = $("#g").val();
+	if( d != '' )
+	{
+		location.href="<?php echo apth_url('?act=geturl&page=');?>"+d;
+	}	
+}
+$(function(){
+	$(".tableBox p:eq(0),.tableBox p:eq(1)").css({"font-weight":"bold"});
+	$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	$(".tableBox tr").hover(function(){
+		$(this).css({"background":"#FFFFDD"});
+	},function(){
+		$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	});
+});
+function btn_sreach(){
+	var search = $("#search").val();
+	if( search != '' )
+	{
+		location.href="<?php echo apth_url('?act=geturl&s=');?>"+search;
+	}
+	else
+	{
+		layer.tips('请输入帐号/手机/邮箱', '#search');
+	}	
+}
+</script>
 </body>
 </html>

@@ -38,7 +38,7 @@ function adminfrom()
 	}
 	
 	$row = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();
-	
+		
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 #菜单栏
@@ -54,6 +54,9 @@ function adminindex()
 {
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
+	
+	#无限级别分类
+	$wxfl = GetFenLai2(0);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
@@ -154,6 +157,26 @@ function geturl()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	
+	#获取用户列表
+	$sql  = ' select * from '.PRE.'admin ';
+	if( $s!=null )
+	{
+		$sql .= ' where (users like "%'.$s.'%" or tel like "%'.$s.'%" or email like "%'.$s.'%") ';
+	}
+	$TotalRows = db()->query($sql)->array_nums();
+	$TotalShow = GetFilePath();
+	$TotalPage = ceil($TotalRows/$TotalShow);
+	$page = $_GET['page']==null?1:$_GET['page'];
+	if($page>=$TotalPage){$page=$TotalPage;}
+	if($page<=1||!is_numeric($page)){$page=1;}
+	$offset = ($page-1)*$TotalShow;
+	
+	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
+	
+	$rows = db()->query($sql)->array_nums();
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 #添值服务
@@ -186,7 +209,65 @@ function getkey_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#添加用户
+function addusers()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
+#添加用户
+function add_user()
+{
+	print_r($_POST);
+}
+#删除分类
+function delete_info()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$int = db()->delete(PRE.'classify',array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+	}
+}
+#修改分类
+function sbm_update()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+	}
+	$data['sort'] = $_POST['sort'];
+	if( $data['sort'] === '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+	}
+	$data['pid'] = $_POST['pid'];
+	$data['descri'] = $_POST['descri'];
+	$data['state'] = $_POST['state'];
+	$data['publitime'] = time();
+	
+	#修改数据
+	$int = db()->update(PRE.'classify',$data,array('id'=>$id));
+	if( $int )
+	{	
+		echo json_encode(array("error"=>0,'txt'=>'修改成功','page'=>$_POST['page']));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
+	}
+}
 #添加分类
 function form_sbm()
 {

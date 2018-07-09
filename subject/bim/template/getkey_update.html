@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="key_box">
-	<h1><a href="<?php echo apth_url('?act=adminfrom');?>" target="_parent">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 修改分类</h1>	
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 修改分类</h1>	
 </div>
 <div class="addfl" style="display:block;">
 	<form id="ify_frm">
@@ -26,7 +26,9 @@
 			<?php if( $v['id'] == $row['pid'] ){?>	
 				<option value="<?php echo $v['id'];?>" selected="selected" ><?php echo $v['title'];?></option>
 			<?php }else{?>
-				<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+				<?php if( $v['id'] != $row['id'] ){?>	
+					<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+				<?php }?>
 			<?php }?>	
 		<?php }?>		
 	<?php }?>
@@ -34,12 +36,51 @@
 		</p>
 		<p>分类描述： <input type="text" name="descri" value="<?php echo $row['descri'];?>" class="ad_fls"/></p>
 		<p>分类状态： <label><input type="radio" name="state" <?php echo $row['state']==0?'checked="checked"':'';?> value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" <?php echo $row['state']==1?'checked="checked"':'';?> value="1"/>隐藏</label></p>
-		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="修改" class="sbm_fl" onclick="sbm_fl();"/></div>
+		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="修改" class="sbm_fl" onclick="sbm_update();"/></div>
+		<input type="hidden" name="id" value="<?php echo $id;?>"/>
+		<input type="hidden" name="page" value="<?php echo $_GET['page'];?>"/>
 	</form>
 </div>
-
 <script>
-
+function sbm_update()
+{
+	var datas = $("#ify_frm").serialize();
+	
+	var title = $("[name='title']").val();
+	var sort = $("[name='sort']").val();
+	
+	if( title == '' )
+	{
+		layer.tips('请输入分类名称', '#ad_fls1');
+		return false;
+	}
+	if( sort == '' )
+	{
+		layer.tips('排序号不能为空，请输入整数。', '#ad_fls2');
+		return false;
+	}
+	$.ajax({
+		url:'<?php echo apth_url("index.php");?>',
+		type:'post',
+		data:'act=sbm_update&'+datas,
+		success:function(data){
+			var obj = eval("("+data+")");
+			if( obj.error == 0 )
+			{
+				layer.msg(obj.txt,{time:1000},function(){
+					location.href="<?php echo apth_url('?act=getkey&page=');?>"+obj.page;
+				});
+			}
+			else
+			{
+				layer.msg(obj.txt);
+			}	
+		}
+	});	
+}
+function Diachronic(){
+	window.history.go(-1);
+}
 </script>
 </body>
 </html>
