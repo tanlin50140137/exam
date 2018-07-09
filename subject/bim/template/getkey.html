@@ -14,24 +14,24 @@
 	<h1><a href="<?php echo apth_url('?act=adminfrom');?>" target="_parent">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; <input type="button" value="添加分类 " class="cearter_key" onclick="cearter_key();"/></h1>	
 </div>
 <div class="addfl">
-<form id="ify_frm">
-	<p>分类名称： <input type="text" name="title" value="" class="ad_fls" id="ad_fls1"/></p>
-	<p>分类排序： <input type="text" name="sort" value="0" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
-	<p>
-		添加父类：
-		<select name="pid" class="ad_fls2">
-			<option value="0">添加为顶级类</option>
-<?php if(!empty($flRows1)){?>
-	<?php foreach( $flRows1 as $k => $v ){?>	
-			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
-	<?php }?>		
-<?php }?>
-		</select>
-	</p>
-	<p>分类描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
-	<p>分类状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
-	<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="添加" class="sbm_fl" onclick="sbm_fl();"/></div>
-</form>
+	<form id="ify_frm">
+		<p>分类名称： <input type="text" name="title" value="" class="ad_fls" id="ad_fls1"/></p>
+		<p>分类排序： <input type="text" name="sort" value="0" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
+		<p>
+			添加父类：
+			<select name="pid" class="ad_fls2">
+				<option value="0">添加为顶级类</option>
+	<?php if(!empty($flRows1)){?>
+		<?php foreach( $flRows1 as $k => $v ){?>	
+				<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+		<?php }?>		
+	<?php }?>
+			</select>
+		</p>
+		<p>分类描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
+		<p>分类状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
+		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="添加" class="sbm_fl" onclick="sbm_fl();"/></div>
+	</form>
 </div>
 <div class="key_tablebox_all">
 <div class="key_tablebox_allins">
@@ -68,10 +68,11 @@
 			<td><?php echo $v['sort'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><?php echo GetState($v['state']);?></td>
-			<td><a href="">修改</a> | <a href="">删除</a></td>
+			<td><a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a> &nbsp; | &nbsp; <a href="javascript:void(0);" onclick="delete_info('<?php echo $v['id'];?>','<?php echo $page;?>');">删除</a></td>
 		</tr>
 	<?php }?>	
 <?php }?>
+<?php if($TotalRows>$TotalShow){?>
 		<tr>
 			<td colspan="7">
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
@@ -86,10 +87,19 @@
 				<option value="100" <?php echo $TotalShow==100?'selected="selected"':''?> >显示100条</option>
 			</select>
 			</td>
-		</tr>			
+		</tr>
+<?php }?>					
 </table>
 </div>
 <script>
+function delete_info(id)
+{
+	alert(456);	
+}
+function update_info(id)
+{
+	location.href = "<?php echo apth_url('?act=getkey_update&id=');?>"+id;
+}
 function search_ify(t)
 {
 	var d = $(t).val();
@@ -116,13 +126,10 @@ function cearter_key()
 }
 function sbm_fl()
 {
-	var data = $("#ify_frm").serialize();
+	var datas = $("#ify_frm").serialize();
 	
 	var title = $("[name='title']").val();
 	var sort = $("[name='sort']").val();
-	var pid = $("[name='pid']").val();
-	var descri = $("[name='descri']").val();
-	var state = $("[name='state']").val();
 	
 	if( title == '' )
 	{
@@ -134,8 +141,11 @@ function sbm_fl()
 		layer.tips('排序号不能为空，请输入整数。', '#ad_fls2');
 		return false;
 	}
-	
-	$.post('<?php echo apth_url("index.php");?>',{'act':'form_sbm','title':title,'sort':sort,'pid':pid,'descri':descri,'state':state},function(data){
+	$.ajax({
+		url:'<?php echo apth_url("index.php");?>',
+		type:'post',
+		data:'act=form_sbm&'+datas,
+		success:function(data){
 			//console.log(data);return false;
 			var obj = eval("("+data+")");
 			if( obj.error == 0 )
@@ -149,6 +159,7 @@ function sbm_fl()
 			{
 				layer.msg(obj.txt);
 			}	
+		}
 	});
 }
 $(function(){

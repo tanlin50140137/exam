@@ -88,7 +88,7 @@ function GetFenLai($pid,$multiplier=0)
 	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
 	
 	$multiplier = $rows==null?0:$multiplier+2;
-	$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid} and state=0";
+	$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid}";
 	$rs = mysql_query($sql);
 	while ($array = mysql_fetch_assoc($rs))
 	{
@@ -105,10 +105,10 @@ function GetFenLai2($pid,$multiplier=0,$id=null)
 	
 	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
 	
-	$where = $id==null?'':" and id='{$id}' ";
+	$where = $id==null?'':" where id='{$id}' ";
 	if( $where == null )
 	{
-		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid} and state=0";
+		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid} ";
 		$rs = mysql_query($sql);
 		while ($array = mysql_fetch_assoc($rs))
 		{
@@ -118,7 +118,7 @@ function GetFenLai2($pid,$multiplier=0,$id=null)
 	}
 	else
 	{
-		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where state=0 {$where} ";
+		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify {$where} ";
 		$rows = db()->query($sql)->array_rows();
 	}
 	return $rows;
@@ -172,6 +172,20 @@ function gethelp()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#分类管理修改分类
+function getkey_update()
+{
+	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$flRows1 = GetFenLai(0,2);
+	
+	$row = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('id'=>$id))->get()->array_row();
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
 #添加分类
 function form_sbm()
@@ -195,6 +209,9 @@ function form_sbm()
 	$data['descri'] = $_POST['descri'];
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
+	
+	//print_r($data);exit;
+	
 	#记录数据
 	$int = db()->insert(PRE.'classify',$data);
 	if( $int )
