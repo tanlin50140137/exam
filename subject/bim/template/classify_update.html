@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>修改分类信息</title>
+<title>修改文档分类信息</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
@@ -11,14 +11,14 @@
 </head>
 <body>
 <div class="key_box">
-	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 修改分类</h1>	
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 修改文档分类</h1>	
 </div>
 <div class="addfl" style="display:block;">
 	<form id="ify_frm">
-		<p>分类名称： <input type="text" name="title" value="<?php echo $row['title'];?>" class="ad_fls" id="ad_fls1"/></p>
-		<p>分类排序： <input type="text" name="sort" value="<?php echo $row['sort'];?>" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
+		<p>名称： <input type="text" name="title" value="<?php echo $row['title'];?>" class="ad_fls" id="ad_fls1"/></p>
+		<p>排序： <input type="text" name="sort" value="<?php echo $row['sort'];?>" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
 		<p>
-			添加父类：
+			父类：
 			<select name="pid" class="ad_fls2">
 				<option value="0">添加为顶级类</option>
 	<?php if(!empty($flRows1)){?>
@@ -34,8 +34,8 @@
 	<?php }?>
 			</select>
 		</p>
-		<p>分类描述： <input type="text" name="descri" value="<?php echo $row['descri'];?>" class="ad_fls"/></p>
-		<p>分类状态： <label><input type="radio" name="state" <?php echo $row['state']==0?'checked="checked"':'';?> value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" <?php echo $row['state']==1?'checked="checked"':'';?> value="1"/>隐藏</label></p>
+		<p>描述： <input type="text" name="descri" value="<?php echo $row['descri'];?>" class="ad_fls"/></p>
+		<p>状态： <label><input type="radio" name="state" <?php echo $row['state']==0?'checked="checked"':'';?> value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" <?php echo $row['state']==1?'checked="checked"':'';?> value="1"/>隐藏</label></p>
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="修改" class="sbm_fl" onclick="sbm_update();"/></div>
 		<input type="hidden" name="id" value="<?php echo $id;?>"/>
 		<input type="hidden" name="page" value="<?php echo $_GET['page'];?>"/>
@@ -62,13 +62,13 @@ function sbm_update()
 	$.ajax({
 		url:'<?php echo apth_url("index.php");?>',
 		type:'post',
-		data:'act=sbm_update&'+datas,
+		data:'act=dclaexe&'+datas,
 		success:function(data){
 			var obj = eval("("+data+")");
 			if( obj.error == 0 )
 			{
 				layer.msg(obj.txt,{time:1000},function(){
-					location.href="<?php echo apth_url('?act=getkey&page=');?>"+obj.page;
+					location.href="<?php echo apth_url('?act=show_classify&page=');?>"+obj.page;
 				});
 			}
 			else

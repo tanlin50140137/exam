@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>分类管理</title>
+<title>考题管理</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
@@ -14,15 +14,10 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<input type="button" value="创建分类 " class="cearter_key" onclick="file_classify();"/>
-		&nbsp;
-		<input type="button" value="创建文档" class="cearter_key" onclick="cearter_key();"/>
+		<input type="button" value="创建考场 " class="cearter_key" onclick="cearter_key();"/>
 	</h1>	
 </div>
 <div class="key_tablebox_all">
-<div style="line-height:30px;padding:0 0.6rem;">
-	<a href="<?php echo apth_url('?act=show_classify');?>">文档分类</a>
-</div>
 <div class="key_tablebox_allins">
 	搜索分类：
 	<select onchange="search_ify(this);" class="ad_fls2">
@@ -126,9 +121,9 @@ function btn_g()
 		location.href="<?php echo apth_url('?act=getkey&page=');?>"+d;
 	}	
 }
-function file_classify()
+function cearter_key()
 {
-	location.href="<?php echo apth_url('?act=file_classify');?>"
+	$(".addfl").show();
 }
 function sbm_fl()
 {

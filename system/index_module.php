@@ -66,7 +66,7 @@ function getkey()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$id = $_GET['id']==null?null:$_GET['id'];
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
 	#获取数据
 	$flRows1 = GetFenLai(0,2);
@@ -102,6 +102,24 @@ function GetFenLai($pid,$multiplier=0)
 	return $rows;
 }
 #无限级别分类
+function GetFenLai3($pid,$multiplier=0)
+{
+	static $rows;	
+	
+	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
+	
+	$multiplier = $rows==null?0:$multiplier+2;
+	$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."fileclass where pid={$pid}";
+	$rs = mysql_query($sql);
+	while ($array = mysql_fetch_assoc($rs))
+	{
+		$array['title'] = str_repeat('&nbsp;', $multiplier).'|－'.$array['title'];
+		$rows[] = $array;
+		GetFenLai3($array['id'],$multiplier);//递归
+	}
+	return $rows;
+}
+#无限级别分类
 function GetFenLai2($pid,$multiplier=0,$id=null)
 {
 	static $rows;	
@@ -122,6 +140,31 @@ function GetFenLai2($pid,$multiplier=0,$id=null)
 	else
 	{
 		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify {$where} ";
+		$rows = db()->query($sql)->array_rows();
+	}
+	return $rows;
+}
+#无限级别分类
+function GetFenLai4($pid,$multiplier=0,$id=null)
+{
+	static $rows;	
+	
+	$int = db()->select('*')->from(PRE."fileclass")->get()->array_nums();
+	
+	$where = $id==null?'':" where id='{$id}' ";
+	if( $where == null )
+	{
+		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."fileclass where pid={$pid} ";
+		$rs = mysql_query($sql);
+		while ($array = mysql_fetch_assoc($rs))
+		{
+			$rows[] = $array;
+			GetFenLai4($array['id'],$multiplier);//递归
+		}
+	}
+	else
+	{
+		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."fileclass {$where} ";
 		$rows = db()->query($sql)->array_rows();
 	}
 	return $rows;
@@ -179,6 +222,14 @@ function geturl()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#考题管理
+function examqm()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 #添值服务
 function getpay()
 {
@@ -229,7 +280,142 @@ function geturl_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#创建文档分类
+function file_classify()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$flRows1 = GetFenLai3(0,2);
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+#显示文档分类
+function show_classify()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
+	$flRows1 = GetFenLai3(0,2);
+	$flRows2 = GetFenLai4(0,0,$id);	
+	$TotalRows = count($flRows2);
+	$TotalShow = GetFilePath();
+	$TotalPage = ceil($TotalRows/$TotalShow);
+	$page = $_GET['page']==null?1:$_GET['page'];
+	if($page>=$TotalPage){$page=$TotalPage;}
+	if($page<=1||!is_numeric($page)){$page=1;}
+	$offset = ($page-1)*$TotalShow;
+		
+	$rows = array_slice($flRows2, $offset, $TotalShow);
+	
+	$flag = GetFilePath2();
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+#修改文档分类
+function classify_update()
+{
+	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$flRows1 = GetFenLai3(0,2);
+	
+	$row = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'fileclass')->where(array('id'=>$id))->get()->array_row();	
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
+#记录树型显示
+function RecordTreeDisplay()
+{
+	$spot = SPOT;
+	$filename = base_url($spot.'settings/'.$spot.'org'.$spot.'shu');
+	
+	file_put_contents($filename, $_POST['flag']);
+}
+#删除分类
+function delete_classify()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$int = db()->delete(PRE.'fileclass',array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+	}
+}
+#修改文档分类
+function dclaexe()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+	}
+	$data['sort'] = $_POST['sort'];
+	if( $data['sort'] === '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+	}
+	$data['pid'] = $_POST['pid'];
+	$data['descri'] = $_POST['descri'];
+	$data['state'] = $_POST['state'];
+	$data['publitime'] = time();
+	
+	#修改数据
+	$int = db()->update(PRE.'fileclass',$data,array('id'=>$id));
+	if( $int )
+	{	
+		echo json_encode(array("error"=>0,'txt'=>'修改成功','page'=>$_POST['page']));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
+	}
+}
+#添加文档分类
+function add_classify()
+{
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+	}
+	$int = db()->select('*')->from(PRE.'fileclass')->where(array('title'=>$data['title']))->get()->array_nums();
+	if( $int > 0 )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
+	}
+	$data['sort'] = $_POST['sort'];
+	if( $data['sort'] === '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+	}
+	$data['pid'] = $_POST['pid'];
+	$data['descri'] = $_POST['descri'];
+	$data['state'] = $_POST['state'];
+	$data['publitime'] = time();
+		
+	#记录数据
+	$int = db()->insert(PRE.'fileclass',$data);
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'添加成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
+	}
+}
 #删除用户
 function delete_geturl()
 {

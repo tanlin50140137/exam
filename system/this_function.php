@@ -224,3 +224,11 @@ function GetFilePath()
 	$str = file_get_contents($filename);
 	return $str;
 }
+#获取路径-显示树
+function GetFilePath2()
+{
+	$spot = SPOT;
+	$filename = base_url($spot.'settings/'.$spot.'org'.$spot.'shu');
+	$str = file_get_contents($filename);
+	return $str;
+}
