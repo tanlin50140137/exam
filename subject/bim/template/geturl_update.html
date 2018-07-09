@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>修改用户信息</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 修改用户</h1>	
+</div>
+<div class="addfl" style="display:block;">
+	<form id="ify_frm">
+		<p>帐号： <input type="text" name="users" value="<?php echo $row['users'];?>" class="ad_fls" id="ad_fls1"/> <span class="tishiinfo"></span></p>
+		<p>密码： <input type="password" name="pwd" value="<?php echo $row['pwd'];?>" class="ad_fls" id="ad_fls1"/> <span class="tishiinfo"></span></p>
+		<p>手机： <input type="text" name="tel" value="<?php echo $row['tel'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
+		<p>邮箱： <input type="text" name="email" value="<?php echo $row['email'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
+		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="修改用户" class="sbm_fl" onclick="add_user(this);" set-url="<?php echo apth_url('index.php');?>"/></div>
+		<input type="hidden" name="id" value="<?php echo $id;?>"/>
+	</form>
+</div>
+<script>
+function add_user(m)
+{
+	var u = $("[name='users']").val();
+	var p = $("[name='pwd']").val();
+	var t = $("[name='tel']").val();
+	var e = $("[name='email']").val();
+	var id = $("[name='id']").val();
+	
+	var url = $(m).attr('set-url');
+	if( u == '' )
+	{
+		$(".tishiinfo:eq(0)").text(strArr[0]);
+		$("[name='users']").focus();
+		return false;
+	}	
+	if( flag_users_name == true )
+	{
+		$(".tishiinfo:eq(0)").text(flag_txt);
+		$("[name='users']").focus();
+		return false;
+	}
+	if( p == '' )
+	{
+		$(".tishiinfo:eq(1)").text(strArr[1]);
+		$("[name='pwd']").focus();
+		return false;
+	}
+	if( t == '' )
+	{
+		$(".tishiinfo:eq(2)").text(strArr[2]);
+		$("[name='tel']").focus();
+		return false;
+	}
+	if(!relphone.test(t))
+	{
+		$(".tishiinfo:eq(2)").text(strArr[4]);
+		$("[name='tel']").focus();
+		return false;
+	}
+	if( e == '' )
+	{
+		$(".tishiinfo:eq(3)").text(strArr[3]);
+		$("[name='email']").focus();
+		return false;
+	}
+	if(!relemail.test(e))
+	{
+		$(".tishiinfo:eq(3)").text(strArr[5]);
+		$("[name='email']").focus();
+		return false;
+	}
+	//验证帐号密码
+	$.post(url,{"act":"form_resets2","u":u,"p":p,"t":t,"e":e,"id":id},function(data){
+		var obj = eval("("+data+")");
+		if( obj.error == 0 )
+		{//修改成功
+			layer.msg(obj.txt,{time:1000},function(){
+				location.href = url+"?act=geturl";
+			});
+		}	
+		else
+		{//错误提示
+			$(".tishiinfo:eq("+obj.f+")").text(obj.txt);
+		}	
+	});
+}
+function Diachronic(){
+	window.history.go(-1);
+}
+</script>
+</body>
+</html>

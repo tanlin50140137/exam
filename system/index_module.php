@@ -175,7 +175,7 @@ function geturl()
 	
 	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
 	
-	$rows = db()->query($sql)->array_nums();
+	$rows = db()->query($sql)->array_rows();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
@@ -217,11 +217,32 @@ function addusers()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-###############################################################################################
-#添加用户
-function add_user()
+#修改用户信息
+function geturl_update()
 {
-	print_r($_POST);
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
+	$row = db()->select('*')->from(PRE.'admin')->where(array('id'=>$id))->get()->array_row();
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+###############################################################################################
+#删除用户
+function delete_geturl()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$int = db()->delete(PRE.'admin',array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+	}
 }
 #删除分类
 function delete_info()
@@ -335,6 +356,60 @@ function form_logins()
 	else
 	{
 		echo json_encode(array('error'=>'1','txt'=>'登录失败'));
+	}
+}
+#用户修改用户信息
+function form_resets2()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	$data['users'] = htmlspecialchars($_POST['u'],ENT_QUOTES);
+	if( $data['users'] == '' )
+	{
+		echo json_encode(array("error"=>1,f=>0,'txt'=>'*请输入帐号*'));exit;
+	}
+	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$data['users']))->get()->array_nums();
+	if( $num > 0 )
+	{#检测帐号
+		echo json_encode(array("error"=>1,f=>0,'txt'=>'*帐号已存在*'));exit;
+	}
+	$data['pwd'] = mb_substr(md5(md5(base64_decode($_POST['p']))),0,10,'utf-8');
+	if( $data['pwd'] == '' )
+	{
+		echo json_encode(array("error"=>1,f=>1,'txt'=>'*请输入密码*'));exit;
+	}
+	$data['tel'] = $_POST['t'];
+	if( $data['tel'] == '' )
+	{
+		echo json_encode(array("error"=>1,f=>2,'txt'=>'*请输入手机*'));exit;
+	}
+	if(!preg_match("/^0?(13|14|15|17|18)[0-9]{9}$/", $data['tel']) )
+	{
+		echo json_encode(array("error"=>"1",f=>2,"txt"=>"*手机号错误*"));exit;
+	}
+	$data['email'] = $_POST['e'];
+	if( $data['email'] == '' )
+	{
+		echo json_encode(array("error"=>1,f=>3,'txt'=>'*请输入邮箱*'));exit;
+	}
+	if( !preg_match("/^\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}$/",$data['email']) )
+	{
+		echo json_encode(array('error'=>'1',f=>3,'txt'=>'*邮箱不正确*'));exit;
+	}
+	#获取随机头像
+	$sql = 'select picname from '.PRE.'apack order by rand() limit 0,1';
+	$picrow = db()->query($sql)->array_row();
+	$data['pic'] = $picrow['picname']==''?'':$picrow['picname'];
+	$data['publitime'] = time();	
+	//修改
+	$int = db()->update(PRE.'admin',$data,array('id'=>$id));
+	if( $int )
+	{	
+		echo json_encode(array('error'=>'0','txt'=>'修改成功'));
+	}
+	else
+	{
+		echo json_encode(array('error'=>'1','txt'=>'修改失败'));
 	}
 }
 #用户提交注册

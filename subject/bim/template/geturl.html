@@ -5,7 +5,7 @@
 <title>绑带域名</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
-<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 </head>
@@ -15,6 +15,8 @@
 </div>
 <div class="key_tablebox_allins">
 	搜索用户：<input type="text" id="search" placeholder="请输入帐号/手机/邮箱" class="ad_fls"/> <input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();"/>
+	&nbsp; &nbsp; &nbsp; &nbsp;
+	<a href="<?php echo apth_url('?act=geturl');?>">显示全部</a>
 </div>
 <script>
 function cearter_key(){
@@ -45,7 +47,7 @@ function Diachronic(){
 			<td><?php echo $v['tel'];?></td>
 			<td><?php echo $v['email'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
-			<td><a href="#">修改</a> &nbsp; | &nbsp; <a href="#">删除</a></td>
+			<td><a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a> &nbsp; | &nbsp; <a href="javascript:void(0);" onclick="delete_info('<?php echo $v['id'];?>','<?php echo $page;?>');">删除</a></td>
 		</tr>
 	<?php }?>	
 <?php } ?>	
@@ -69,6 +71,25 @@ function Diachronic(){
 		</tr>		
 </table>
 <script>
+function delete_info(id,p)
+{
+	layer.confirm('您是否要删除这条分类？删除后无法恢复，分类下的信息将会全部丢失！', {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+		  layer.msg('正在删除......', {icon: 1},function(){
+			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_geturl','id':id},function(data){
+				  var obj = eval("("+data+")");
+				  layer.msg(obj.txt,{time:1000},function(){
+						location.reload();
+				  });
+			  });
+		  });		  
+		}, function(){});
+}
+function update_info(id,p)
+{
+	location.href = "<?php echo apth_url('?act=geturl_update&id=');?>"+id+'&page='+p;
+}
 function SetShwoTotal(t)
 {
 	var c = $(t).val();
