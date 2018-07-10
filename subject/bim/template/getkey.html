@@ -8,6 +8,8 @@
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<link rel="StyleSheet" href="<?php echo apth_url('subject/bim/dtree/dtree.css');?>" type="text/css" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/dtree/dtree.js');?>"></script>
 </head>
 <body>
 <div class="key_box">
@@ -33,24 +35,25 @@
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="添加" class="sbm_fl" onclick="sbm_fl();"/></div>
 	</form>
 </div>
+<?php if( $flag == 0 ){ ?>
 <div class="key_tablebox_all">
-<div class="key_tablebox_allins">
-	搜索分类：
-	<select onchange="search_ify(this);" class="ad_fls2">
-			<option value="">所有分类</option>
-<?php if(!empty($flRows1)) { ?>
-	<?php foreach( $flRows1 as $k => $v ) { ?>
-		<?php if($id == $v['id']) { ?>	
-			<option value="<?php echo $v['id'];?>" selected="selected"><?php echo $v['title'];?></option>
-		<?php } else { ?>
-			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
-		<?php } ?>	
-	<?php } ?>		
-<?php } ?>
-	</select>
-	&nbsp; &nbsp; &nbsp; &nbsp;
-	<a href="<?php echo apth_url('?act=adminfrom');?>" target="_parent">树型展示</a>
-</div>
+	<div class="key_tablebox_allins">
+		搜索分类：
+		<select onchange="search_ify(this);" class="ad_fls2">
+				<option value="">所有分类</option>
+	<?php if(!empty($flRows1)) { ?>
+		<?php foreach( $flRows1 as $k => $v ) { ?>
+			<?php if($id == $v['id']) { ?>	
+				<option value="<?php echo $v['id'];?>" selected="selected"><?php echo $v['title'];?></option>
+			<?php } else { ?>
+				<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+			<?php } ?>	
+		<?php } ?>		
+	<?php } ?>
+		</select>
+		&nbsp; &nbsp; &nbsp; &nbsp;
+		<a href="javascript:void(0);" onclick="TreeDisplay(this);">树型展示</a>
+	</div>
 <table class="key_tablebox tableBox">
 		<tr>
 			<td>序号</td>
@@ -94,7 +97,40 @@
 		</tr>					
 </table>
 </div>
+<?php }else{ ?>
+<div class="key_tablebox_all">
+	<div class="key_tablebox_allins">
+		<a href="javascript:void(0);" onclick="TreeDisplay(this);">列表展示</a>
+	</div>
+	<script type="text/javascript">
+		d = new dTree('d');
+		d.add(0,-1,'查看所有考试分类');
+<?php if(!empty($flRows2)){?>	
+	<?php foreach($flRows2 as $k=>$v){?>
+		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"];?>','<?php echo apth_url("?act=getkey_update&id=".$v["id"]);?>');
+	<?php } ?>	
+<?php } ?>			
+		document.write(d);
+	</script>
+</div>
+<?php } ?>
 <script>
+function TreeDisplay(t)
+{
+	var v = $(t).text();
+	if( v == '树型展示' )
+	{
+		$.post('<?php echo apth_url("index.php");?>',{'act':'RecordTreeDisplay','flag':'1'},function(data){
+			location.reload();
+		});
+	}
+	else
+	{
+		$.post('<?php echo apth_url("index.php");?>',{'act':'RecordTreeDisplay','flag':'0'},function(data){
+			location.reload();
+		});
+	}	
+}
 function Diachronic(){
 	window.history.go(-1);
 }

@@ -81,6 +81,8 @@ function getkey()
 		
 	$rows = array_slice($flRows2, $offset, $TotalShow);
 	
+	$flag = GetFilePath2();
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 #无限级别分类

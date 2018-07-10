@@ -111,6 +111,6 @@ html{height:92%;}
 .btn_sreach:hover{background:#86b2f5;color:#383535;}
 
 .pic_useradin{border: 1px solid #ecdada;width:30px;height:30px;border-radius:1rem;vertical-align: middle;}
-
-
+.WenDongFenlai{border: 1px solid #81dfef;border-radius:0.3rem;padding:0 0.3rem;background:#81dfef;color:#1b1a19;}
+.key_tablebox_all .WenDongFenlai:hover{color:red;}
 
