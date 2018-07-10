@@ -26,7 +26,7 @@
 	<div class="key_tablebox_allins">
 		发布文档
 	</div>
-<form id="_frm">	
+<form id="_frm" action="<?php echo apth_url('index.php');?>" method="post" enctype="multipart/form-data">	
 	<table class="key_tablebox_lists">
 		<tr>
 			<td class="key_tablebox_height key_tab_w"><p>标 题</p></td>
@@ -41,7 +41,7 @@
 			<td class="key_tablebox_height2">
 				<p>
 					<select name="ify" class="key_table_ify">
-						<option value="-1">--请选择分类--</option>
+						<option value="0">--请选择分类--</option>
 <?php if(!empty($flRows1)){?>
 			<?php foreach( $flRows1 as $k => $v ){?>	
 						<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
@@ -72,14 +72,14 @@
 		<tr>
 			<td class="key_tablebox_height key_tab_w"><p>封 面</p></td>
 			<td class="key_tablebox_height2" style="padding:10px 0;">
-				<p style="padding-left:10px;"><input type="file" name="file" id="covers" class="input_lists2"/></p>
-				<p style="margin-top:10px;"><img src="<?php echo apth_url('subject/bim/images/l_dg.png');?>" alt="文章封面" class="input_imgs"/></p>
+				<p style="padding-left:10px;"><input type="file" name="file" id="covers" onchange="previewImage(this);" class="input_lists2"/> <span>封面图片格式要求（jpeg，jpg，png，gif，bmp）；大小不能超出2M</span></p>
+				<p style="margin-top:10px;padding-left:10px;"><img src="<?php echo apth_url('subject/bim/images/l_dg.png');?>" id="img_url" alt="文章封面" class="input_imgs"/></p>
 			</td>
 		</tr>
 		<tr>
 			<td class="key_tablebox_height key_tab_w"><p>定 时</p></td>
 			<td class="key_tablebox_height">
-				<p><input type="text" name="timing" value="" placeholder="<?php echo date('Y-m-d H:i:s');?>" class="input_lists2"/></p>
+				<p><input type="text" name="timing" value="" placeholder="<?php echo date('Y-m-d H:i:s');?>" class="input_lists2"/> <span>定时发布格式要求（2018-01-01 00:00:00）</span></p>
 			</td>
 		</tr>
 		<tr>
@@ -95,6 +95,7 @@
 			<td class="key_tablebox_height key_tab_w"></td>
 			<td class="key_tablebox_height2">
 				<p>
+					<input type="hidden" name="act" value="create_dtsend"/>
 					<input type="button" value="提交" class="key_table_tijiao" onclick="frm_send();"/>
 				</p>				
 			</td>
@@ -124,7 +125,7 @@ function frm_send()
 		return false;
 	}
 	var ify = $("[name='ify']").val();
-	if( ify == '-1' )
+	if( ify == '0' )
 	{
 		layer.msg('请选择分类');
 		$("[name='ify']").focus();
@@ -142,11 +143,43 @@ function frm_send()
 	var covers = $("#covers").val();
 	if(covers=='')
 	{
-		layer.msg('请输入内容');
+		layer.msg('请选择封面');
 		$("#covers").focus();
 		return false;
 	}
+	$("#_frm").submit();
+}
+function previewImage(file){
+	$("#img_url").show();
+	if(file.files && file.files[0]){
+		var img = $("#img_url")[0];
+		var reader = new FileReader(),rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;;  
 	
+		var size = file.size;
+		var Max_Size = 2000*1024;
+		var width,height;
+		var image = new Image();
+	
+		reader.onload = function(evt){
+			img.src=evt.target.result;
+			var data = evt.target.result;
+			image.onload=function(){
+				width = image.width;
+				height = image.height;
+				/*
+				if(width>img.width && height>img.height){ 
+					alert("图片宽高不符合要求，请上传宽高"+img.width+"*"+img.height+"像素图片");
+				}
+				*/
+			};
+			image.src= data; 
+		} 
+	
+		if(!rFilter.test(file.files[0].type)) { alert("文件类型不正确 "); return; }
+		if(size>Max_Size){ alert("文件大小不能超出2M"); return; }
+		    
+		reader.readAsDataURL(file.files[0]);
+	}    
 }
 </script>
 </body>

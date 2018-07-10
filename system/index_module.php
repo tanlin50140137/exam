@@ -78,9 +78,10 @@ function getkey()
 	if( $page >= $TotalPage ){ $page=$TotalPage; }
 	if( $page<=1 || !is_numeric( $page ) ){ $page=1; }
 	$offset = ($page-1)*$TotalShow;
-		
-	$rows = array_slice($flRows2, $offset, $TotalShow);
-	
+	if( !empty( $flRows2 ) )
+	{
+		$rows = array_slice($flRows2, $offset, $TotalShow);
+	}
 	$flag = GetFilePath2();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
@@ -185,6 +186,19 @@ function GetState( $int )
 	}
 	return $str;
 }
+function GetState2( $int )
+{
+	switch ( $int )
+	{
+		case 0:
+			$str = '发布';
+		break;
+		case 1:
+			$str = '草稿箱';
+		break;
+	}
+	return $str;
+}
 #记录显示条数
 function SetShwoTotal()
 {
@@ -218,8 +232,7 @@ function geturl()
 	if($page<=1||!is_numeric($page)){$page=1;}
 	$offset = ($page-1)*$TotalShow;
 	
-	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
-	
+	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';	
 	$rows = db()->query($sql)->array_rows();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
@@ -237,6 +250,19 @@ function getpay()
 {
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
+	
+	$sql  = ' select a.id,a.pid,a.title,a.titleas,a.tags,a.static_n,a.covers,a.publitime,a.timing,a.state,b.title as ify from '.PRE.'createdts as a,'.PRE.'fileclass as b where a.pid=b.id ';
+	
+	$TotalRows = db()->query($sql)->array_nums();
+	$TotalShow = GetFilePath();
+	$TotalPage = ceil($TotalRows/$TotalShow);
+	$page = $_GET['page']==null?1:$_GET['page'];
+	if($page>=$TotalPage){$page=$TotalPage;}
+	if($page<=1||!is_numeric($page)){$page=1;}
+	$offset = ($page-1)*$TotalShow;
+	
+	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
+	$rows = db()->query($sql)->array_rows();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
@@ -309,9 +335,10 @@ function show_classify()
 	if($page>=$TotalPage){$page=$TotalPage;}
 	if($page<=1||!is_numeric($page)){$page=1;}
 	$offset = ($page-1)*$TotalShow;
-		
-	$rows = array_slice($flRows2, $offset, $TotalShow);
-	
+	if( !empty( $flRows2 ) )
+	{
+		$rows = array_slice($flRows2, $offset, $TotalShow);
+	}
 	$flag = GetFilePath2();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
@@ -341,6 +368,87 @@ function create_dts()
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
+#创建文章
+function create_dtsend()
+{	
+	$file = $_FILES['file'];//封面
+	
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo '<script>alert("请输入标题");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+	}
+	$data['titleas'] = $_POST['titleas'];
+	$data['pid'] = $_POST['ify'];
+	if( $data['pid'] == '0' )
+	{
+		echo '<script>alert("请选择分类");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+	}
+	$data['depict'] = $_POST['depict'];
+	$data['tags'] = $_POST['tags'];
+	
+	$timing = str_replace(array('－','：'),array('-',':'), $_POST['timing']);
+	if( $timing != '' )
+	{
+		$data['timing'] = strtotime($timing); 
+	}
+	else
+	{
+		$data['timing'] = 0; 
+	}
+	$data['content'] = $_POST['content'];
+	if( $data['content'] == '' )
+	{
+		echo '<script>alert("请选入内容");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+	}
+	$data['state'] = $_POST['state'];
+	
+	$name = mt_rand(10000,99999).mt_rand(10000,99999).mt_rand(100000,999999);
+	
+	if( $file['error'] == 0 )
+	{
+		$extArr = explode('.', $file['name']);
+		$ext = end($extArr);
+		$haystack = array('jpeg','jpg','png','gif','bmp');
+		if( !in_array($ext, $haystack) )
+		{
+			echo '<script>alert("封面格式不正确");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		}
+		if( $file['size'] > (1024*1024*2) )
+		{
+			echo '<script>alert("封面大小不能超出2M");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		}
+		
+		$path = '/ueditor/php/upload/image/'.date('Ymd');				
+		if( !is_dir( $_SERVER['DOCUMENT_ROOT'].$path ) )
+		{
+			mkdir($_SERVER['DOCUMENT_ROOT'].$path,0777);
+		}
+				
+		$destination = $path.'/'.$name.'.'.$ext;
+		
+		if( move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'].$destination) )
+		{
+			$data['covers'] = $destination;
+		}
+		else
+		{
+			$data['covers'] = '';
+		}
+	}
+	$data['static_n'] = $name;
+	$data['publitime'] = time();
+	
+	$int = db()->insert(PRE.'createdts',$data);
+	if( $int )
+	{
+		header('location:'.apth_url('?act=getpay'));
+	}
+	else
+	{
+		echo '<script>alert("文档创建失败");location.href="'.apth_url('?act=create_dts').'";</script>';
+	}
+}
 #记录树型显示
 function RecordTreeDisplay()
 {

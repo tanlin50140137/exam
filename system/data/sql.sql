@@ -89,3 +89,23 @@ create table htx_fileclass(
 	key key_title(title),
 	key key_sort(sort)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#创建文档
+drop table if exists htx_createdts;
+create table htx_createdts(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	pid int(10) unsigned not null default 0 comment '文档分类',
+	title varchar(255) not null default '' comment '正标题',
+	titleas varchar(255) not null default '' comment '副标题',			
+	depict text not null comment '描述',	
+	content MediumText not null comment '内容,大文本',
+	tags varchar(255) not null default '' comment '标签',
+	covers varchar(255) not null default '' comment '封面',
+	static_n varchar(255) not null default '' comment '静态名称',
+	publitime int(11) unsigned not null default 0 comment '文档创间时间',
+	timing varchar(255) not null default '' comment '定时发布',
+	state tinyint(10) unsigned not null default 0 comment '状态,0=发布,1=草稿箱',
+	key key_pid(pid),
+	key key_title(title),
+	key key_publitime(publitime),
+	key key_tags(tags)
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';
