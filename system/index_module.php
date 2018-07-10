@@ -330,6 +330,14 @@ function classify_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#创建文档
+function create_dts()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
 #记录树型显示
 function RecordTreeDisplay()
