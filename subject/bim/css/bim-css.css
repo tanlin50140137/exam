@@ -114,3 +114,16 @@ html{height:92%;}
 .WenDongFenlai{border: 1px solid #81dfef;border-radius:0.3rem;padding:0 0.3rem;background:#81dfef;color:#1b1a19;}
 .key_tablebox_all .WenDongFenlai:hover{color:red;}
 
+.key_tablebox_lists{border: 1px solid #ecdada;width:100%;}
+.key_tablebox_height{width:0.5rem;height:60px;padding:0 0.6rem;}
+.key_tablebox_height2{width:0.5rem;padding:0 0.6rem;}
+.input_lists{border:1px solid #cec7c7;padding:0.4rem;border-radius:0.3rem;width:74.5rem;outline:none;}
+.input_lists2{border:1px solid #cec7c7;padding:0.4rem;border-radius:0.3rem;width:15rem;outline:none;}
+.key_tab_w{width:5rem;text-align:right;}
+.key_tablebox_txt{border:1px solid #cec7c7;width:74.5rem;padding:0.4rem;border-radius:0.4rem;outline:none;}
+.key_table_ify{border:1px solid #cec7c7;padding:0.4rem;border-radius:0.3rem;outline:none;}
+.key_table_tijiao{border:1px solid #5e8de2;width:16.3rem;height:2.5rem;border-radius:0.4rem;background:#5e8de2;color:beige;outline:none;cursor:pointer;}
+.key_table_tijiao:hover{background:#3978e8;}
+.input_imgs{border:1px solid #e4dada;width:7rem;height:4.5rem;border-radius:0.4rem;display:none;}
+
+

@@ -336,6 +336,8 @@ function create_dts()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$flRows1 = GetFenLai3(0,2);
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
