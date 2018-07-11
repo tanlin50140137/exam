@@ -109,3 +109,10 @@ create table htx_createdts(
 	key key_publitime(publitime),
 	key key_tags(tags)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#创建考场
+drop table if exists htx_createroom;
+create table htx_createdts(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	pid int(10) unsigned not null default 0 comment '关联分类ID',
+	
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';

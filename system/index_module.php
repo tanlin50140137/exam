@@ -396,6 +396,14 @@ function conent_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#创建考场
+function create_room()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
 #删除文章
 function delete_conent()

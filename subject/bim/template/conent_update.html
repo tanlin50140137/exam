@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>显示文档分类</title>
+<title>修改文档</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
@@ -16,9 +16,7 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a>
 		 &nbsp; &nbsp; &nbsp; 
-		创建文档
-		 &nbsp; &nbsp; &nbsp; 
-		<input type="button" value="创建文档 " class="cearter_key" onclick="file_classify();"/>
+		修改文档
 	</h1>	
 </div>
 
@@ -113,10 +111,6 @@
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/ueditor/ueditor.all.js');?>"></script>
 <script>
 var ue = UE.getEditor('container');
-function file_classify()
-{
-	location.href="<?php echo apth_url('?act=create_dts');?>";	
-}
 function Diachronic()
 {
 	window.history.go(-1);

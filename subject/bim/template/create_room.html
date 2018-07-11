@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>创建考场</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 创建考场</h1>	
+</div>
+<div class="addfl" style="display:block;">
+	<form id="ify_frm">
+		<p>考场名称： <input type="text" name="title" value="" class="ad_fls" id="ad_fls1"/></p>
+		<p>考场排序： <input type="text" name="sort" value="0" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
+		<p>
+			题库分类：
+			<select name="pid" class="ad_fls2">
+				<option value="0">添加为顶级类</option>
+	<?php if(!empty($flRows1)){?>
+		<?php foreach( $flRows1 as $k => $v ){?>
+			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+		<?php }?>		
+	<?php }?>
+			</select>
+		</p>
+		<p>考场描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
+		<p>考场状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
+		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="创建" class="sbm_fl" onclick="add_classify();"/></div>
+	</form>
+</div>
+<script>
+function add_classify()
+{
+	var datas = $("#ify_frm").serialize();
+
+	var title = $("[name='title']").val();
+	var sort = $("[name='sort']").val();
+	
+	if( title == '' )
+	{
+		layer.tips('请输入分类名称', '#ad_fls1');
+		return false;
+	}
+	if( sort == '' )
+	{
+		layer.tips('排序号不能为空，请输入整数。', '#ad_fls2');
+		return false;
+	}
+	
+	$.ajax({
+		url:'<?php echo apth_url("index.php");?>',
+		type:'post',
+		data:'act=add_classify&'+datas,
+		success:function(data){
+			//console.log(data);return false;
+			var obj = eval("("+data+")");
+			if( obj.error == 0 )
+			{
+				layer.msg(obj.txt,{time:1000},function(){
+					location.href="<?php echo apth_url('?act=show_classify');?>";
+				});
+			}
+			else
+			{
+				layer.msg(obj.txt);
+			}	
+		}
+	});	
+}
+function Diachronic(){
+	window.history.go(-1);
+}
+</script>
+</body>
+</html>
