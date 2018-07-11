@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>显示文档分类</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<link rel="StyleSheet" href="<?php echo apth_url('subject/bim/dtree/dtree.css');?>" type="text/css" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/dtree/dtree.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1>
+		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a>
+		 &nbsp; &nbsp; &nbsp; 
+		创建文档
+		 &nbsp; &nbsp; &nbsp; 
+		<input type="button" value="创建文档 " class="cearter_key" onclick="file_classify();"/>
+	</h1>	
+</div>
+
+<div class="key_tablebox_all">
+	<div class="key_tablebox_allins">
+		发布文档
+	</div>
+<form id="_frm" action="<?php echo apth_url('index.php');?>" method="post" enctype="multipart/form-data">	
+	<table class="key_tablebox_lists">
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>标 题</p></td>
+			<td class="key_tablebox_height"><p><input type="text" name="title" value="<?php echo $row['title'];?>" placeholder="文章标题" class="input_lists"/></p></td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>副 标</p></td>
+			<td class="key_tablebox_height"><p><input type="text" name="titleas" value="<?php echo $row['titleas'];?>" placeholder="文章副标题" class="input_lists"/></p></td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>分 类</p></td>
+			<td class="key_tablebox_height2">
+				<p>
+					<select name="ify" class="key_table_ify">
+						<option value="0">--请选择分类--</option>
+<?php if(!empty($flRows1)){?>
+			<?php foreach( $flRows1 as $k => $v ){?>
+				<?php if( $v['id'] == $row['pid'] ){ ?>	
+						<option value="<?php echo $v['id'];?>" selected="selected" ><?php echo $v['title'];?></option>
+				<?php }else{ ?>
+						<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+				<?php }?>		
+			<?php }?>
+<?php }?>					
+					</select>
+				</p>			
+			</td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>描 述</p></td>
+			<td class="key_tablebox_height2">
+				<p><textarea name="depict" class="key_tablebox_txt" placeholder="文章摘要" ><?php echo $row['depict'];?></textarea></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>内 容</p></td>
+			<td class="key_tablebox_height2">
+				<p>
+					<script id="container" name="content" type="text/plain" style="width:90%;height:16rem;"><?php echo $row['content'];?></script>
+    			</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>标 签</p></td>
+			<td class="key_tablebox_height"><p><input type="text" name="tags" value="<?php echo $row['tags'];?>" placeholder="多个标签请使用“,”隔开" class="input_lists"/></p></td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>封 面</p></td>
+			<td class="key_tablebox_height2" style="padding:10px 0;">
+				<p style="padding-left:10px;"><input type="file" name="file" id="covers" onchange="previewImage(this);" class="input_lists2"/> <span>封面图片格式要求（jpeg，jpg，png，gif，bmp）；大小不能超出2M</span></p>
+				<p style="margin-top:10px;padding-left:10px;"><img src="<?php echo $row['covers'];?>" id="img_url" alt="文章封面" class="input_imgs" style="display:inline;"/></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>定 时</p></td>
+			<td class="key_tablebox_height">
+				<p><input type="text" name="timing" value="<?php echo $row['timing']==0?'':date('Y-m-d H:i:s',$row['timing']);?>" placeholder="<?php echo date('Y-m-d H:i:s');?>" class="input_lists2"/> <span>定时发布格式要求（2018-01-01 00:00:00）</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"><p>状 态</p></td>
+			<td class="key_tablebox_height">
+				<p>
+					<label><input type="radio" name="state" <?php echo $row['state']==0?'checked="checked"':'';?> value="0"/>发布</label> &nbsp; &nbsp; &nbsp;
+					<label><input type="radio" name="state" <?php echo $row['state']==1?'checked="checked"':'';?> value="1"/>草稿箱</label>
+				</p>				
+			</td>
+		</tr>
+		<tr>
+			<td class="key_tablebox_height key_tab_w"></td>
+			<td class="key_tablebox_height2">
+				<p>
+					<input type="hidden" name="act" value="update_dtsend"/>
+					<input type="hidden" name="id" value="<?php echo $id;?>"/>
+					<input type="hidden" name="page" value="<?php echo $_GET['page'];?>"/>
+					<input type="button" value="修改" class="key_table_tijiao" onclick="frm_send();"/>
+				</p>				
+			</td>
+		</tr>
+	</table>
+</form>	
+</div>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/ueditor/ueditor.config.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/ueditor/ueditor.all.js');?>"></script>
+<script>
+var ue = UE.getEditor('container');
+function file_classify()
+{
+	location.href="<?php echo apth_url('?act=create_dts');?>";	
+}
+function Diachronic()
+{
+	window.history.go(-1);
+}
+function frm_send()
+{
+	var title = $("[name='title']").val();
+	if( title == '' )
+	{
+		layer.msg('请输入标题');
+		$("[name='title']").focus();
+		return false;
+	}
+	var ify = $("[name='ify']").val();
+	if( ify == '0' )
+	{
+		layer.msg('请选择分类');
+		$("[name='ify']").focus();
+		return false;
+	}
+	var txt = ue.getContentTxt();
+	var reg=/<[^<>]+>/g;
+		txt=txt.replace(reg,''); 
+	if( txt == '' )
+	{
+		layer.msg('请输入内容');
+		ue.focus();
+		return false;
+	}	
+	$("#_frm").submit();
+}
+function previewImage(file){
+	$("#img_url").show();
+	if(file.files && file.files[0]){
+		var img = $("#img_url")[0];
+		var reader = new FileReader(),rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;;  
+	
+		var size = file.size;
+		var Max_Size = 2000*1024;
+		var width,height;
+		var image = new Image();
+	
+		reader.onload = function(evt){
+			img.src=evt.target.result;
+			var data = evt.target.result;
+			image.onload=function(){
+				width = image.width;
+				height = image.height;
+				/*
+				if(width>img.width && height>img.height){ 
+					alert("图片宽高不符合要求，请上传宽高"+img.width+"*"+img.height+"像素图片");
+				}
+				*/
+			};
+			image.src= data; 
+		} 
+	
+		if(!rFilter.test(file.files[0].type)) { alert("文件类型不正确 "); return; }
+		if(size>Max_Size){ alert("文件大小不能超出2M"); return; }
+		    
+		reader.readAsDataURL(file.files[0]);
+	}    
+}
+</script>
+</body>
+</html>

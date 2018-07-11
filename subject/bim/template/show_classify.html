@@ -126,7 +126,7 @@ function delete_info(id,p)
 	layer.confirm('您是否要删除这条分类？删除后无法恢复，分类下的信息将会全部丢失！', {
 		  btn: ['确定','取消'] //按钮
 		}, function(){
-		  layer.msg('正在删除......', {icon: 1},function(){
+		  layer.msg('正在删除...', {icon: 1},function(){
 			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_classify','id':id},function(data){
 				  var obj = eval("("+data+")");
 				  layer.msg(obj.txt,{time:1000},function(){

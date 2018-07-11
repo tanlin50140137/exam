@@ -24,7 +24,7 @@
 	<a href="<?php echo apth_url('?act=show_classify');?>" class="WenDongFenlai">文档分类</a>
 </div>
 <div class="key_tablebox_allins">
-	搜索分类：
+	搜索：
 	<select onchange="search_ify(this);" class="ad_fls2">
 			<option value="0">所有分类</option>
 <?php if(!empty($flRows1)) { ?>
@@ -38,7 +38,7 @@
 <?php } ?>
 	</select>
 	&nbsp; &nbsp; &nbsp; &nbsp;
-	<input type="text" id="search" placeholder="分类/文章标题" class="ad_fls"/> <input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();"/>
+	<input type="text" id="search" value="<?php echo $s;?>" placeholder="分类/文章标题" class="ad_fls"/> <input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();"/>
 </div>
 <table class="key_tablebox tableBox">
 		<tr>
@@ -58,7 +58,7 @@
 			<td><?php echo $v['title'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><?php echo $v['timing']==0?'未定时':date('Y.m.d H:i:s',$v['timing']);?></td>
-			<td><?php echo GetState2($v['state']);?></td>
+			<td><?php echo GetState2($v['state'],$v['id'],$page);?></td>
 			<td><a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a> &nbsp; | &nbsp; <a href="javascript:void(0);" onclick="delete_info('<?php echo $v['id'];?>','<?php echo $page;?>');">删除</a></td>
 		</tr>
 	<?php }?>	
@@ -97,7 +97,7 @@ function delete_info(id,p)
 		  btn: ['确定','取消'] //按钮
 		}, function(){
 		  layer.msg('正在删除......', {icon: 1},function(){
-			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_info','id':id},function(data){
+			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_conent','id':id},function(data){
 				  var obj = eval("("+data+")");
 				  layer.msg(obj.txt,{time:1000},function(){
 						location.reload();
@@ -108,7 +108,7 @@ function delete_info(id,p)
 }
 function update_info(id,p)
 {
-	location.href = "<?php echo apth_url('?act=getkey_update&id=');?>"+id+'&page='+p;
+	location.href = "<?php echo apth_url('?act=conent_update&id=');?>"+id+'&page='+p;
 }
 function search_ify(t)
 {
@@ -132,7 +132,15 @@ function btn_g()
 }
 function btn_sreach()
 {
-	alert(123);	
+	var search = $("#search").val();
+	if( search != '' )
+	{
+		location.href="<?php echo apth_url('?act=getpay&s=');?>"+search;
+	}
+	else
+	{
+		location.href="<?php echo apth_url('?act=getpay');?>";
+	}	
 }
 function file_classify()
 {

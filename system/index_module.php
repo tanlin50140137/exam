@@ -186,7 +186,7 @@ function GetState( $int )
 	}
 	return $str;
 }
-function GetState2( $int )
+function GetState2( $int , $id, $page)
 {
 	switch ( $int )
 	{
@@ -194,7 +194,7 @@ function GetState2( $int )
 			$str = '发布';
 		break;
 		case 1:
-			$str = '草稿箱';
+			$str = '<a href="'.apth_url('?act=conent_update&id='.$id.'&page='.$page).'">[草稿箱]</a>';
 		break;
 	}
 	return $str;
@@ -252,12 +252,18 @@ function getpay()
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
 	$sql  = ' select a.id,a.pid,a.title,a.titleas,a.tags,a.static_n,a.covers,a.publitime,a.timing,a.state,b.title as ify from '.PRE.'createdts as a,'.PRE.'fileclass as b where a.pid=b.id ';
 	
 	if( $id != 0 )
 	{
 		$sql  .= ' and  b.id='.$id.' ';
+	}
+	
+	if( $s != '' )
+	{
+		$sql  .= ' and  (a.title like "%'.$s.'%" or b.title like "%'.$s.'%") ';
 	}
 	
 	$TotalRows = db()->query($sql)->array_nums();
@@ -377,7 +383,133 @@ function create_dts()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#修改文档
+function conent_update()
+{
+	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	#分类
+	$flRows1 = GetFenLai3(0,2);
+	#获取信息
+	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
+#删除文章
+function delete_conent()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	#获取信息
+	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
+	
+	$int = db()->delete(PRE.'createdts',array('id'=>$id));
+	if( $int )
+	{
+		if( is_file( $_SERVER['DOCUMENT_ROOT'].$row['covers'] ) )
+		{
+			unlink( $_SERVER['DOCUMENT_ROOT'].$row['covers'] );
+		}		
+		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+	}
+}
+#修改文章
+function update_dtsend()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	$file = $_FILES['file'];//封面
+	
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo '<script>alert("请输入标题");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+	}
+	$data['titleas'] = $_POST['titleas'];
+	$data['pid'] = $_POST['ify'];
+	if( $data['pid'] == '0' )
+	{
+		echo '<script>alert("请选择分类");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+	}
+	$data['depict'] = $_POST['depict'];
+	$data['tags'] = $_POST['tags'];
+	
+	$timing = str_replace(array('－','：'),array('-',':'), $_POST['timing']);
+	if( $timing != '' )
+	{
+		$data['timing'] = strtotime($timing); 
+	}
+	else
+	{
+		$data['timing'] = 0; 
+	}
+	$data['content'] = $_POST['content'];
+	if( $data['content'] == '' )
+	{
+		echo '<script>alert("请选入内容");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+	}
+	$data['state'] = $_POST['state'];
+	
+	#获取信息
+	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
+	
+	$name = mt_rand(10000,99999).mt_rand(10000,99999).mt_rand(100000,999999);
+	if( $file['error'] == 0 )
+	{#有新图片上传	
+		$extArr = explode('.', $file['name']);
+		$ext = end($extArr);
+		$haystack = array('jpeg','jpg','png','gif','bmp');
+		if( !in_array($ext, $haystack) )
+		{
+			echo '<script>alert("封面格式不正确");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		}
+		if( $file['size'] > (1024*1024*2) )
+		{
+			echo '<script>alert("封面大小不能超出2M");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		}
+		
+		$path = '/ueditor/php/upload/image/'.date('Ymd');				
+		if( !is_dir( $_SERVER['DOCUMENT_ROOT'].$path ) )
+		{
+			mkdir($_SERVER['DOCUMENT_ROOT'].$path,0777);
+		}
+				
+		$destination = $path.'/'.$name.'.'.$ext;
+		
+		if( move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'].$destination) )
+		{
+			if( is_file( $_SERVER['DOCUMENT_ROOT'].$row['covers'] ) )
+			{
+				unlink( $_SERVER['DOCUMENT_ROOT'].$row['covers'] );
+			}			
+			$data['covers'] = $destination;
+		}
+		else
+		{
+			$data['covers'] = '';
+		}
+	}
+	else
+	{#没有图片上传
+		$data['covers'] = $row['covers'];		
+	}
+	
+	$int = db()->update(PRE.'createdts',$data,array('id'=>$id));
+	if( $int )
+	{
+		header('location:'.apth_url('?act=getpay&page='.$_POST['page']));
+	}
+	else
+	{
+		echo '<script>alert("文档创建失败");location.href="'.apth_url('?act=create_dts').'";</script>';
+	}
+}
 #创建文章
 function create_dtsend()
 {	
@@ -467,10 +599,25 @@ function RecordTreeDisplay()
 	
 	file_put_contents($filename, $_POST['flag']);
 }
-#删除分类
+#删除文档分类
 function delete_classify()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	#获取信息
+	$rows = db()->select('*')->from(PRE.'createdts')->where(array('pid'=>$id))->get()->array_rows();
+	if( !empty( $rows ) )
+	{
+		foreach( $rows as $k => $v )
+		{
+			if( is_file( $_SERVER['DOCUMENT_ROOT'].$v['covers'] ) )
+			{
+				unlink( $_SERVER['DOCUMENT_ROOT'].$v['covers'] );
+			}	
+			
+		}
+	}
+	
 	$int = db()->delete(PRE.'fileclass',array('id'=>$id));
 	if( $int )
 	{
