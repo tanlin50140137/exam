@@ -251,7 +251,14 @@ function getpay()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
 	$sql  = ' select a.id,a.pid,a.title,a.titleas,a.tags,a.static_n,a.covers,a.publitime,a.timing,a.state,b.title as ify from '.PRE.'createdts as a,'.PRE.'fileclass as b where a.pid=b.id ';
+	
+	if( $id != 0 )
+	{
+		$sql  .= ' and  b.id='.$id.' ';
+	}
 	
 	$TotalRows = db()->query($sql)->array_nums();
 	$TotalShow = GetFilePath();
@@ -263,6 +270,9 @@ function getpay()
 	
 	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
 	$rows = db()->query($sql)->array_rows();
+	
+	#分类
+	$flRows1 = GetFenLai3(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }

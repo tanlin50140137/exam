@@ -26,7 +26,7 @@
 <div class="key_tablebox_allins">
 	搜索分类：
 	<select onchange="search_ify(this);" class="ad_fls2">
-			<option value="">所有分类</option>
+			<option value="0">所有分类</option>
 <?php if(!empty($flRows1)) { ?>
 	<?php foreach( $flRows1 as $k => $v ) { ?>
 		<?php if($id == $v['id']) { ?>	
@@ -38,7 +38,7 @@
 <?php } ?>
 	</select>
 	&nbsp; &nbsp; &nbsp; &nbsp;
-	<a href="<?php echo apth_url('?act=adminfrom');?>" target="_parent">树型展示</a>
+	<input type="text" id="search" placeholder="分类/文章标题" class="ad_fls"/> <input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();"/>
 </div>
 <table class="key_tablebox tableBox">
 		<tr>
@@ -129,6 +129,10 @@ function btn_g()
 	{
 		location.href="<?php echo apth_url('?act=getpay&page=');?>"+d;
 	}	
+}
+function btn_sreach()
+{
+	alert(123);	
 }
 function file_classify()
 {
