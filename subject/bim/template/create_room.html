@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="key_box">
-	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 创建考场</h1>	
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=create_room');?>">创建考场</a></h1>	
 </div>
 <div class="addfl" style="display:block;">
 	<form id="ify_frm">
@@ -29,11 +29,88 @@
 			</select>
 		</p>
 		<p>考场描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
+		<p>资费模式： <label><input type="radio" name="tariff" value="0" checked="checked" onclick="SetState(1);"/>免费</label> &nbsp; &nbsp; <label><input type="radio" name="tariff" value="1" onclick="SetState(2);"/>收费</label></p>
+		<div class="t_guizhe" style="display:none;">
+			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则：</div>
+			<div class="t_guizhe_list">
+				<span style="font-weight:bold;">VIP包月：</span><br/>
+				<div class="add_rules">
+				01.设置名称： <input type="text" name="r_name[]" placeholder="1个月" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
+				可用天数 <input type="text" name="r_day[]" placeholder="30" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
+				 原价格 <input type="text" name="r_srcpay[]" placeholder="20" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 折后价 <input type="text" name="r_fra[]" placeholder="15" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 <label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则</label><br/>
+				 02.设置名称： <input type="text" name="r_name[]" placeholder="3个月" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
+				可用天数 <input type="text" name="r_day[]" placeholder="90" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
+				 原价格 <input type="text" name="r_srcpay[]" placeholder="60" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 折后价 <input type="text" name="r_fra[]" placeholder="55" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 <label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则 &nbsp;  &nbsp; <input type="button" value="删除" onclick="r_delete();"/></label><br/>
+				 03.设置名称： <input type="text" name="r_name[]" placeholder="6个月" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
+				可用天数 <input type="text" name="r_day[]" placeholder="180" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
+				 原价格 <input type="text" name="r_srcpay[]" placeholder="120" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 折后价 <input type="text" name="r_fra[]" placeholder="115" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 <label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则 &nbsp;  &nbsp; <input type="button" value="删除" onclick="r_delete();"/></label><br/>
+				 04.设置名称： <input type="text" name="r_name[]" placeholder="1个年" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
+				可用天数 <input type="text" name="r_day[]" placeholder="365" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
+				 原价格 <input type="text" name="r_srcpay[]" placeholder="240" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 折后价 <input type="text" name="r_fra[]" placeholder="225" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 <label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则 &nbsp;  &nbsp; <input type="button" value="删除" onclick="r_delete();"/></label><br/>
+				 05.设置名称： <input type="text" name="r_name[]" placeholder="2个年" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
+				可用天数 <input type="text" name="r_day[]" placeholder="720" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
+				 原价格 <input type="text" name="r_srcpay[]" placeholder="480" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 折后价 <input type="text" name="r_fra[]" placeholder="445" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 <label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则 &nbsp;  &nbsp; <input type="button" value="删除" onclick="r_delete();"/></label><br/>
+				 06.设置名称： <input type="text" name="r_name[]" placeholder="3个年" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
+				可用天数 <input type="text" name="r_day[]" placeholder="1080" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
+				 原价格 <input type="text" name="r_srcpay[]" placeholder="720" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 折后价 <input type="text" name="r_fra[]" placeholder="700" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+				 <label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则 &nbsp;  &nbsp; <input type="button" value="删除" onclick="r_delete();"/></label><br/>
+				 </div>
+				 <input type="button" value="添加规则" onclick="AddRules();"/>
+			</div>
+		</div>
 		<p>考场状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="创建" class="sbm_fl" onclick="add_classify();"/></div>
 	</form>
 </div>
 <script>
+var i=6;
+function AddRules()
+{
+	i++;
+	var html = '';
+	html += setInts(i)+'.设置名称： <input type="text" name="r_name[]" placeholder="填写名称" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; ';
+	html += '可用天数 <input type="text" name="r_day[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; ';
+	html += '原价格 <input type="text" name="r_srcpay[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; ';
+	html += ' 折后价 <input type="text" name="r_fra[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; ';
+	html += '<label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则</label> &nbsp;  &nbsp; <input type="button" value="删除" onclick="r_delete();"/><br/>';
+	$(".add_rules").append(html);	
+}
+function SetState(t)
+{
+	if( t == 1 )
+	{
+		$(".r_setvals").val('');
+		$(".r_setons").attr({"checked":false});
+		$(".t_guizhe").hide();
+	}
+	else if( t == 2 )
+	{
+		$(".t_guizhe").show();
+	}
+}
+function r_delete()
+{
+	alert(123);	
+}
+function setInts(i)
+{
+	if(i<10)
+	{
+		i = '0'+i;
+	}	
+	return i;
+}
 function add_classify()
 {
 	var datas = $("#ify_frm").serialize();
@@ -55,14 +132,14 @@ function add_classify()
 	$.ajax({
 		url:'<?php echo apth_url("index.php");?>',
 		type:'post',
-		data:'act=add_classify&'+datas,
+		data:'act=add_room&'+datas,
 		success:function(data){
 			//console.log(data);return false;
 			var obj = eval("("+data+")");
 			if( obj.error == 0 )
 			{
 				layer.msg(obj.txt,{time:1000},function(){
-					location.href="<?php echo apth_url('?act=show_classify');?>";
+					location.href="<?php echo apth_url('?act=examqm');?>";
 				});
 			}
 			else

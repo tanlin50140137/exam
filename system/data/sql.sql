@@ -111,8 +111,16 @@ create table htx_createdts(
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
 #创建考场
 drop table if exists htx_createroom;
-create table htx_createdts(
+create table htx_createroom(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
 	pid int(10) unsigned not null default 0 comment '关联分类ID',
-	
+	title varchar(255) not null default '' comment '考场名称',
+	sort varchar(255) not null default '' comment '考场排序',
+	tariff tinyint(10) unsigned not null default 0 comment '资费模式,0=免费,1=收费',
+	descri varchar(255) not null default '' comment '考场描述',
+	publitime int(11) unsigned not null default 0 comment '考场创间时间',
+	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',
+	key key_pid(pid),
+	key key_title(title),
+	key key_sort(sort)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';

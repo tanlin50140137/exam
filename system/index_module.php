@@ -402,9 +402,46 @@ function create_room()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	#获取数据
+	$flRows1 = GetFenLai(0,2);
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
+#添加考场
+function add_room()
+{
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+	}
+	$int = db()->select('*')->from(PRE.'fileclass')->where(array('title'=>$data['title']))->get()->array_nums();
+	if( $int > 0 )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
+	}
+	$data['sort'] = $_POST['sort'];
+	if( $data['sort'] === '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+	}
+	$data['pid'] = $_POST['pid'];
+	$data['descri'] = $_POST['descri'];
+	$data['state'] = $_POST['state'];
+	$data['publitime'] = time();
+		
+	#记录数据
+	$int = db()->insert(PRE.'createroom',$data);
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'添加成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
+	}
+}
 #删除文章
 function delete_conent()
 {
