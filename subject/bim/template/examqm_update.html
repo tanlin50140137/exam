@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>创建考场</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=examqm_update');?>">修改考场</a></h1>	
+</div>
+<div class="addfl" style="display:block;">
+	<form id="ify_frm">
+		<p>考场名称： <input type="text" name="title" value="<?php echo $row['title'];?>" class="ad_fls" id="ad_fls1"/></p>
+		<p>考场排序： <input type="text" name="sort" value="<?php echo $row['sort'];?>" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
+		<p>
+			题库分类：
+			<select name="pid" class="ad_fls2">
+				<option value="0">添加为顶级类</option>
+	<?php if(!empty($flRows1)){?>
+		<?php foreach( $flRows1 as $k => $v ){?>
+			<?php if($v['id'] == $row['pid']){?>
+				<option value="<?php echo $v['id'];?>" selected="selected"><?php echo $v['title'];?></option>
+			<?php }else{?>
+				<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+			<?php }?>
+		<?php }?>		
+	<?php }?>
+			</select>
+		</p>
+		<p>考场描述： <input type="text" name="descri" value="<?php echo $row['descri'];?>" class="ad_fls"/></p>
+		<p>资费模式： <label><input type="radio" name="tariff" value="0" <?php echo $row['tariff']==0?'checked="checked"':'';?> onclick="SetState(1);"/>免费</label> &nbsp; &nbsp; <label><input type="radio" name="tariff" <?php echo $row['tariff']==1?'checked="checked"':'';?> value="1" onclick="SetState(2);"/>收费</label></p>		
+		<div class="t_guizhe" style="display:none;">
+			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则：</div>
+			<div class="t_guizhe_list">
+				<span style="font-weight:bold;">VIP包月：</span><br/>
+				<div class="add_rules">
+<?php if( !empty( $rule['r_name'] ) ){ ?>	
+	<?php foreach( $rule['r_name'] as $k => $v ){ ?>		
+					<div class="cloxe_xxx">
+					<span><?php echo GetInts($k+1);?></span>.设置名称： <input type="text" name="r_name[]" placeholder="1个月" value="<?php echo $v;?>" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
+					可用天数 <input type="text" name="r_day[]" placeholder="30" value="<?php echo $rule['r_day'][$k];?>" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
+					 原价格 <input type="text" name="r_srcpay[]" placeholder="20" value="<?php echo $rule['r_day'][$k];?>" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
+					 折后价 <input type="text" name="r_fra[]" placeholder="15" value="<?php echo $rule['r_day'][$k];?>" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen; &nbsp; &nbsp;  
+					 <label><input type="radio" name="r_radio<?php echo ($k+1);?>" value="1" <?php echo $rule['r_radio'.($k+1)]==1?'checked="checked"':'';?> class="r_radio"/>显示原价</label> &nbsp;
+					 <label><input type="radio" name="r_radio<?php echo ($k+1);?>" value="2" <?php echo $rule['r_radio'.($k+1)]==2?'checked="checked"':'';?> class="r_radio"/>显示折后价</label> &nbsp;
+					 <label><input type="radio" name="r_radio<?php echo ($k+1);?>" value="3" <?php echo $rule['r_radio'.($k+1)]==3?'checked="checked"':'';?> class="r_radio"/>显示所有价格</label> &nbsp; &nbsp; &nbsp; &nbsp;
+					 <label><input type="checkbox" name="r_on[]" value="on" <?php echo $rule['r_on'][$k]=='on'?'checked="checked"':'';?> class="r_setons" />选用此规则</label>
+					 </div>
+	<?php } ?>				 
+<?php } ?>
+				 </div>
+				 <input type="button" value="添加规则" onclick="AddRules();"/>
+			</div>
+		</div>
+		<p>考场设置： 
+		<label><input type="radio" name="setting" value="0" <?php echo $row['setting']==0?'checked="checked"':'';?> />练习</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="setting" value="1" <?php echo $row['setting']==1?'checked="checked"':'';?> />真考</label> &nbsp; &nbsp; 
+		</p>
+		<p>考场状态： <label><input type="radio" name="state" value="0" <?php echo $row['state']==0?'checked="checked"':'';?> />显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1" <?php echo $row['state']==1?'checked="checked"':'';?>/>隐藏</label></p>
+		<input type="hidden" name="id" value="<?php echo $id;?>"/>
+		<input type="hidden" name="page" value="<?php echo $_GET['page'];?>"/>
+		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="修改" class="sbm_fl" onclick="add_classify();"/></div>
+	</form>
+</div>
+<script>
+function AddRules()
+{	
+	var i = $(".cloxe_xxx").length;
+	
+	var html = '';
+	html += '<div class="cloxe_xxx"><span>'+setInts(i+1)+'</span>.设置名称： <input type="text" name="r_name[]" placeholder="填写名称" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; ';
+	html += '可用天数 <input type="text" name="r_day[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; ';
+	html += '原价格 <input type="text" name="r_srcpay[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; ';
+	html += ' 折后价 <input type="text" name="r_fra[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen; &nbsp; &nbsp; ';
+	html += '<label><input type="radio" name="r_radio'+(i+1)+'" value="1" class="r_radio"/>显示原价</label> &nbsp; ';
+	html += '<label><input type="radio" name="r_radio'+(i+1)+'" value="2" class="r_radio"/>显示折后价</label> &nbsp; ';
+	html += '<label><input type="radio" name="r_radio'+(i+1)+'" value="3" checked="checked" class="r_radio"/>显示所有价格</label> &nbsp; &nbsp; &nbsp; &nbsp; ';
+	html += '<label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则</label> &nbsp;  &nbsp; </div>';
+	$(".add_rules").append(html);	
+}
+function SetState(t)
+{
+	if( t == 1 )
+	{
+		$(".r_setvals").val('');
+		$(".r_setons").attr({"checked":false});
+		$(".t_guizhe").hide();
+	}
+	else if( t == 2 )
+	{
+		$(".t_guizhe").show();
+	}
+}
+function setInts(i)
+{
+	if(i<10)
+	{
+		i = '0'+i;
+	}	
+	return i;
+}
+function add_classify()
+{
+	var datas = $("#ify_frm").serialize();
+
+	var title = $("[name='title']").val();
+	var sort = $("[name='sort']").val();
+	
+	if( title == '' )
+	{
+		layer.tips('请输入分类名称', '#ad_fls1');
+		return false;
+	}
+	if( sort == '' )
+	{
+		layer.tips('排序号不能为空，请输入整数。', '#ad_fls2');
+		return false;
+	}
+	var setting = $("[name='setting']");
+	if( !setting.is(":checked") )
+	{
+		layer.msg('请设置考场');
+		return false;
+	}
+	$.ajax({
+		url:'<?php echo apth_url("index.php");?>',
+		type:'post',
+		data:'act=update_room&'+datas,
+		success:function(data){
+			//console.log(data);return false;
+			var obj = eval("("+data+")");
+			if( obj.error == 0 )
+			{
+				layer.msg(obj.txt,{time:1000},function(){
+					location.href="<?php echo apth_url('?act=examqm');?>";
+				});
+			}
+			else
+			{
+				layer.msg(obj.txt);
+			}	
+		}
+	});	
+}
+function Diachronic(){
+	window.history.go(-1);
+}
+</script>
+</body>
+</html>

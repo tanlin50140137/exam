@@ -240,11 +240,35 @@ function geturl()
 #考题管理
 function examqm()
 {
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	#获取考场
-	$rows = db()->select('*')->from(PRE.'createroom')->get()->array_rows();
+	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.descri,a.rule,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
+	if( $id != '' )
+	{
+		$sql .= ' and b.id='.$id.' ';
+	}
+	if( $s!=null )
+	{
+		$sql .= ' and (a.title like "%'.$s.'%" or b.title like "%'.$s.'%") ';
+	}
+	$TotalRows = db()->query($sql)->array_nums();
+	$TotalShow = GetFilePath();
+	$TotalPage = ceil($TotalRows/$TotalShow);
+	$page = $_GET['page']==null?1:$_GET['page'];
+	if($page>=$TotalPage){$page=$TotalPage;}
+	if($page<=1||!is_numeric($page)){$page=1;}
+	$offset = ($page-1)*$TotalShow;
+	
+	$sql .= ' order by a.publitime desc limit '.$offset.','.$TotalShow.' ';	
+	$rows = db()->query($sql)->array_rows();
+	
+	#获取数据
+	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
@@ -410,13 +434,42 @@ function create_room()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-###############################################################################################
-#添加考场
-function add_room()
+#修改考场
+function examqm_update()
 {
-	$value = $_POST;
-	$data['rule'] = serialize($value);//规则
+	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	#获取数据
+	$row = db()->select('id,pid,title,sort,tariff,setting,descri,rule,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
+	#收费规则
+	if( $row['rule'] != null )
+	{
+		$rule = unserialize($row['rule']);
+	}
+	#获取数据
+	$flRows1 = GetFenLai(0,2);
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+###############################################################################################
+#修改考场
+function update_room()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	$data['tariff'] = $_POST['tariff'];
+	if( $data['tariff'] == 1 )
+	{#有设置规则
+		$value = $_POST;
+		$data['rule'] = serialize($value);//规则
+	}
+	else
+	{#没有设置规则
+		$data['rule'] = '';
+	}
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
@@ -433,6 +486,60 @@ function add_room()
 		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
 	}
 	$data['pid'] = $_POST['pid'];
+	if( $data['pid'] == 0 )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请选择分类'));exit;
+	}
+	$data['setting'] = $_POST['setting'];
+	$data['descri'] = $_POST['descri'];
+	$data['state'] = $_POST['state'];
+	$data['publitime'] = time();
+		
+	#记录数据
+	$int = db()->update(PRE.'createroom',$data,array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'修改成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
+	}
+}
+#添加考场
+function add_room()
+{
+	$data['tariff'] = $_POST['tariff'];
+	if( $data['tariff'] == 1 )
+	{#有设置规则
+		$value = $_POST;
+		$data['rule'] = serialize($value);//规则
+	}
+	else
+	{#没有设置规则
+		$data['rule'] = '';
+	}
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+	}
+	$int = db()->select('*')->from(PRE.'fileclass')->where(array('title'=>$data['title']))->get()->array_nums();
+	if( $int > 0 )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
+	}
+	$data['sort'] = $_POST['sort'];
+	if( $data['sort'] === '' )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+	}
+	$data['pid'] = $_POST['pid'];
+	if( $data['pid'] == 0 )
+	{
+		echo json_encode(array("error"=>1,'txt'=>'请选择分类'));exit;
+	}
+	$data['setting'] = $_POST['setting'];
 	$data['descri'] = $_POST['descri'];
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();

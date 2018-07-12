@@ -98,6 +98,14 @@ function getThemeDir()
 {
 	return 'bim';
 }
+function GetInts($int)
+{
+	if( $int < 10 )
+	{
+		$int = '0'.$int;
+	}
+	return $int;
+}
 #获取版本号
 function get_version()
 {

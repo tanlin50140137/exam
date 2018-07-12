@@ -19,8 +19,8 @@
 		<p>考场排序： <input type="text" name="sort" value="0" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
 		<p>
 			题库分类：
-			<select name="pid" class="ad_fls2">
-				<option value="0">添加为顶级类</option>
+			<select name="pid" class="ad_fls2" id="ad_fls3">
+				<option value="0">请选择分类</option>
 	<?php if(!empty($flRows1)){?>
 		<?php foreach( $flRows1 as $k => $v ){?>
 			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
@@ -29,7 +29,7 @@
 			</select>
 		</p>
 		<p>考场描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
-		<p>资费模式： <label><input type="radio" name="tariff" value="0" checked="checked" onclick="SetState(1);"/>免费</label> &nbsp; &nbsp; <label><input type="radio" name="tariff" value="1" onclick="SetState(2);"/>收费</label></p>
+		<p>资费模式： <label><input type="radio" name="tariff" value="0" checked="checked" onclick="SetState(1);"/>免费</label> &nbsp; &nbsp; <label><input type="radio" name="tariff" value="1" onclick="SetState(2);"/>收费</label></p>		
 		<div class="t_guizhe" style="display:none;">
 			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则：</div>
 			<div class="t_guizhe_list">
@@ -99,6 +99,10 @@
 				 <input type="button" value="添加规则" onclick="AddRules();"/>
 			</div>
 		</div>
+		<p>考场设置： 
+		<label><input type="radio" name="setting" value="0" onclick="SetSetting(1);"/>练习</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="setting" value="1" onclick="SetSetting(2);"/>真考</label> &nbsp; &nbsp; 
+		</p>
 		<p>考场状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="创建" class="sbm_fl" onclick="add_classify();"/></div>
 	</form>
@@ -157,7 +161,18 @@ function add_classify()
 		layer.tips('排序号不能为空，请输入整数。', '#ad_fls2');
 		return false;
 	}
-	
+	var pid = $("[name='pid']").val();
+	if( pid == 0 )
+	{
+		layer.tips('请选择分类', '#ad_fls3');
+		return false;
+	}
+	var setting = $("[name='setting']");
+	if( !setting.is(":checked") )
+	{
+		layer.msg('请设置考场');
+		return false;
+	}
 	$.ajax({
 		url:'<?php echo apth_url("index.php");?>',
 		type:'post',
