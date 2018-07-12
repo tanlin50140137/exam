@@ -243,6 +243,9 @@ function examqm()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	#获取考场
+	$rows = db()->select('*')->from(PRE.'createroom')->get()->array_rows();
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 #添值服务
@@ -411,6 +414,9 @@ function create_room()
 #添加考场
 function add_room()
 {
+	$value = $_POST;
+	$data['rule'] = serialize($value);//规则
+	
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
