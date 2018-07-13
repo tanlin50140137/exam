@@ -19,18 +19,32 @@ function reset_u()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#后台框架
-function adminfrom()
+#获取用户名
+function GetUsersName()
 {
 	session_start();
-	#公共文件内容
-	include 'subject/'.getThemeDir().'/common.php';
-	
 	if( !isset( $_SESSION['usersname'] ) || $_SESSION['usersname']==null )
 	{
 		header('location:'.apth_url(''));exit;
-	}	
+	}		
 	$usersname = $_SESSION['usersname'];
+	return $usersname;
+}
+#获取用户身份
+function GetUserp()
+{
+	$usersname = GetUsersName();
+	$row = db()->select('power')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();
+	return $row['power'];
+}
+#后台框架
+function adminfrom()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+		
+	$usersname = GetUsersName();
+	
 	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_nums();
 	if( $num == 0 )
 	{
@@ -62,9 +76,11 @@ function adminindex()
 }
 #获取KEY
 function getkey()
-{
+{	
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
+	
+	$power = GetUserp();
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -216,6 +232,8 @@ function geturl()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$power = GetUserp();
+	
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
 	#获取用户列表
@@ -237,9 +255,44 @@ function geturl()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+#获取权限
+function get_power($int)
+{
+	switch ( $int )
+	{
+		case 0:
+			$str = '<font color="#FF0000">普通管理员</font>';
+		break;
+		case 1:
+			$str = '<font color="#377d02">网站编辑员</font>';
+		break;
+		case 2:
+			$str = '<font color="#0000FF">超级管理员</font>';
+		break;
+	}
+	return $str;
+}
+function get_power2($int)
+{
+	switch ( $int )
+	{
+		case 0:
+			$str = '普通管理员';
+		break;
+		case 1:
+			$str = '网站编辑员';
+		break;
+		case 2:
+			$str = '超级管理员';
+		break;
+	}
+	return $str;
+}
 #考题管理
 function examqm()
 {
+	$power = GetUserp();
+	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
@@ -311,6 +364,8 @@ function getpay()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$power = GetUserp();
+	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
@@ -370,6 +425,8 @@ function addusers()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$power = GetUserp();
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 #修改用户信息
@@ -377,6 +434,8 @@ function geturl_update()
 {
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
+	
+	$power = GetUserp();
 	
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -397,6 +456,8 @@ function file_classify()
 #显示文档分类
 function show_classify()
 {
+	$power = GetUserp();
+	
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
@@ -484,6 +545,16 @@ function examqm_update()
 	}
 	#获取数据
 	$flRows1 = GetFenLai(0,2);
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+#题库管理
+function gettiku()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$power = GetUserp();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
@@ -1035,11 +1106,6 @@ function form_resets2()
 	{
 		echo json_encode(array("error"=>1,f=>0,'txt'=>'*请输入帐号*'));exit;
 	}
-	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$data['users']))->get()->array_nums();
-	if( $num > 0 )
-	{#检测帐号
-		echo json_encode(array("error"=>1,f=>0,'txt'=>'*帐号已存在*'));exit;
-	}
 	$data['pwd'] = mb_substr(md5(md5(base64_decode($_POST['p']))),0,10,'utf-8');
 	if( $data['pwd'] == '' )
 	{
@@ -1063,11 +1129,7 @@ function form_resets2()
 	{
 		echo json_encode(array('error'=>'1',f=>3,'txt'=>'*邮箱不正确*'));exit;
 	}
-	#获取随机头像
-	$sql = 'select picname from '.PRE.'apack order by rand() limit 0,1';
-	$picrow = db()->query($sql)->array_row();
-	$data['pic'] = $picrow['picname']==''?'':$picrow['picname'];
-	$data['publitime'] = time();	
+	$data['power'] = $_POST['power']==null?0:$_POST['power'];	
 	//修改
 	$int = db()->update(PRE.'admin',$data,array('id'=>$id));
 	if( $int )
@@ -1119,6 +1181,7 @@ function form_resets()
 	$sql = 'select picname from '.PRE.'apack order by rand() limit 0,1';
 	$picrow = db()->query($sql)->array_row();
 	$data['pic'] = $picrow['picname']==''?'':$picrow['picname'];
+	$data['power'] = $_POST['power']==null?0:$_POST['power'];
 	$data['publitime'] = time();	
 	//注册
 	$int = db()->insert(PRE.'admin',$data);

@@ -16,7 +16,7 @@
 <div class="key_box">
 	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp;
 <?php if( $power==2 || $power==1 ){?>	 
-	<input type="button" value="添加分类 " class="cearter_key" onclick="cearter_key();"/>
+	<input type="button" value="导入题库 " class="cearter_key" onclick="cearter_key();"/>
 <?php }?>	
 	</h1>	
 </div>
@@ -40,7 +40,6 @@
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="添加" class="sbm_fl" onclick="sbm_fl();"/></div>
 	</form>
 </div>
-<?php if( $flag == 0 ){ ?>
 <div class="key_tablebox_all">
 	<div class="key_tablebox_allins">
 		搜索分类：
@@ -114,39 +113,10 @@
 		</tr>					
 </table>
 </div>
-<?php }else{ ?>
-<div class="key_tablebox_all">
-	<div class="key_tablebox_allins">
-		<a href="javascript:void(0);" onclick="TreeDisplay(this);">列表展示</a>
-	</div>
-	<script type="text/javascript">
-		d = new dTree('d');
-		d.add(0,-1,'查看所有考试分类');
-<?php if(!empty($flRows2)){?>	
-	<?php foreach($flRows2 as $k=>$v){?>
-		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"];?>','<?php echo apth_url("?act=getkey_update&id=".$v["id"]);?>');
-	<?php } ?>	
-<?php } ?>			
-		document.write(d);
-	</script>
-</div>
-<?php } ?>
 <script>
-function TreeDisplay(t)
+function cearter_key()
 {
-	var v = $(t).text();
-	if( v == '树型展示' )
-	{
-		$.post('<?php echo apth_url("index.php");?>',{'act':'RecordTreeDisplay','flag':'1'},function(data){
-			location.reload();
-		});
-	}
-	else
-	{
-		$.post('<?php echo apth_url("index.php");?>',{'act':'RecordTreeDisplay','flag':'0'},function(data){
-			location.reload();
-		});
-	}	
+	alert(123);	
 }
 function Diachronic(){
 	window.history.go(-1);
@@ -189,47 +159,6 @@ function btn_g()
 	{
 		location.href="<?php echo apth_url('?act=getkey&page=');?>"+d;
 	}	
-}
-function cearter_key()
-{
-	$(".addfl").show();
-}
-function sbm_fl()
-{
-	var datas = $("#ify_frm").serialize();
-	
-	var title = $("[name='title']").val();
-	var sort = $("[name='sort']").val();
-	
-	if( title == '' )
-	{
-		layer.tips('请输入分类名称', '#ad_fls1');
-		return false;
-	}
-	if( sort == '' )
-	{
-		layer.tips('排序号不能为空，请输入整数。', '#ad_fls2');
-		return false;
-	}
-	$.ajax({
-		url:'<?php echo apth_url("index.php");?>',
-		type:'post',
-		data:'act=form_sbm&'+datas,
-		success:function(data){
-			var obj = eval("("+data+")");
-			if( obj.error == 0 )
-			{
-				$("#ify_frm")[0].reset();
-				layer.msg(obj.txt,{time:1000},function(){
-					location.reload();
-				});
-			}
-			else
-			{
-				layer.msg(obj.txt);
-			}	
-		}
-	});
 }
 $(function(){
 	$(".tableBox p:eq(0),.tableBox p:eq(1)").css({"font-weight":"bold"});

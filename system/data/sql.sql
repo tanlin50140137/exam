@@ -17,11 +17,14 @@ create table htx_admin(
 	dqy_time  int(11) unsigned not null default 0 comment '到期时间',
 	tzy_time  int(11) unsigned not null default 0 comment '通知时间',
 	publitime int(11) unsigned not null default 0 comment '注册时间',
+	power tinyint(10) unsigned not null default 0 comment '权限,0=普通管理员,1=网站编辑员,2=超级管理员',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=正常,1=禁止',
 	key key_users(users),
 	key key_publitime(publitime),
 	key key_state(state)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#添加后台会员权限
+alter table htx_admin add power tinyint(10) unsigned not null default 0 comment '权限,0=普通管理员,1=网站编辑员,2=超级管理员' AFTER publitime;
 #头像包
 drop table if exists htx_apack;
 create table htx_apack(

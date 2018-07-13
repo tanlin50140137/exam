@@ -17,8 +17,10 @@
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
 		文档分类
+<?php if( $power==2 || $power==1 ){ ?>		
 		 &nbsp; &nbsp; &nbsp; 
 		<input type="button" value="创建分类 " class="cearter_key" onclick="file_classify();"/>
+<?php } ?>		
 	</h1>	
 </div>
 <?php if($flag==0){?>
@@ -59,7 +61,17 @@
 			<td><?php echo $v['sort'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><?php echo GetState($v['state']);?></td>
-			<td><a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a> &nbsp; | &nbsp; <a href="javascript:void(0);" onclick="delete_info('<?php echo $v['id'];?>','<?php echo $page;?>');">删除</a></td>
+			<td>
+<?php if( $power==2 || $power==1 ){ ?>			
+			<a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a>
+<?php }else{ ?>
+			<font color="#999999">观看</font>
+<?php } ?>	
+<?php if( $power==2 ){ ?>			
+			 &nbsp; | &nbsp; 
+			<a href="javascript:void(0);" onclick="delete_info('<?php echo $v['id'];?>','<?php echo $page;?>');">删除</a>
+<?php }?>			
+			</td>
 		</tr>
 	<?php }?>	
 <?php }?>
@@ -70,7 +82,8 @@
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
 			<a href="<?php echo apth_url('?act=show_classify&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=show_classify&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
-<?php }?>			
+<?php }?>	
+<?php if( $power==2 || $power==1 ){ ?>		
 			<select onchange="SetShwoTotal(this);">
 				<option value="5" <?php echo $TotalShow==5?'selected="selected"':''?> >显示5条</option>
 				<option value="10" <?php echo $TotalShow==10?'selected="selected"':''?> >显示10条</option>
@@ -79,6 +92,7 @@
 				<option value="50" <?php echo $TotalShow==50?'selected="selected"':''?> >显示50条</option>
 				<option value="100" <?php echo $TotalShow==100?'selected="selected"':''?> >显示100条</option>
 			</select>
+<?php }?>			
 			</td>
 		</tr>					
 </table>

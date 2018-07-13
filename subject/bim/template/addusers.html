@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="key_box">
-	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp; 添加用户</h1>	
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=addusers');?>">添加用户</a></h1>	
 </div>
 <div class="addfl" style="display:block;">
 	<form id="ify_frm">
@@ -19,6 +19,16 @@
 		<p>密码： <input type="password" name="pwd" value="" class="ad_fls" id="ad_fls1"/> <span class="tishiinfo"></span></p>
 		<p>手机： <input type="text" name="tel" value="" class="ad_fls"/> <span class="tishiinfo"></span></p>
 		<p>邮箱： <input type="text" name="email" value="" class="ad_fls"/> <span class="tishiinfo"></span></p>
+		<p>
+			权限：
+			<select name="power">
+				<option value="0">普通管理员</option>				
+				<option value="1">网站编辑员</option>	
+<?php if($power == 2 ){?>							
+				<option value="2">超级管理员</option>
+<?php }?>				
+			</select>
+		</p>
 		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="添加用户" class="sbm_fl" onclick="add_user(this);" set-url="<?php echo apth_url('index.php');?>"/></div>
 	</form>
 </div>
@@ -29,6 +39,8 @@ function add_user(m)
 	var p = $("[name='pwd']").val();
 	var t = $("[name='tel']").val();
 	var e = $("[name='email']").val();
+	var power = $("[name='power']").val();
+	
 	var url = $(m).attr('set-url');
 	if( u == '' )
 	{
@@ -73,7 +85,7 @@ function add_user(m)
 		return false;
 	}
 	//验证帐号密码
-	$.post(url,{"act":"form_resets","u":u,"p":p,"t":t,"e":e},function(data){
+	$.post(url,{"act":"form_resets","u":u,"p":p,"t":t,"e":e,'power':power},function(data){
 		var obj = eval("("+data+")");
 		if( obj.error == 0 )
 		{//注册成功
