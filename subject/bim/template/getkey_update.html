@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="key_box">
-	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回首页</a> &nbsp; &nbsp; &nbsp; 修改分类</h1>	
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp; 修改分类</h1>	
 </div>
 <div class="addfl" style="display:block;">
 	<form id="ify_frm">
@@ -36,7 +36,7 @@
 		</p>
 		<p>分类描述： <input type="text" name="descri" value="<?php echo $row['descri'];?>" class="ad_fls"/></p>
 		<p>分类状态： <label><input type="radio" name="state" <?php echo $row['state']==0?'checked="checked"':'';?> value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" <?php echo $row['state']==1?'checked="checked"':'';?> value="1"/>隐藏</label></p>
-		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="修改" class="sbm_fl" onclick="sbm_update();"/></div>
+		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="修改" class="sbm_fl" onclick="sbm_update();"/>  &nbsp; &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=getkey');?>">取消</a></div>
 		<input type="hidden" name="id" value="<?php echo $id;?>"/>
 		<input type="hidden" name="page" value="<?php echo $_GET['page'];?>"/>
 	</form>

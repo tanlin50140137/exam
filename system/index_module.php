@@ -181,7 +181,7 @@ function GetState( $int )
 			$str = '显示';
 		break;
 		case 1:
-			$str = '隐藏';
+			$str = '<font color="red">隐藏</font>';
 		break;
 	}
 	return $str;
@@ -247,7 +247,7 @@ function examqm()
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	#获取考场
-	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.descri,a.rule,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
+	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.setting,a.descri,a.rule,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
 	if( $id != '' )
 	{
 		$sql .= ' and b.id='.$id.' ';
@@ -271,6 +271,39 @@ function examqm()
 	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+#规则
+function e_zfms($int)
+{
+	switch ($int)
+	{
+		case 0:
+			$str = '<font color="#69b530">免费</font>';
+		break;
+		case 1:
+			$str = '<font color="#ff9800">收费</font>';
+		break;
+	}
+	return $str;
+}
+function e_exam($int)
+{
+	switch ($int)
+	{
+		case 0:
+			$str = '<font color="#69b530">练习</font>';
+		break;
+		case 1:
+			$str = '<font color="#cb10ea">历年真考</font>';
+		break;
+		case 2:
+			$str = '<font color="#232222">随机模拟 </font>';
+		break;
+		case 3:
+			$str = '<font color="#e94111">专家模拟</font>';
+		break;
+	}
+	return $str;
 }
 #添值服务
 function getpay()
@@ -455,6 +488,20 @@ function examqm_update()
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
+#删除考场
+function delete_exam()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$int = db()->delete(PRE.'createroom',array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+	}
+}
 #修改考场
 function update_room()
 {
@@ -493,7 +540,6 @@ function update_room()
 	$data['setting'] = $_POST['setting'];
 	$data['descri'] = $_POST['descri'];
 	$data['state'] = $_POST['state'];
-	$data['publitime'] = time();
 		
 	#记录数据
 	$int = db()->update(PRE.'createroom',$data,array('id'=>$id));
