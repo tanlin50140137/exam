@@ -240,3 +240,10 @@ function GetFilePath2()
 	$str = file_get_contents($filename);
 	return $str;
 }
+#获取路径-外来
+function GetFilePath3()
+{
+	$spot = SPOT;
+	$filename = base_url($spot.'external');
+	return $filename;
+}

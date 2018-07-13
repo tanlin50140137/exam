@@ -129,3 +129,28 @@ create table htx_createroom(
 	key key_title(title),
 	key key_sort(sort)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#题库
+drop table if exists htx_examination;
+create table htx_examination(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	pid int(10) unsigned not null default 0 comment '关联分类ID - 与题种分类',
+	typeofs tinyint(10) unsigned not null default 0 comment '题型,0=单选题,1=多选题,2=判断题,3=问答题',
+	dry varchar(255) not null default '' comment '题干',
+	options varchar(255) not null default '' comment '选项',
+	numbers varchar(255) not null default '' comment '选项数',
+	answers varchar(255) not null default '' comment '答案',
+	analysis text not null comment '解析',	
+	years varchar(255) not null default '' comment '考题年份',
+	booknames varchar(255) not null default '' comment '书本名称',
+	subtitles varchar(255) not null default '' comment '书本小标题',
+	chapters varchar(255) not null default '' comment '章节',
+	hats varchar(255) not null default '' comment '帽题',	
+	publitime int(11) unsigned not null default 0 comment '导入时间',
+	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',
+	key key_pid(pid),
+	key key_dry(dry),
+	key key_years(years),
+	key key_booknames(booknames),
+	key key_subtitles(subtitles),
+	key key_typeofs(typeofs)
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';

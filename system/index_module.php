@@ -554,11 +554,108 @@ function gettiku()
 	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
 	$power = GetUserp();
+	#获取数据
+	$flRows1 = GetFenLai(0,2);
+		
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+#创建导入题库
+function import_tiku()
+{
+	#公共文件内容
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	#获取数据
+	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
+#导入题库
+function import_sends()
+{
+	$ExtFlag = $_POST['format'];
+	$data['pid'] = $_POST['pid'];
+	$file = $_FILES['file'];
+	
+	if( $file['error'] == 0 )
+	{
+		$extArr = explode('.', $file['name']);
+		$ext = end( $extArr );
+		$haystack = array('xls','xlsx','csv');
+		if( !in_array($ext, $haystack) )
+		{
+			echo '<script>alert("文件格式有误");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
+		}
+		$path = GetFilePath3();				
+		if( !is_dir( $path ) )
+		{
+			mkdir($path,0777);
+		}
+		$destination = $path.'/'.SPOT.mt_rand(10000,99999).mt_rand(10000,99999).mt_rand(100000,999999).'.'.$ext;	
+		move_uploaded_file($file['tmp_name'], $destination);
+	}
+	
+	require base_url('system/Classes/PHPExcel.php');
+	require base_url('system/Classes/PHPExcel/IOFactory.php');
+	require base_url('system/Classes/PHPExcel/Reader/Excel5.php');
+	
+	$filename = $destination;
+		
+	if( $ExtFlag == 0 ){
+		$objReader = PHPExcel_IOFactory::createReader('Excel5');
+	}elseif( $ExtFlag == 1 ){
+		$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+	}elseif( $ExtFlag == 2 ){
+		$objReader = PHPExcel_IOFactory::createReader('CSV')->setDelimiter(',')->setInputEncoding('GBK');
+	}
+
+	$objReader->setReadDataOnly(true);
+	$objPHPExcel = $objReader->load($filename);
+	$sheet = $objPHPExcel->getSheet(0); 
+	$highestRow = $sheet->getHighestRow();
+
+	for($j=2;$j<=$highestRow;$j++)
+	{		
+		$data['typeofs'] = GetFourTypes($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue());	
+		$data['dry'] = $objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue();
+		$options = $objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue();		
+		$data['options'] = str_replace(array(',','，','-','－',';','；','|','｜','#','&','!','！','*','$','%','^','@','?','？','~','+','*','/','.',' '),array('-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'), $options);
+		$data['numbers'] = $objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue();
+		$data['answers'] = $objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue();
+		$data['analysis'] = $objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue();
+		$data['years'] = $objPHPExcel->getActiveSheet()->getCell("G".$j)->getValue();
+		$data['booknames'] = $objPHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
+		$data['subtitles'] = $objPHPExcel->getActiveSheet()->getCell("I".$j)->getValue();
+		$data['chapters'] = $objPHPExcel->getActiveSheet()->getCell("J".$j)->getValue();
+		$data['hats'] = $objPHPExcel->getActiveSheet()->getCell("K".$j)->getValue();
+		$data['publitime'] = time();
+		
+		#检测是否存在
+		$int = db()->select('*')->from(PRE.'examination')->where(array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'years'=>$data['years'],'booknames'=>$data['booknames']))->get()->array_nums();
+			
+		if( $int == 0 )
+		{#如何不存在添加
+			db()->insert(PRE.'examination',$data);
+		}
+		else
+		{#如何存在修改
+			db()->update(PRE.'examination',$data,array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'years'=>$data['years'],'booknames'=>$data['booknames']));
+		}
+	}
+	
+	#转入首页
+	header('location:'.apth_url('?act=gettiku'));	
+}
+#获取四种题型
+function GetFourTypes($str)
+{
+	$strArr = array('单选题'=>0,'多选题'=>1,'判断题'=>2,'问答题'=>3);
+	return $strArr[$str];
+}
 #删除考场
 function delete_exam()
 {
