@@ -16,6 +16,12 @@ if(!empty($arr))
 define("SITE_URL", $sys_protocal.$_SERVER['HTTP_HOST'].$site_url);#绝对路径url
 define("BASE_URL", $_SERVER['DOCUMENT_ROOT'].$site_url);#绝对路径dir
 define("SPOT", ".");
+define("OFFICEXLS", "xls");
+define("OFFICEXLSX", "xlsx");
+define("OFFICECSV", "csv");
+define("PHPEXCELXLS", "Excel5");
+define("PHPEXCELXLSX", "Excel2007");
+define("PHPEXCELCSV", "CSV");
 #全局路径
 define("APTH_URL", 'http://127.0.0.1/exam');#绝对路径url
 define("DIR_URL", $_SERVER['DOCUMENT_ROOT'].str_replace($sys_protocal.$_SERVER['HTTP_HOST'], '', APTH_URL));#绝对路径dir

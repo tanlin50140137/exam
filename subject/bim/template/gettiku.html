@@ -56,14 +56,30 @@
 	<?php } ?>
 		</select>
 		&nbsp; &nbsp; &nbsp; &nbsp;
-		<a href="javascript:void(0);" onclick="TreeDisplay(this);">树型展示</a>
+		<input type="text" id="search" value="" placeholder="分类/文章标题" class="ad_fls">
+		<input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();">
+		&nbsp; &nbsp; &nbsp; &nbsp;
+		<a href="javascript:void(0);">全部</a>
+		&nbsp; &nbsp; 
+		<a href="javascript:void(0);">单选题</a>
+		&nbsp; &nbsp; 
+		<a href="javascript:void(0);">多选题</a>
+		&nbsp; &nbsp; 
+		<a href="javascript:void(0);">判断题</a>
+		&nbsp; &nbsp; 
+		<a href="javascript:void(0);">问答题</a>
 	</div>
 <table class="key_tablebox tableBox">
 		<tr>
 			<td>序号</td>
-			<td>PID</td>
 			<td>分类名称</td>
-			<td>排序</td>
+			<td>题型</td>
+			<td>题干</td>
+			<td>选项</td>
+			<td>选项数</td>
+			<td>答案</td>
+			<td>考题年份</td>
+			<td>书本名称</td>
 			<td>创间时间</td>
 			<td>状态</td>
 			<td>操作</td>
@@ -72,9 +88,14 @@
 	<?php foreach( $rows as $k => $v ){?>	
 		<tr>
 			<td><?php echo ($k+1);?></td>
-			<td><?php echo $v['pid'];?></td>
 			<td><?php echo $v['title'];?></td>
-			<td><?php echo $v['sort'];?></td>
+			<td><?php echo GetFourTypes2($v['typeofs']);?></td>
+			<td><?php echo $v['dry'];?></td>
+			<td><?php echo $v['options'];?></td>
+			<td><?php echo $v['numbers'];?></td>
+			<td><?php echo $v['answers'];?></td>
+			<td><?php echo $v['years'];?></td>
+			<td><?php echo $v['booknames'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><?php echo GetState($v['state']);?></td>
 			<td>
@@ -92,11 +113,11 @@
 	<?php }?>	
 <?php }?>
 		<tr>	
-			<td colspan="7">			
+			<td colspan="12">			
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
-			<a href="<?php echo apth_url('?act=getkey&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=getkey&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('?act=gettiku&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=gettiku&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
 <?php }?>	
 <?php if( $power==2 || $power==1 ){ ?>			
@@ -157,7 +178,7 @@ function btn_g()
 	var d = $("#g").val();
 	if( d != '' )
 	{
-		location.href="<?php echo apth_url('?act=getkey&page=');?>"+d;
+		location.href="<?php echo apth_url('?act=gettiku&page=');?>"+d;
 	}	
 }
 $(function(){

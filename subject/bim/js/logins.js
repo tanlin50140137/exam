@@ -153,7 +153,7 @@ function reset_s(m)
 		return false;
 	}
 	//验证帐号密码
-	$.post(url,{"act":"form_resets","u":u,"p":p,"t":t,"e":e},function(data){
+	$.post(url,{"act":"form_resets","u":u,"p":p,"t":t,"e":e,'power':2},function(data){
 		var obj = eval("("+data+")");
 		if( obj.error == 0 )
 		{//注册成功

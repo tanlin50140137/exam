@@ -129,7 +129,7 @@ create table htx_createroom(
 	key key_title(title),
 	key key_sort(sort)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
-#题库
+#导入题库
 drop table if exists htx_examination;
 create table htx_examination(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
@@ -149,6 +149,7 @@ create table htx_examination(
 	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',
 	key key_pid(pid),
 	key key_dry(dry),
+	key key_options(options),
 	key key_years(years),
 	key key_booknames(booknames),
 	key key_subtitles(subtitles),

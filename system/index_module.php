@@ -559,6 +559,19 @@ function gettiku()
 	$power = GetUserp();
 	#获取数据
 	$flRows1 = GetFenLai(0,2);
+	
+	$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
+	
+	$TotalRows = db()->query($sql)->array_nums();
+	$TotalShow = GetFilePath();
+	$TotalPage = ceil($TotalRows/$TotalShow);
+	$page = $_GET['page']==null?1:$_GET['page'];
+	if($page>=$TotalPage){$page=$TotalPage;}
+	if($page<=1||!is_numeric($page)){$page=1;}
+	$offset = ($page-1)*$TotalShow;
+	
+	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
+	$rows = db()->query($sql)->array_rows();
 		
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
@@ -574,7 +587,7 @@ function import_tiku()
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
-#导入题库
+#题库管理
 function import_sends()
 {
 	$ExtFlag = $_POST['format'];
@@ -585,10 +598,14 @@ function import_sends()
 	{
 		$extArr = explode('.', $file['name']);
 		$ext = end( $extArr );
-		$haystack = array('xls','xlsx','csv');
+		$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);
 		if( !in_array($ext, $haystack) )
 		{
 			echo '<script>alert("文件格式有误");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
+		}
+		if( $haystack[$ExtFlag] != $ext )
+		{
+			echo '<script>alert("选择格式有误");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
 		}
 		$path = GetFilePath3();				
 		if( !is_dir( $path ) )
@@ -606,11 +623,11 @@ function import_sends()
 	$filename = $destination;
 		
 	if( $ExtFlag == 0 ){
-		$objReader = PHPExcel_IOFactory::createReader('Excel5');
+		$objReader = PHPExcel_IOFactory::createReader(PHPEXCELXLS);
 	}elseif( $ExtFlag == 1 ){
-		$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+		$objReader = PHPExcel_IOFactory::createReader(PHPEXCELXLSX);
 	}elseif( $ExtFlag == 2 ){
-		$objReader = PHPExcel_IOFactory::createReader('CSV')->setDelimiter(',')->setInputEncoding('GBK');
+		$objReader = PHPExcel_IOFactory::createReader(PHPEXCELCSV)->setDelimiter(',')->setInputEncoding('GBK');
 	}
 
 	$objReader->setReadDataOnly(true);
@@ -619,23 +636,23 @@ function import_sends()
 	$highestRow = $sheet->getHighestRow();
 
 	for($j=2;$j<=$highestRow;$j++)
-	{		
-		$data['typeofs'] = GetFourTypes($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue());	
-		$data['dry'] = $objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue();
-		$options = $objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue();		
-		$data['options'] = str_replace(array(',','，','-','－',';','；','|','｜','#','&','!','！','*','$','%','^','@','?','？','~','+','*','/','.',' '),array('-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'), $options);
-		$data['numbers'] = $objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue();
-		$data['answers'] = $objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue();
-		$data['analysis'] = $objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue();
-		$data['years'] = $objPHPExcel->getActiveSheet()->getCell("G".$j)->getValue();
-		$data['booknames'] = $objPHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
-		$data['subtitles'] = $objPHPExcel->getActiveSheet()->getCell("I".$j)->getValue();
-		$data['chapters'] = $objPHPExcel->getActiveSheet()->getCell("J".$j)->getValue();
-		$data['hats'] = $objPHPExcel->getActiveSheet()->getCell("K".$j)->getValue();
+	{	
+		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue()));	
+		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue());
+		$options = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());		
+		$data['options'] = str_replace(array(',','，','-','－',';','；','|','｜','#','&','!','！','*','$','%','^','@','?','？','~','+','*','/','.',' '),array('-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'), trim($options));
+		$data['numbers'] = trim($objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue());
+		$data['answers'] = trim($objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue());
+		$data['analysis'] = trim($objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue());
+		$data['years'] = trim($objPHPExcel->getActiveSheet()->getCell("G".$j)->getValue());
+		$data['booknames'] = trim($objPHPExcel->getActiveSheet()->getCell("H".$j)->getValue());
+		$data['subtitles'] = trim($objPHPExcel->getActiveSheet()->getCell("I".$j)->getValue());
+		$data['chapters'] = trim($objPHPExcel->getActiveSheet()->getCell("J".$j)->getValue());
+		$data['hats'] = trim($objPHPExcel->getActiveSheet()->getCell("K".$j)->getValue());
 		$data['publitime'] = time();
 		
 		#检测是否存在
-		$int = db()->select('*')->from(PRE.'examination')->where(array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'years'=>$data['years'],'booknames'=>$data['booknames']))->get()->array_nums();
+		$int = db()->select('*')->from(PRE.'examination')->where(array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']))->get()->array_nums();
 			
 		if( $int == 0 )
 		{#如何不存在添加
@@ -643,10 +660,10 @@ function import_sends()
 		}
 		else
 		{#如何存在修改
-			db()->update(PRE.'examination',$data,array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'years'=>$data['years'],'booknames'=>$data['booknames']));
+			db()->update(PRE.'examination',$data,array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']));
 		}
 	}
-	
+		
 	#转入首页
 	header('location:'.apth_url('?act=gettiku'));	
 }
@@ -654,6 +671,12 @@ function import_sends()
 function GetFourTypes($str)
 {
 	$strArr = array('单选题'=>0,'多选题'=>1,'判断题'=>2,'问答题'=>3);
+	return $strArr[$str];
+}
+#获取四种题型
+function GetFourTypes2($str)
+{
+	$strArr = array('0'=>'单选题','1'=>'多选题','2'=>'判断题','3'=>'问答题');
 	return $strArr[$str];
 }
 #删除考场
