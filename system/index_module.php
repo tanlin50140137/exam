@@ -548,6 +548,65 @@ function gettiku_update()
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
+function delete_tiku()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$int = db()->delete(PRE.'examination',array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+	}
+}
+function update_tiku()
+{
+	$id = $_POST['id']==null?null:htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$data['pid'] = $_POST['pid'];
+	if( $data['pid'] == 0 )
+	{
+		echo '<script>alert("请选择分类");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+	}
+	$data['typeofs'] = $_POST['typeofs'];
+	$data['dry'] = $_POST['dry'];
+	if( $data['dry'] == '' )
+	{
+		echo '<script>alert("题干不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+	}
+	$data['options'] = $_POST['options'];
+	if( $data['options'] == '' )
+	{
+		echo '<script>alert("选项不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+	}
+	$data['numbers'] = $_POST['numbers'];
+	if( $data['numbers'] == '' )
+	{
+		echo '<script>alert("数量不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+	}
+	$data['answers'] = $_POST['answers'];
+	if( $data['answers'] == '' )
+	{
+		echo '<script>alert("答案不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+	}
+	$data['analysis'] = $_POST['analysis'];
+	$data['years'] = $_POST['years'];
+	$data['booknames'] = $_POST['booknames'];
+	$data['subtitles'] = $_POST['subtitles'];
+	$data['chapters'] = $_POST['chapters'];
+	$data['hats'] = $_POST['hats'];
+	
+	$int = db()->update(PRE.'examination', $data, array('id'=>$id) );
+	if( $int )
+	{
+		header('location:'.apth_url('?act=gettiku'));
+	}
+	else 
+	{
+		echo '<script>alert("修改失败");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';
+	}
+}
 function import_sends()
 {
 	$ExtFlag = $_POST['format'];

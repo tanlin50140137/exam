@@ -122,6 +122,7 @@ create table htx_createroom(
 	tariff tinyint(10) unsigned not null default 0 comment '资费模式,0=免费,1=收费',
 	descri varchar(255) not null default '' comment '考场描述',
 	setting tinyint(10) unsigned not null default 0 comment '设置考场,0=练习,1=真考',
+	typeofs tinyint(10) unsigned not null default 0 comment '题型,0=单选题,1=多选题,2=判断题,3=问答题',
 	rule text not null comment '规则',	
 	publitime int(11) unsigned not null default 0 comment '考场创间时间',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',

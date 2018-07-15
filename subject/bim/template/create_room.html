@@ -18,7 +18,7 @@
 		<p>考场名称： <input type="text" name="title" value="" class="ad_fls" id="ad_fls1"/></p>
 		<p>考场排序： <input type="text" name="sort" value="0" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
 		<p>
-			题库分类：
+			考题分类：
 			<select name="pid" class="ad_fls2" id="ad_fls3">
 				<option value="0">请选择分类</option>
 	<?php if(!empty($flRows1)){?>
@@ -31,7 +31,7 @@
 		<p>考场描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
 		<p>资费模式： <label><input type="radio" name="tariff" value="0" checked="checked" onclick="SetState(1);"/>免费</label> &nbsp; &nbsp; <label><input type="radio" name="tariff" value="1" onclick="SetState(2);"/>收费</label></p>		
 		<div class="t_guizhe" style="display:none;">
-			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则：</div>
+			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则</div>
 			<div class="t_guizhe_list">
 				<span style="font-weight:bold;">VIP包月：</span><br/>
 				<div class="add_rules">
@@ -101,9 +101,28 @@
 		</div>
 		<p>考场设置： 
 		<label><input type="radio" name="setting" value="0" />练习</label> &nbsp; &nbsp; 
-		<label><input type="radio" name="setting" value="1" />历年真考</label> &nbsp; &nbsp; 
-		<label><input type="radio" name="setting" value="2" />随机模拟</label> &nbsp; &nbsp; 
-		<label><input type="radio" name="setting" value="3" />专家模拟</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="setting" value="1" />正式考</label> &nbsp; &nbsp;
+		<div class="t_guizhe2">
+			<div class="t_guizhe_list2" style="font-weight:bold;">设置考试规则</div>
+			<div class="t_guizhe_list">
+				<span style="font-weight:bold;">常用规则：</span><br/>
+				<div class="add_rules">
+					<div class="cloxe_xxx">
+						<span>1</span>、考试时间： <input type="text" name="times" placeholder="2" value="" class="r_setvals" style="width:1rem;padding:0 0.2rem;"/> 小时&nbsp; <br/>
+						<span>2</span>、选择题型：
+						<label><input type="checkbox" name="typeofs[]" value="0"/>单选题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" value="1"/>多选题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" value="2"/>判断题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" value="3"/>问答题</label> &nbsp; 
+						<label><input type="checkbox" />全部混合</label> &nbsp;  <br/>
+						<span>3</span>、获取考题： <label><input type="checkbox" name="chouti" value="0"/>随机抽题</label> &nbsp; &nbsp; <label><input type="checkbox" name="chouti" value="1"/>顺序抽题</label> &nbsp; <br/> 
+						<span>4</span>、考题数量： <input type="text" name="times" placeholder="100" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 题&nbsp; <br/>
+					 	<span>5</span>、考题总分： <input type="text" name="times" placeholder="100" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
+					 	<span>6</span>、及格分数： <input type="text" name="times" placeholder="80" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
+					 </div>
+				</div>	 
+			</div>	
+		</div>		
 		</p>
 		<p>考场状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="创建" class="sbm_fl" onclick="add_classify();"/></div>

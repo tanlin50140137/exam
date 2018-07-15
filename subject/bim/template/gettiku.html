@@ -160,7 +160,7 @@ function delete_info(id,p)
 		  btn: ['确定','取消'] //按钮
 		}, function(){
 		  layer.msg('正在删除......', {icon: 1},function(){
-			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_info','id':id},function(data){
+			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_tiku','id':id},function(data){
 				  var obj = eval("("+data+")");
 				  layer.msg(obj.txt,{time:1000},function(){
 						location.reload();
