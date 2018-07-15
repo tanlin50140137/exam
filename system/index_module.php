@@ -1,25 +1,18 @@
 <?php
 header('content-type:text/html;charset=utf-8');
-/**
- * 所有模块必须写在函数里
- * */
-#主页面 , Ready to start work (准备开始工作)
+
 function index()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#注册
 function reset_u()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#获取用户名
 function GetUsersName()
 {
 	session_start();
@@ -30,17 +23,14 @@ function GetUsersName()
 	$usersname = $_SESSION['usersname'];
 	return $usersname;
 }
-#获取用户身份
 function GetUserp()
 {
 	$usersname = GetUsersName();
 	$row = db()->select('power')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();
 	return $row['power'];
 }
-#后台框架
 function adminfrom()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 		
 	$usersname = GetUsersName();
@@ -55,36 +45,28 @@ function adminfrom()
 		
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#菜单栏
 function menu()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#后台首页面
 function adminindex()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	#无限级别分类
 	$wxfl = GetFenLai2(0);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#获取KEY
 function getkey()
 {	
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$power = GetUserp();
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	#获取数据
 	$flRows1 = GetFenLai(0,2);
 	$flRows2 = GetFenLai2(0,2,$id);
 	$TotalRows = count($flRows2);
@@ -102,7 +84,6 @@ function getkey()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#无限级别分类
 function GetFenLai($pid,$multiplier=0)
 {
 	static $rows;	
@@ -116,11 +97,10 @@ function GetFenLai($pid,$multiplier=0)
 	{
 		$array['title'] = str_repeat('&nbsp;', $multiplier).'|－'.$array['title'];
 		$rows[] = $array;
-		GetFenLai($array['id'],$multiplier);//递归
+		GetFenLai($array['id'],$multiplier);
 	}
 	return $rows;
 }
-#无限级别分类
 function GetFenLai3($pid,$multiplier=0)
 {
 	static $rows;	
@@ -134,11 +114,10 @@ function GetFenLai3($pid,$multiplier=0)
 	{
 		$array['title'] = str_repeat('&nbsp;', $multiplier).'|－'.$array['title'];
 		$rows[] = $array;
-		GetFenLai3($array['id'],$multiplier);//递归
+		GetFenLai3($array['id'],$multiplier);
 	}
 	return $rows;
 }
-#无限级别分类
 function GetFenLai2($pid,$multiplier=0,$id=null)
 {
 	static $rows;	
@@ -153,7 +132,7 @@ function GetFenLai2($pid,$multiplier=0,$id=null)
 		while ($array = mysql_fetch_assoc($rs))
 		{
 			$rows[] = $array;
-			GetFenLai2($array['id'],$multiplier);//递归
+			GetFenLai2($array['id'],$multiplier);
 		}
 	}
 	else
@@ -163,7 +142,6 @@ function GetFenLai2($pid,$multiplier=0,$id=null)
 	}
 	return $rows;
 }
-#无限级别分类
 function GetFenLai4($pid,$multiplier=0,$id=null)
 {
 	static $rows;	
@@ -178,7 +156,7 @@ function GetFenLai4($pid,$multiplier=0,$id=null)
 		while ($array = mysql_fetch_assoc($rs))
 		{
 			$rows[] = $array;
-			GetFenLai4($array['id'],$multiplier);//递归
+			GetFenLai4($array['id'],$multiplier);
 		}
 	}
 	else
@@ -188,7 +166,6 @@ function GetFenLai4($pid,$multiplier=0,$id=null)
 	}
 	return $rows;
 }
-#状态
 function GetState( $int )
 {
 	switch ( $int )
@@ -215,28 +192,24 @@ function GetState2( $int , $id, $page)
 	}
 	return $str;
 }
-#记录显示条数
 function SetShwoTotal()
 {
 	$spot = SPOT;
 	
-	$c = $_POST['c'];//记录总数
+	$c = $_POST['c'];
 	
 	$path = base_url($spot.'settings/'.$spot.'org'.$spot.'nums');
 	
 	file_put_contents( $path, $c );	
 }
-#绑定域名
 function geturl()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$power = GetUserp();
 	
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
-	#获取用户列表
 	$sql  = ' select * from '.PRE.'admin ';
 	if( $s!=null )
 	{
@@ -255,7 +228,6 @@ function geturl()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#获取权限
 function get_power($int)
 {
 	switch ( $int )
@@ -288,7 +260,6 @@ function get_power2($int)
 	}
 	return $str;
 }
-#考题管理
 function examqm()
 {
 	$power = GetUserp();
@@ -296,10 +267,8 @@ function examqm()
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	#获取考场
 	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.setting,a.descri,a.rule,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
 	if( $id != '' )
 	{
@@ -320,12 +289,10 @@ function examqm()
 	$sql .= ' order by a.publitime desc limit '.$offset.','.$TotalShow.' ';	
 	$rows = db()->query($sql)->array_rows();
 	
-	#获取数据
 	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#规则
 function e_zfms($int)
 {
 	switch ($int)
@@ -358,10 +325,8 @@ function e_exam($int)
 	}
 	return $str;
 }
-#添值服务
 function getpay()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$power = GetUserp();
@@ -392,25 +357,20 @@ function getpay()
 	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
 	$rows = db()->query($sql)->array_rows();
 	
-	#分类
 	$flRows1 = GetFenLai3(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#帮助中心
 function gethelp()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#分类管理修改分类
 function getkey_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$flRows1 = GetFenLai(0,2);
@@ -419,20 +379,16 @@ function getkey_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#添加用户
 function addusers()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$power = GetUserp();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#修改用户信息
 function geturl_update()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$power = GetUserp();
@@ -443,22 +399,18 @@ function geturl_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#创建文档分类
 function file_classify()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$flRows1 = GetFenLai3(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#显示文档分类
 function show_classify()
 {
 	$power = GetUserp();
 	
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
@@ -480,12 +432,10 @@ function show_classify()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#修改文档分类
 function classify_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$flRows1 = GetFenLai3(0,2);
@@ -494,70 +444,59 @@ function classify_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#创建文档
 function create_dts()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$flRows1 = GetFenLai3(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#修改文档
 function conent_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
-	#公共文件内容
+
 	include 'subject/'.getThemeDir().'/common.php';
-	#分类
+
 	$flRows1 = GetFenLai3(0,2);
-	#获取信息
+
 	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#创建考场
 function create_room()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	#获取数据
 	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#修改考场
 function examqm_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	#获取数据
 	$row = db()->select('id,pid,title,sort,tariff,setting,descri,rule,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
-	#收费规则
+
 	if( $row['rule'] != null )
 	{
 		$rule = unserialize($row['rule']);
 	}
-	#获取数据
+
 	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#题库管理
 function gettiku()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
 	$power = GetUserp();
-	#获取数据
+
 	$flRows1 = GetFenLai(0,2);
 	
 	$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
@@ -570,24 +509,20 @@ function gettiku()
 	if($page<=1||!is_numeric($page)){$page=1;}
 	$offset = ($page-1)*$TotalShow;
 	
-	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
+	$sql .= ' order by a.id desc limit '.$offset.','.$TotalShow.' ';
 	$rows = db()->query($sql)->array_rows();
 		
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-#创建导入题库
 function import_tiku()
 {
-	#公共文件内容
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	#获取数据
 	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 ###############################################################################################
-#题库管理
 function import_sends()
 {
 	$ExtFlag = $_POST['format'];
@@ -636,7 +571,7 @@ function import_sends()
 	$highestRow = $sheet->getHighestRow();
 
 	for($j=2;$j<=$highestRow;$j++)
-	{	
+	{
 		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue()));	
 		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue());
 		$options = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());		
@@ -651,35 +586,38 @@ function import_sends()
 		$data['hats'] = trim($objPHPExcel->getActiveSheet()->getCell("K".$j)->getValue());
 		$data['publitime'] = time();
 		
-		#检测是否存在
 		$int = db()->select('*')->from(PRE.'examination')->where(array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']))->get()->array_nums();
 			
 		if( $int == 0 )
-		{#如何不存在添加
-			db()->insert(PRE.'examination',$data);
+		{
+			$i = db()->insert(PRE.'examination',$data);
 		}
 		else
-		{#如何存在修改
-			db()->update(PRE.'examination',$data,array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']));
+		{
+			$i = db()->update(PRE.'examination',$data,array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']));
 		}
 	}
-		
-	#转入首页
+
+	if( $i )
+	{
+		if(is_file($filename))
+		{
+			unlink($filename);
+		}
+	}
+	
 	header('location:'.apth_url('?act=gettiku'));	
 }
-#获取四种题型
 function GetFourTypes($str)
 {
 	$strArr = array('单选题'=>0,'多选题'=>1,'判断题'=>2,'问答题'=>3);
 	return $strArr[$str];
 }
-#获取四种题型
 function GetFourTypes2($str)
 {
 	$strArr = array('0'=>'单选题','1'=>'多选题','2'=>'判断题','3'=>'问答题');
 	return $strArr[$str];
 }
-#删除考场
 function delete_exam()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -693,19 +631,18 @@ function delete_exam()
 		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
 	}
 }
-#修改考场
 function update_room()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
 	
 	$data['tariff'] = $_POST['tariff'];
 	if( $data['tariff'] == 1 )
-	{#有设置规则
+	{
 		$value = $_POST;
-		$data['rule'] = serialize($value);//规则
+		$data['rule'] = serialize($value);
 	}
 	else
-	{#没有设置规则
+	{
 		$data['rule'] = '';
 	}
 	$data['title'] = $_POST['title'];
@@ -732,7 +669,6 @@ function update_room()
 	$data['descri'] = $_POST['descri'];
 	$data['state'] = $_POST['state'];
 		
-	#记录数据
 	$int = db()->update(PRE.'createroom',$data,array('id'=>$id));
 	if( $int )
 	{
@@ -743,17 +679,16 @@ function update_room()
 		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
 	}
 }
-#添加考场
 function add_room()
 {
 	$data['tariff'] = $_POST['tariff'];
 	if( $data['tariff'] == 1 )
-	{#有设置规则
+	{
 		$value = $_POST;
-		$data['rule'] = serialize($value);//规则
+		$data['rule'] = serialize($value);
 	}
 	else
-	{#没有设置规则
+	{
 		$data['rule'] = '';
 	}
 	$data['title'] = $_POST['title'];
@@ -781,7 +716,6 @@ function add_room()
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
 		
-	#记录数据
 	$int = db()->insert(PRE.'createroom',$data);
 	if( $int )
 	{
@@ -792,12 +726,10 @@ function add_room()
 		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
 	}
 }
-#删除文章
 function delete_conent()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
 	
-	#获取信息
 	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
 	
 	$int = db()->delete(PRE.'createdts',array('id'=>$id));
@@ -814,12 +746,11 @@ function delete_conent()
 		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
 	}
 }
-#修改文章
 function update_dtsend()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
 	
-	$file = $_FILES['file'];//封面
+	$file = $_FILES['file'];
 	
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
@@ -851,12 +782,11 @@ function update_dtsend()
 	}
 	$data['state'] = $_POST['state'];
 	
-	#获取信息
 	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
 	
 	$name = mt_rand(10000,99999).mt_rand(10000,99999).mt_rand(100000,999999);
 	if( $file['error'] == 0 )
-	{#有新图片上传	
+	{	
 		$extArr = explode('.', $file['name']);
 		$ext = end($extArr);
 		$haystack = array('jpeg','jpg','png','gif','bmp');
@@ -891,7 +821,7 @@ function update_dtsend()
 		}
 	}
 	else
-	{#没有图片上传
+	{
 		$data['covers'] = $row['covers'];		
 	}
 	
@@ -905,10 +835,9 @@ function update_dtsend()
 		echo '<script>alert("文档创建失败");location.href="'.apth_url('?act=create_dts').'";</script>';
 	}
 }
-#创建文章
 function create_dtsend()
 {	
-	$file = $_FILES['file'];//封面
+	$file = $_FILES['file'];
 	
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
@@ -986,7 +915,6 @@ function create_dtsend()
 		echo '<script>alert("文档创建失败");location.href="'.apth_url('?act=create_dts').'";</script>';
 	}
 }
-#记录树型显示
 function RecordTreeDisplay()
 {
 	$spot = SPOT;
@@ -994,12 +922,10 @@ function RecordTreeDisplay()
 	
 	file_put_contents($filename, $_POST['flag']);
 }
-#删除文档分类
 function delete_classify()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
 	
-	#获取信息
 	$rows = db()->select('*')->from(PRE.'createdts')->where(array('pid'=>$id))->get()->array_rows();
 	if( !empty( $rows ) )
 	{
@@ -1023,7 +949,6 @@ function delete_classify()
 		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
 	}
 }
-#修改文档分类
 function dclaexe()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -1043,7 +968,6 @@ function dclaexe()
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
 	
-	#修改数据
 	$int = db()->update(PRE.'fileclass',$data,array('id'=>$id));
 	if( $int )
 	{	
@@ -1054,7 +978,6 @@ function dclaexe()
 		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
 	}
 }
-#添加文档分类
 function add_classify()
 {
 	$data['title'] = $_POST['title'];
@@ -1077,7 +1000,6 @@ function add_classify()
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
 		
-	#记录数据
 	$int = db()->insert(PRE.'fileclass',$data);
 	if( $int )
 	{
@@ -1088,7 +1010,6 @@ function add_classify()
 		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
 	}
 }
-#删除用户
 function delete_geturl()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -1102,7 +1023,6 @@ function delete_geturl()
 		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
 	}
 }
-#删除分类
 function delete_info()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -1116,7 +1036,6 @@ function delete_info()
 		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
 	}
 }
-#修改分类
 function sbm_update()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -1136,7 +1055,6 @@ function sbm_update()
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
 	
-	#修改数据
 	$int = db()->update(PRE.'classify',$data,array('id'=>$id));
 	if( $int )
 	{	
@@ -1147,7 +1065,6 @@ function sbm_update()
 		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
 	}
 }
-#添加分类
 function form_sbm()
 {
 	$data['title'] = $_POST['title'];
@@ -1170,9 +1087,6 @@ function form_sbm()
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
 	
-	//print_r($data);exit;
-	
-	#记录数据
 	$int = db()->insert(PRE.'classify',$data);
 	if( $int )
 	{	
@@ -1183,7 +1097,6 @@ function form_sbm()
 		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
 	}
 }
-#用户登录
 function form_logins()
 {
 	session_start();
@@ -1203,7 +1116,7 @@ function form_logins()
 	{
 		echo json_encode(array("error"=>1,f=>1,'txt'=>'*请输入密码*'));exit;
 	}
-	#会员登录 
+
 	$int = db()->select('*')->from(PRE.'admin')->where(array('users'=>$data['users'],'pwd'=>$data['pwd']))->get()->array_nums();
 	if( $int )
 	{	
@@ -1216,7 +1129,6 @@ function form_logins()
 		echo json_encode(array('error'=>'1','txt'=>'登录失败'));
 	}
 }
-#用户修改用户信息
 function form_resets2()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -1250,7 +1162,7 @@ function form_resets2()
 		echo json_encode(array('error'=>'1',f=>3,'txt'=>'*邮箱不正确*'));exit;
 	}
 	$data['power'] = $_POST['power']==null?0:$_POST['power'];	
-	//修改
+
 	$int = db()->update(PRE.'admin',$data,array('id'=>$id));
 	if( $int )
 	{	
@@ -1261,7 +1173,6 @@ function form_resets2()
 		echo json_encode(array('error'=>'1','txt'=>'修改失败'));
 	}
 }
-#用户提交注册
 function form_resets()
 {
 	$data['users'] = htmlspecialchars($_POST['u'],ENT_QUOTES);
@@ -1271,7 +1182,7 @@ function form_resets()
 	}
 	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$data['users']))->get()->array_nums();
 	if( $num > 0 )
-	{#检测帐号
+	{
 		echo json_encode(array("error"=>1,f=>0,'txt'=>'*帐号已存在*'));exit;
 	}
 	$data['pwd'] = mb_substr(md5(md5(base64_decode($_POST['p']))),0,10,'utf-8');
@@ -1297,13 +1208,13 @@ function form_resets()
 	{
 		echo json_encode(array('error'=>'1',f=>3,'txt'=>'*邮箱不正确*'));exit;
 	}
-	#获取随机头像
+
 	$sql = 'select picname from '.PRE.'apack order by rand() limit 0,1';
 	$picrow = db()->query($sql)->array_row();
 	$data['pic'] = $picrow['picname']==''?'':$picrow['picname'];
 	$data['power'] = $_POST['power']==null?0:$_POST['power'];
 	$data['publitime'] = time();	
-	//注册
+
 	$int = db()->insert(PRE.'admin',$data);
 	if( $int )
 	{	
@@ -1319,7 +1230,7 @@ function checked_selects()
 	$u = htmlspecialchars($_POST['u'],ENT_QUOTES);
 	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$u))->get()->array_nums();
 	if( $num > 0 )
-	{#检测帐号
+	{
 		echo json_encode(array("error"=>1,'txt'=>'*帐号已存在*'));
 	}
 	else
@@ -1327,7 +1238,6 @@ function checked_selects()
 		echo json_encode(array("error"=>0,'txt'=>'*帐号未注册*'));
 	}
 }
-#获取key
 function GetOpenId()
 {
 	$f = $_POST['flag'];
@@ -1342,14 +1252,11 @@ function GetOpenId()
 	}
 	echo $keys;
 }
-#注销用户
 function log_on()
-{
-	#注销用户信息	
+{	
 	session_start();
 	$_SESSION['usersname'] = null;
 	unset($_SESSION['usersname']);
 	
-	#返回用户登录
 	header("location:".apth_url(''));
 }

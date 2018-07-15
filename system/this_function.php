@@ -1,14 +1,10 @@
 <?php
 header('content-type:text/html;charset=utf-8');
-/**
- * 自定义方法
-*/
-#实例化一个db对像
+
 function db()
 {
 	return new This_Linked();
 }
-#处理xml
 function xml_str($array)
 {
 	$xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -20,7 +16,6 @@ function xml_str($array)
 	$xml .= '</box>';
 	return $xml;
 }
-#处理xml
 function xml_str2($array)
 {
 	$xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -32,7 +27,6 @@ function xml_str2($array)
 	$xml .= '</box>';
 	return $xml;
 }
-#加载主题
 function load_theme($dir='default')
 {
 	$dir = $dir==''?'404':$dir;
@@ -46,27 +40,22 @@ function load_theme($dir='default')
 		echo '加载失败：主题首页不存在 或 未启用主题 !';
 	}
 }
-#根目录url
 function apth_url($url='')
 {
 	return APTH_URL.($url==''?'':'/'.$url);
 }
-#路由url
 function site_url($url='')
 {
 	return SITE_URL.'/'.$url;
 }
-#路由dir
 function base_url($dir='')
 {
 	return BASE_URL.'/'.$dir;
 }
-#路由dir
 function dir_url($dir='')
 {
 	return DIR_URL.($dir==''?'':'/'.$dir);
 }
-#截取字符串
 function subString($string,$len)
 {
 	if(mb_strlen($string,'utf-8')>=$len)
@@ -75,7 +64,6 @@ function subString($string,$len)
 	}
 	return $string;
 }
-#屏蔽错误提示
 function set_ini_error($flag)
 {
 	if($flag['development'] == "ON")
@@ -83,7 +71,6 @@ function set_ini_error($flag)
 		ini_set('display_errors', 'Off');
 	}
 }
-#关闭网站
 function CloseSite()
 {
 	$review = db()->select('closesite')->from(PRE.'review_up')->get()->array_row();
@@ -93,7 +80,6 @@ function CloseSite()
 		echo '网站已经关闭，无法访问';exit;
 	}
 }
-#获取主题目录
 function getThemeDir()
 {
 	return 'bim';
@@ -106,7 +92,6 @@ function GetInts($int)
 	}
 	return $int;
 }
-#获取版本号
 function get_version()
 {
 	$filename = dir_url('subject/version.txt');
@@ -121,7 +106,6 @@ function get_version()
 		return '';
 	}
 }
-#curl
 function vcurl($url, $post = '', $cookie = '', $cookiejar = '', $referer = '') {
 	$tmpInfo = '';
 	$cookiepath = getcwd () . '. / ' . $cookiejar;
@@ -144,18 +128,13 @@ function vcurl($url, $post = '', $cookie = '', $cookiejar = '', $referer = '') {
 		curl_setopt ( $curl, CURLOPT_COOKIEJAR, $cookiepath );
 		curl_setopt ( $curl, CURLOPT_COOKIEFILE, $cookiepath );
 	}
-	// curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
 	curl_setopt ( $curl, CURLOPT_TIMEOUT, 100 );
 	curl_setopt ( $curl, CURLOPT_HEADER, 0 );
 	curl_setopt ( $curl, CURLOPT_RETURNTRANSFER, 1 );
 	$tmpInfo = curl_exec ( $curl );
-	if (curl_errno ( $curl )) {
-		// echo ' < pre > < b > 错误: < /b><br / > ' . curl_error ( $curl );
-	}
 	curl_close ( $curl );
 	return $tmpInfo;
 }
-#解析JSON格式,返回数组
 function ParsingJson($json)
 {
 	$rows = array();
@@ -165,12 +144,10 @@ function ParsingJson($json)
 	}
 	return $rows;
 }
-#改变图片像素
 function get_pixels($dir,$x,$y)
 {
 	return apth_url("system/img_pixels.php?dir=$dir&x=$x&y=$y");
 }
-#转换时间
 function get_day_formt($t)
 {
 	$int = time()-$t;
@@ -217,14 +194,12 @@ function get_day_formt($t)
 	}
 	return floor($int).$ext[$i];
 }
-#截取手机号码
 function substr_tel($tel)
 {
 	$str1 = substr($tel,0,3);
 	$str2 = substr($tel,-3);
 	return $str1.'***'.$str2;
 }
-#获取路径
 function GetFilePath()
 {
 	$spot = SPOT;
@@ -232,7 +207,6 @@ function GetFilePath()
 	$str = file_get_contents($filename);
 	return $str;
 }
-#获取路径-显示树
 function GetFilePath2()
 {
 	$spot = SPOT;
@@ -240,7 +214,6 @@ function GetFilePath2()
 	$str = file_get_contents($filename);
 	return $str;
 }
-#获取路径-外来
 function GetFilePath3()
 {
 	$spot = SPOT;

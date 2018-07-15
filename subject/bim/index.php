@@ -1,7 +1,4 @@
 <?php
-/**
- * 默认模板主题
- * */
 define(DIRECTORY, $dir);
 $act = $_REQUEST['act']==''?'index':$_REQUEST['act'];
 
