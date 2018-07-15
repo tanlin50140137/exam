@@ -494,13 +494,26 @@ function gettiku()
 	include 'subject/'.getThemeDir().'/common.php';
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	$t = $_GET['t']==null?null:htmlspecialchars($_GET['t'],ENT_QUOTES);
 	
 	$power = GetUserp();
 
 	$flRows1 = GetFenLai(0,2);
 	
 	$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
-	
+	if( $id != null )
+	{
+		$sql .= ' and b.id='.$id.' ';
+	}
+	if( $s != null )
+	{
+		$sql .= ' and (a.dry like "%'.$s.'%" or a.years like "%'.$s.'%" or a.booknames like "%'.$s.'%") ';
+	}
+	if( $t != null )
+	{
+		$sql .= ' and a.typeofs='.$t.' ';
+	}
 	$TotalRows = db()->query($sql)->array_nums();
 	$TotalShow = GetFilePath();
 	$TotalPage = ceil($TotalRows/$TotalShow);
@@ -517,6 +530,18 @@ function gettiku()
 function import_tiku()
 {
 	include 'subject/'.getThemeDir().'/common.php';
+	
+	$flRows1 = GetFenLai(0,2);
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+function gettiku_update()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
+	$row = db()->select('*')->from(PRE.'examination')->where(array('id'=>$id))->get()->array_row();
 	
 	$flRows1 = GetFenLai(0,2);
 	

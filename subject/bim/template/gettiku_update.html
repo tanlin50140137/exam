@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>修改题</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=gettiku_update&id='.$id);?>">修改题</a></h1>	
+</div>
+<div class="addfl" style="display:block;">
+	<form id="ify_frm">
+		<p>
+		分类： 
+		<select name="pid" class="ad_fls2">
+			<option value="0">--请选择分类--</option>
+<?php if( !empty( $flRows1 ) ){?>	
+	<?php foreach( $flRows1 as $k => $v ){?>
+		<?php if( $v['id'] == $row['pid'] ){?>	
+			<option value="<?php echo $v['id'];?>" selected="selected"><?php echo $v['title'];?></option>
+		<?php }else{?>
+			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+		<?php }?>	
+	<?php }?>		
+<?php }?>			
+		</select>
+		</p>
+		<p>题型：<label><input type="radio" name="typeofs" value="0">单选题</label> &nbsp; &nbsp; <label><input type="radio" name="typeofs" value="1">多选题</label> &nbsp; &nbsp; <label><input type="radio" name="typeofs" value="1">判断题</label> &nbsp; &nbsp; <label><input type="radio" name="typeofs" value="1">问答题</label></p>
+		<p>题干： <input type="text" name="dry" value="<?php echo $row['dry'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
+		<p>选项： <input type="text" name="options" value="<?php echo $row['options'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>		
+		<p>数量： <input type="text" name="numbers" value="<?php echo $row['numbers'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
+		<p>答案： <input type="text" name="answers" value="<?php echo $row['answers'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>	
+		<p>解析： <textarea name="analysis" placeholder="解析"><?php echo $row['analysis'];?></textarea></p>
+		<p>年份： <input type="text" name="years" value="<?php echo $row['years'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>	
+		<p>书名： <input type="text" name="booknames" value="<?php echo $row['booknames'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
+		<p>副名： <input type="text" name="subtitles" value="<?php echo $row['subtitles'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>	
+		<p>章节： <input type="text" name="chapters" value="<?php echo $row['chapters'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
+		<p>帽题： <input type="text" name="hats" value="<?php echo $row['hats'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>		
+		<p>状态：<label><input type="radio" name="state" value="0">显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1">隐藏</label></p>
+		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="修改" class="sbm_fl" onclick="add_user(this);" set-url="<?php echo apth_url('index.php');?>"/></div>
+	</form>
+</div>
+<script>
+function add_user(m)
+{
+	var u = $("[name='users']").val();
+	var p = $("[name='pwd']").val();
+	var t = $("[name='tel']").val();
+	var e = $("[name='email']").val();
+	var power = $("[name='power']").val();
+	
+	var url = $(m).attr('set-url');
+	if( u == '' )
+	{
+		$(".tishiinfo:eq(0)").text(strArr[0]);
+		$("[name='users']").focus();
+		return false;
+	}	
+	if( flag_users_name == true )
+	{
+		$(".tishiinfo:eq(0)").text(flag_txt);
+		$("[name='users']").focus();
+		return false;
+	}
+	if( p == '' )
+	{
+		$(".tishiinfo:eq(1)").text(strArr[1]);
+		$("[name='pwd']").focus();
+		return false;
+	}
+	if( t == '' )
+	{
+		$(".tishiinfo:eq(2)").text(strArr[2]);
+		$("[name='tel']").focus();
+		return false;
+	}
+	if(!relphone.test(t))
+	{
+		$(".tishiinfo:eq(2)").text(strArr[4]);
+		$("[name='tel']").focus();
+		return false;
+	}
+	if( e == '' )
+	{
+		$(".tishiinfo:eq(3)").text(strArr[3]);
+		$("[name='email']").focus();
+		return false;
+	}
+	if(!relemail.test(e))
+	{
+		$(".tishiinfo:eq(3)").text(strArr[5]);
+		$("[name='email']").focus();
+		return false;
+	}
+	//验证帐号密码
+	$.post(url,{"act":"form_resets","u":u,"p":p,"t":t,"e":e,'power':power},function(data){
+		var obj = eval("("+data+")");
+		if( obj.error == 0 )
+		{//注册成功
+			layer.msg(obj.txt,{time:2000},function(){
+				location.href = url+"?act=geturl";
+			});
+		}	
+		else
+		{//错误提示
+			$(".tishiinfo:eq("+obj.f+")").text(obj.txt);
+		}	
+	});
+}
+function Diachronic(){
+	window.history.go(-1);
+}
+</script>
+</body>
+</html>
