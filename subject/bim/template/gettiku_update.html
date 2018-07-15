@@ -30,7 +30,11 @@
 <?php }?>			
 		</select>
 		</p>
-		<p>题型：<label><input type="radio" name="typeofs" value="0">单选题</label> &nbsp; &nbsp; <label><input type="radio" name="typeofs" value="1">多选题</label> &nbsp; &nbsp; <label><input type="radio" name="typeofs" value="1">判断题</label> &nbsp; &nbsp; <label><input type="radio" name="typeofs" value="1">问答题</label></p>
+		<p>题型：
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==0?'checked="checked"':'';?> value="0">单选题</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==1?'checked="checked"':'';?> value="1">多选题</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==2?'checked="checked"':'';?> value="2">判断题</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==3?'checked="checked"':'';?> value="3">问答题</label></p>
 		<p>题干： <input type="text" name="dry" value="<?php echo $row['dry'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
 		<p>选项： <input type="text" name="options" value="<?php echo $row['options'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>		
 		<p>数量： <input type="text" name="numbers" value="<?php echo $row['numbers'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
@@ -41,7 +45,9 @@
 		<p>副名： <input type="text" name="subtitles" value="<?php echo $row['subtitles'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>	
 		<p>章节： <input type="text" name="chapters" value="<?php echo $row['chapters'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>
 		<p>帽题： <input type="text" name="hats" value="<?php echo $row['hats'];?>" class="ad_fls"/> <span class="tishiinfo"></span></p>		
-		<p>状态：<label><input type="radio" name="state" value="0">显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1">隐藏</label></p>
+		<p>状态：
+		<label><input type="radio" name="state" <?php echo $row['state']==0?'checked="checked"':'';?> value="0">显示</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="state" <?php echo $row['state']==1?'checked="checked"':'';?> value="1">隐藏</label></p>
 		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="修改" class="sbm_fl" onclick="add_user(this);" set-url="<?php echo apth_url('index.php');?>"/></div>
 	</form>
 </div>
