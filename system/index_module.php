@@ -269,7 +269,7 @@ function examqm()
 	
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.setting,a.descri,a.rule,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
+	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.roomsets,a.descri,a.rule1,a.rule2,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
 	if( $id != '' )
 	{
 		$sql .= ' and b.id='.$id.' ';
@@ -478,13 +478,17 @@ function examqm_update()
 	
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$row = db()->select('id,pid,title,sort,tariff,setting,descri,rule,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
+	$row = db()->select('id,pid,title,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
 
-	if( $row['rule'] != null )
+	if( $row['rule1'] != null )
 	{
-		$rule = unserialize($row['rule']);
+		$rule = unserialize($row['rule1']);
 	}
-
+	if( $row['rule2'] != null )
+	{
+		$rule2 = unserialize($row['rule2']);
+	}
+		
 	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
@@ -769,12 +773,31 @@ function add_room()
 	if( $data['tariff'] == 1 )
 	{
 		$value = $_POST;
-		$data['rule'] = serialize($value);
+		$data['rule1'] = serialize($value);
 	}
 	else
 	{
-		$data['rule'] = '';
+		$data['rule1'] = '';
 	}
+	
+	$data['roomsets'] = $_POST['roomsets'];
+	if( $data['roomsets'] == 1 )
+	{
+		$rule2['roomsets'] = $_POST['roomsets'];
+		$rule2['times'] = $_POST['times'];
+		$rule2['typeofs'] = $_POST['typeofs'];
+		$rule2['extracts'] = $_POST['extracts'];
+		$rule2['chouti'] = $_POST['chouti'];
+		$rule2['totalexam'] = $_POST['totalexam'];
+		$rule2['totalscore'] = $_POST['totalscore'];
+		$rule2['passscore'] = $_POST['passscore'];
+		$data['rule2'] = serialize($rule2);
+	}
+	else
+	{
+		$data['rule2'] = '';
+	}
+	
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
@@ -795,7 +818,6 @@ function add_room()
 	{
 		echo json_encode(array("error"=>1,'txt'=>'请选择分类'));exit;
 	}
-	$data['setting'] = $_POST['setting'];
 	$data['descri'] = $_POST['descri'];
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
