@@ -2,22 +2,22 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>分类管理</title>
+<title>批量修改</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <link rel="stylesheet" href="<?php echo apth_url('subject/bim/treeview/jquery.treeview.css');?>" />
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
-<link rel="StyleSheet" href="<?php echo apth_url('subject/bim/dtree/dtree.css');?>" type="text/css" />
-<script type="text/javascript" src="<?php echo apth_url('subject/bim/dtree/dtree.js');?>"></script>
+<link rel="StyleSheet" href="<?php echo apth_url('subject/bim/css/jquery-ui.custom.css');?>" type="text/css" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-ui.custom.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-ui-timepicker-addon.js');?>"></script>
 </head>
 <body>
 <div class="key_box">
-	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp;
-<?php if( $power==2 || $power==1 ){?>	 
-	<input type="button" value="导入题库 " class="cearter_key" onclick="cearter_key();"/>
-<?php }?>	
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
+	 &nbsp; &nbsp; &nbsp;
+	<a href="<?php echo apth_url('?act=batch_modification');?>">批量修改－批量导出Excel修改</a>
 	</h1>	
 </div>
 <div class="addfl">
@@ -44,7 +44,7 @@
 	<div class="key_tablebox_allins">
 		搜索分类：
 		<select onchange="search_ify(this);" class="ad_fls2">
-				<option value="">所有分类</option>
+				<option value="">--请选择分类--</option>
 	<?php if(!empty($flRows1)) { ?>
 		<?php foreach( $flRows1 as $k => $v ) { ?>
 			<?php if($id == $v['id']) { ?>	
@@ -56,24 +56,15 @@
 	<?php } ?>
 		</select>
 		&nbsp; &nbsp; &nbsp; &nbsp;
+		关键词：
 		<input type="text" id="search" value="<?php echo $s;?>" placeholder="题干/年份/书本名称" class="ad_fls">
 		<input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();">
 		&nbsp; &nbsp; &nbsp; &nbsp;
-		<a href="<?php echo apth_url('?act=gettiku');?>">全部</a>
-		&nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=gettiku&t=0');?>">单选题</a>
-		&nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=gettiku&t=1');?>">多选题</a>
-		&nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=gettiku&t=2');?>">判断题</a>
-		&nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=gettiku&t=3');?>">问答题</a>
-		<span style="float:right;">
-			<a href="<?php echo apth_url('?act=batch_deleting');?>">批量删除</a>
-		</span>
-		<span style="float:right;margin-right:1.5rem;">
-			<a href="<?php echo apth_url('?act=batch_modification');?>">批量修改</a>
-		</span>
+		时间：
+		<input type="text" id="edtDateTime1" readonly="readonly" value="<?php echo $as;?>" class="ad_fls" style="width:12.6rem;"/>
+		至
+		<input type="text" id="edtDateTime2" readonly="readonly" value="<?php echo $bs;?>" class="ad_fls" style="width:12.6rem;"/>
+		<input type="button" value="查询" class="btn_sreach" onclick="query_sreach();">
 	</div>
 <table class="key_tablebox tableBox">
 		<tr>
@@ -94,14 +85,14 @@
 	<?php foreach( $rows as $k => $v ){?>	
 		<tr>
 			<td><?php echo ($k+1);?></td>
-			<td title="<?php echo $v['title'];?>"><?php echo StrSubs($v['title']);?></td>
+			<td title="<?php echo $v['title'];?>"><?php echo StrSubs($v['title'],20);?></td>
 			<td><?php echo GetFourTypes2($v['typeofs']);?></td>
-			<td title="<?php echo $v['dry'];?>"><?php echo StrSubs($v['dry']);?></td>
+			<td title="<?php echo $v['dry'];?>"><?php echo StrSubs($v['dry'],20);?></td>
 			<td><?php echo $v['options'];?></td>
 			<td><?php echo $v['numbers'];?></td>
 			<td><?php echo $v['answers'];?></td>
 			<td><?php echo $v['years'];?></td>
-			<td title="<?php echo $v['booknames'];?>"><?php echo StrSubs($v['booknames']);?></td>
+			<td title="<?php echo $v['booknames'];?>"><?php echo StrSubs($v['booknames'],20);?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><?php echo GetState($v['state']);?></td>
 			<td>
@@ -110,20 +101,17 @@
 <?php }else{ ?>
 			<font color="#999999">观看</font>
 <?php } ?>					
-<?php if( $power==2 ){ ?>	
-				 &nbsp; | &nbsp;			
-				<a href="javascript:void(0);" onclick="delete_info('<?php echo $v['id'];?>','<?php echo $page;?>');">删除</a>
-<?php } ?>					
 			</td>
 		</tr>
 	<?php }?>	
 <?php }?>
 		<tr>	
-			<td colspan="12">			
+			<td colspan="12">		
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
-			<a href="<?php echo apth_url('?act=gettiku&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=gettiku&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('?act=batch_modification&page='.($page-1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">上一页</a> &nbsp; | &nbsp; 
+			<a href="<?php echo apth_url('?act=batch_modification&page='.($page+1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
 <?php }?>	
 <?php if( $power==2 || $power==1 ){ ?>			
@@ -135,22 +123,48 @@
 				<option value="50" <?php echo $TotalShow==50?'selected="selected"':''?> >显示50条</option>
 				<option value="100" <?php echo $TotalShow==100?'selected="selected"':''?> >显示100条</option>
 			</select>
+			 &nbsp; &nbsp; 
+			<span>
+				<a href="javascript:void(0);" onclick="BatchExport();">批量导出</a>
+			</span>
 <?php }?>			
 			</td>
 		</tr>					
 </table>
 </div>
 <script>
+var ExportFlag = "<?php echo $exportflag==null?0:$exportflag;?>";
+function BatchExport()
+{
+	if( ExportFlag == 1 )
+	{
+		location.href="<?php echo apth_url('?act=BatchExport&id='.$id);?>";
+	}
+	else if( ExportFlag == 2 )
+	{
+		location.href="<?php echo apth_url('?act=BatchExport&s='.$s);?>";
+	}	
+	else if(  ExportFlag == 3 )
+	{
+		location.href="<?php echo apth_url('?act=BatchExport&a='.$as.'&b='.$bs);?>";
+	}	
+}
+function query_sreach()
+{
+	var edtDateTime1 = $("#edtDateTime1").val();
+	var edtDateTime2 = $("#edtDateTime2").val();
+	location.href="<?php echo apth_url('?act=batch_modification&exportflag=3&a=');?>"+edtDateTime1+"&b="+edtDateTime2;
+}
 function btn_sreach()
 {
 	var search = $("#search").val();
 	if( search != '' )
 	{
-		location.href="<?php echo apth_url('?act=gettiku&s=');?>"+search;
+		location.href="<?php echo apth_url('?act=batch_modification&exportflag=2&s=');?>"+search;
 	}
 	else
 	{
-		location.href="<?php echo apth_url('?act=gettiku');?>";
+		location.href="<?php echo apth_url('?act=batch_modification');?>";
 	}	
 }
 function cearter_key()
@@ -182,7 +196,7 @@ function update_info(id,p)
 function search_ify(t)
 {
 	var d = $(t).val();
-	location.href="<?php echo apth_url('?act=gettiku&page='.$page.'&id=');?>"+d;
+	location.href="<?php echo apth_url('?act=batch_modification&exportflag=1&page='.$page.'&id=');?>"+d;
 }
 function SetShwoTotal(t)
 {
@@ -196,7 +210,7 @@ function btn_g()
 	var d = $("#g").val();
 	if( d != '' )
 	{
-		location.href="<?php echo apth_url('?act=gettiku&page=');?>"+d;
+		location.href="<?php echo apth_url('?act=batch_modification&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs.'&page=');?>"+d;
 	}	
 }
 $(function(){
@@ -206,6 +220,57 @@ $(function(){
 		$(this).css({"background":"#FFFFDD"});
 	},function(){
 		$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	});
+});
+
+var as = "<?php echo $as;?>";
+var bs = "<?php echo $bs;?>";
+
+$(function(){
+	//日期时间控件
+	var dt = new Date();
+if( as=='' && bs=='' )
+{	
+	$("#edtDateTime1").val(dt.getFullYear()+"-"+getInts(dt.getMonth()+1)+"-"+getInts(dt.getDate())+" "+getInts(dt.getHours())+":"+getInts(dt.getMinutes())+":"+getInts(dt.getSeconds()));
+	$("#edtDateTime2").val(dt.getFullYear()+"-"+getInts(dt.getMonth()+1)+"-"+getInts(dt.getDate())+" "+getInts(dt.getHours())+":"+getInts(dt.getMinutes())+":"+getInts(dt.getSeconds()));
+}	
+	function getInts(int){if(int<10){var int = "0"+int;} return int;};
+	$.datepicker.regional["zh-CN"] = {
+	  closeText: "完成",
+	  prevText: "上个月",
+	  nextText: "下个月",
+	  currentText: "现在",
+	  monthNames: ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+	  monthNamesShort: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+	  dayNames: ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],
+	  dayNamesShort: ["周日","周一","周二","周三","周四","周五","周六"],
+	  dayNamesMin: ["日","一","二","三","四","五","六"],
+	  weekHeader: "周",
+	  dateFormat: "yy-mm-dd",
+	  firstDay: 1,
+	  isRTL: false,
+	  showMonthAfterYear: true,
+	  yearSuffix: " 年  "
+	};
+	$.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+	$.timepicker.regional["zh-CN"] = {
+	  timeOnlyTitle: "时间",
+	  timeText: "时间",
+	  hourText: "小时",
+	  minuteText: "分钟",
+	  secondText: "秒钟",
+	  millisecText: "毫秒",
+	  currentText: "现在",
+	  closeText: "完成",
+	  timeFormat: "HH:mm:ss",
+	  ampm: false
+	};
+	$.timepicker.setDefaults($.timepicker.regional["zh-CN"]);
+	$("#edtDateTime1").datetimepicker({
+	  showSecond: true
+	});
+	$("#edtDateTime2").datetimepicker({
+	  showSecond: true
 	});
 });
 </script>

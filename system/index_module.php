@@ -314,13 +314,7 @@ function e_exam($int)
 			$str = '<font color="#69b530">练习</font>';
 		break;
 		case 1:
-			$str = '<font color="#cb10ea">历年真考</font>';
-		break;
-		case 2:
-			$str = '<font color="#232222">随机模拟 </font>';
-		break;
-		case 3:
-			$str = '<font color="#e94111">专家模拟</font>';
+			$str = '<font color="#cb10ea">正式考</font>';
 		break;
 	}
 	return $str;
@@ -551,7 +545,85 @@ function gettiku_update()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function batch_modification()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$exportflag = htmlspecialchars($_GET['exportflag'],ENT_QUOTES);
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	
+	$as = $_GET['a']==null?null:htmlspecialchars($_GET['a'],ENT_QUOTES);
+	$bs = $_GET['b']==null?null:htmlspecialchars($_GET['b'],ENT_QUOTES);
+	$values = array(strtotime($as),strtotime($bs));
+	$a = min($values);
+	$b = max($values);
+	
+	$power = GetUserp();
+	$flRows1 = GetFenLai(0,2);
+	
+	if( $id != '' || $s!='' || ($a!=''&&$b!='') )
+	{	
+		
+		$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
+		if( $id != null )
+		{
+			$sql .= ' and b.id='.$id.' ';
+		}
+		if( $s != null )
+		{
+			$sql .= ' and (a.dry like "%'.$s.'%" or a.years like "%'.$s.'%" or a.booknames like "%'.$s.'%") ';
+		}
+		if( $t != null )
+		{
+			$sql .= ' and a.typeofs='.$t.' ';
+		}
+		if( $a!=''&&$b!='' )
+		{
+			$sql .= ' and a.publitime between '.$a.' and '.$b.' ';
+		}
+		$TotalRows = db()->query($sql)->array_nums();
+		$TotalShow = GetFilePath();
+		$TotalPage = ceil($TotalRows/$TotalShow);
+		$page = $_GET['page']==null?1:$_GET['page'];
+		if($page>=$TotalPage){$page=$TotalPage;}
+		if($page<=1||!is_numeric($page)){$page=1;}
+		$offset = ($page-1)*$TotalShow;
+		
+		$sql .= ' order by a.id desc limit '.$offset.','.$TotalShow.' ';
+		$rows = db()->query($sql)->array_rows();
+		
+	}	
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
+function BatchExport()
+{
+	Header( "Content-type: application/octet-stream "); 
+	Header( "Accept-Ranges: bytes "); 
+	Header( "Content-type:application/vnd.ms-excel "); 
+	Header( "Content-Disposition:attachment;filename=".date('Y-m-ds').".xls "); 
+
+	$t1 = strtotime(trim($_REQUEST['t1']));
+	$t2 = strtotime(trim($_REQUEST['t2']));
+	$rows = db()->select('id,code,discount,publitime,usetime,types,state')->from(PRE.'promocode')->where('publitime')->between(array($t1,$t2))->get()->array_rows();
+	
+	if(!empty($rows))
+	{		
+		echo iconv("utf-8", "gbk", '序号')."\t".iconv("utf-8", "gbk", '优惠码')."\t".iconv("utf-8", "gbk", '打折')."\t".iconv("utf-8", "gbk", '生成时间')."\t".iconv("utf-8", "gbk", '使用时间')."\t".iconv("utf-8", "gbk", '方式')."\t".iconv("utf-8", "gbk", '状态');
+		foreach($rows as $k=>$v)
+		{
+			echo "\n";
+ 			echo ($k+1)."\t".$v['code']."\t".$v['discount']."\t".date("Y-m-d H:i:s",$v['publitime'])."\t".date("Y-m-d H:i:s",$v['usetime'])."\t".($v['types']==1?iconv("utf-8", "gbk", '活动使用'):iconv("utf-8", "gbk", '其它使用'))."\t".($v['state']==1?iconv("utf-8", "gbk", '未使用'):iconv("utf-8", "gbk", '已使用'));
+		}
+	}
+	else
+	{
+		echo iconv("utf-8", "gbk", '时间范围内没有查找到数据');
+	}     
+}
 function delete_tiku()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -727,12 +799,31 @@ function update_room()
 	if( $data['tariff'] == 1 )
 	{
 		$value = $_POST;
-		$data['rule'] = serialize($value);
+		$data['rule1'] = serialize($value);
 	}
 	else
 	{
-		$data['rule'] = '';
+		$data['rule1'] = '';
 	}
+	
+	$data['roomsets'] = $_POST['roomsets'];
+	if( $data['roomsets'] == 1 )
+	{
+		$rule2['roomsets'] = $_POST['roomsets'];
+		$rule2['times'] = $_POST['times'];
+		$rule2['typeofs'] = $_POST['typeofs'];
+		$rule2['extracts'] = $_POST['extracts'];
+		$rule2['chouti'] = $_POST['chouti'];
+		$rule2['totalexam'] = $_POST['totalexam'];
+		$rule2['totalscore'] = $_POST['totalscore'];
+		$rule2['passscore'] = $_POST['passscore'];
+		$data['rule2'] = serialize($rule2);
+	}
+	else
+	{
+		$data['rule2'] = '';
+	}
+	
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
@@ -753,7 +844,6 @@ function update_room()
 	{
 		echo json_encode(array("error"=>1,'txt'=>'请选择分类'));exit;
 	}
-	$data['setting'] = $_POST['setting'];
 	$data['descri'] = $_POST['descri'];
 	$data['state'] = $_POST['state'];
 		

@@ -35,7 +35,7 @@
 		<p>考场描述： <input type="text" name="descri" value="<?php echo $row['descri'];?>" class="ad_fls"/></p>
 		<p>资费模式： <label><input type="radio" name="tariff" value="0" <?php echo $row['tariff']==='0'?'checked="checked"':'';?> onclick="SetState(1);"/>免费</label> &nbsp; &nbsp; <label><input type="radio" name="tariff" <?php echo $row['tariff']==1?'checked="checked"':'';?> value="1" onclick="SetState(2);"/>收费</label></p>		
 		<div class="t_guizhe" style="display:none;">
-			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则：</div>
+			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则</div>
 			<div class="t_guizhe_list">
 				<span style="font-weight:bold;">VIP包月：</span><br/>
 				<div class="add_rules">
@@ -63,7 +63,7 @@
 		<div class="t_guizhe2" style="display:none;">
 			<div class="t_guizhe_list2" style="font-weight:bold;">设置考试规则</div>
 			<div class="t_guizhe_list">
-				<span style="font-weight:bold;">考场常用规则：</span><br/>
+				<span style="font-weight:bold;">考场规则：</span><br/>
 				<div class="add_rules">
 					<div class="cloxe_xxx">
 						<span>1</span>、考试时间： <input type="text" name="times" placeholder="2" value="<?php echo $rule2['times'];?>" class="r_setvals" style="width:1rem;padding:0 0.2rem;"/> 小时&nbsp; <br/>
@@ -78,18 +78,18 @@
 						<label><input type="checkbox" class="allhunhes" onclick="all_mixing(this);" />全部混合</label> &nbsp; &nbsp;  <br/>
 				<?php } ?>							
 						<span>3</span>、抽题数量：		
-						单选题 <input type="text" name="extracts[]" placeholder="30" value="<?php echo $rule2['extracts'][0];?>" disabled="disabled" class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 ；&nbsp;  
-						多选题 <input type="text" name="extracts[]" placeholder="30" value="<?php echo $rule2['extracts'][1];?>" disabled="disabled" class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 ；&nbsp;  
-						判选题 <input type="text" name="extracts[]" placeholder="30" value="<?php echo $rule2['extracts'][2];?>" disabled="disabled" class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 ；&nbsp;  
-						问答题 <input type="text" name="extracts[]" placeholder="10" value="<?php echo $rule2['extracts'][3];?>" disabled="disabled" class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 &nbsp;  		
+						单选题 <input type="text" name="extracts[]" placeholder="30" value="<?php echo $rule2['extracts'][0];?>" <?php echo $rule2['extracts'][0]!=''?'':'disabled="disabled"';?> class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 ；&nbsp;  
+						多选题 <input type="text" name="extracts[]" placeholder="30" value="<?php echo $rule2['extracts'][1];?>" <?php echo $rule2['extracts'][1]!=''?'':'disabled="disabled"';?> class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 ；&nbsp;  
+						判选题 <input type="text" name="extracts[]" placeholder="30" value="<?php echo $rule2['extracts'][2];?>" <?php echo $rule2['extracts'][2]!=''?'':'disabled="disabled"';?> class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 ；&nbsp;  
+						问答题 <input type="text" name="extracts[]" placeholder="10" value="<?php echo $rule2['extracts'][3];?>" <?php echo $rule2['extracts'][3]!=''?'':'disabled="disabled"';?> class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 &nbsp;  		
 						<br/>
 						<span>4</span>、获取考题： 
-						<label><input type="radio" name="chouti" checked="checked" value="0"/>随机抽题</label> &nbsp; &nbsp; 
-						<label><input type="radio" name="chouti" value="1"/>书本顺序</label> &nbsp; &nbsp; 
-						<label><input type="radio" name="chouti" value="2"/>自由模式</label> &nbsp; &nbsp; <br/> 
-						<span>5</span>、考题总量： <input type="text" name="totalexam" placeholder="100" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 题&nbsp; <br/>
-					 	<span>6</span>、考题总分： <input type="text" name="totalscore" placeholder="100" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
-					 	<span>7</span>、及格分数： <input type="text" name="passscore" placeholder="90" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
+						<label><input type="radio" name="chouti" <?php echo $rule2['chouti']==='0'?'checked="checked"':'';?> value="0"/>随机抽题</label> &nbsp; &nbsp; 
+						<label><input type="radio" name="chouti" <?php echo $rule2['chouti']==1?'checked="checked"':'';?> value="1"/>书本顺序</label> &nbsp; &nbsp; 
+						<label><input type="radio" name="chouti" <?php echo $rule2['chouti']==2?'checked="checked"':'';?> value="2"/>自由模式</label> &nbsp; &nbsp; <br/> 
+						<span>5</span>、考题总量： <input type="text" name="totalexam" placeholder="100" value="<?php echo $rule2['totalexam'];?>" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 题&nbsp; <br/>
+					 	<span>6</span>、考题总分： <input type="text" name="totalscore" placeholder="100" value="<?php echo $rule2['totalscore'];?>" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
+					 	<span>7</span>、及格分数： <input type="text" name="passscore" placeholder="90" value="<?php echo $rule2['passscore'];?>" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
 					 </div>
 				</div>	 
 			</div>	
@@ -126,6 +126,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}	
 	}	
 	else if( i == 1 )
@@ -143,6 +144,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}	
 	}	
 	else if( i == 2 )
@@ -160,6 +162,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}	
 	}	
 	else if( i == 3 )
@@ -177,6 +180,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}
 	}	
 }
@@ -271,12 +275,6 @@ function add_classify()
 	if( sort == '' )
 	{
 		layer.tips('排序号不能为空，请输入整数。', '#ad_fls2');
-		return false;
-	}
-	var setting = $("[name='setting']");
-	if( !setting.is(":checked") )
-	{
-		layer.msg('请设置考场');
 		return false;
 	}
 	$.ajax({

@@ -157,6 +157,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}	
 	}	
 	else if( i == 1 )
@@ -174,6 +175,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}	
 	}	
 	else if( i == 2 )
@@ -191,6 +193,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}	
 	}	
 	else if( i == 3 )
@@ -208,6 +211,7 @@ function all_mixing2(t,i)
 		{
 			$(".rs_eadonly:eq("+i+")").attr('disabled','disabled');
 			$(".allhunhes")[0].checked=false;
+			$(".rs_eadonly:eq("+i+")").val('');
 		}
 	}	
 }
@@ -219,7 +223,7 @@ function all_mixing(t)
 	$(".rs_eadonly").val('');
 	
 	if( $(t).is(':checked') )
-	{		
+	{	
 		for(var i=0;i<len;i++)
 		{
 			objs[i].checked = true;
@@ -233,6 +237,7 @@ function all_mixing(t)
 			objs[i].checked = false;
 		}
 		$(".rs_eadonly").attr('disabled','disabled');
+		$(".rs_eadonly").val('');
 	}	
 }
 function room_sets(t)

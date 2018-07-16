@@ -107,6 +107,7 @@ html{height:92%;}
 .btn_g{padding:0 0.5rem;}
 
 .key_tablebox_allins{border:1px solid #ded5d5;margin:6px 0;height:50px;background:#f4f4f4;line-height:50px;padding:0 10px;}
+.key_tablebox_all .key_tablebox_allins a:hover{color:red;}
 .btn_sreach{border: 1px solid #3571cc;padding:0.21rem;border-radius:0.2rem;background:#3571cc;color:antiquewhite;}
 .btn_sreach:hover{background:#86b2f5;color:#383535;}
 

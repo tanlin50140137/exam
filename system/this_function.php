@@ -220,3 +220,11 @@ function GetFilePath3()
 	$filename = base_url($spot.'external');
 	return $filename;
 }
+function StrSubs($str,$int=10,$imt='...')
+{
+	if( mb_strlen($str,'utf-8') > $int )
+	{
+		$str = mb_substr($str, 0, $int,'utf-8').$imt;
+	}
+	return $str;
+}
