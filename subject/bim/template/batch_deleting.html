@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>批量修改</title>
+<title>批量删除</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <link rel="stylesheet" href="<?php echo apth_url('subject/bim/treeview/jquery.treeview.css');?>" />
@@ -17,9 +17,9 @@
 <div class="key_box">
 	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp;
-	<a href="<?php echo apth_url('?act=batch_modification');?>">批量修改（批量导出Excel）</a>
+	<a href="<?php echo apth_url('?act=batch_deleting');?>">批量删除</a>
 	 &nbsp; &nbsp; &nbsp;
-	<a href="<?php echo apth_url('?act=batch_deleting');?>">批量删除</a>	
+	<a href="<?php echo apth_url('?act=batch_modification');?>">批量修改</a> 
 	 &nbsp; &nbsp; &nbsp;
 	<a href="<?php echo apth_url('?act=gettiku');?>">返回题库</a>
 	</h1>	
@@ -101,7 +101,7 @@
 			<td><?php echo GetState($v['state']);?></td>
 			<td>
 <?php if( $power==2 || $power==1 ){ ?>			
-				<a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a> 
+				<a href="javascript:void(0);" onclick="delete_info('<?php echo $v['id'];?>','<?php echo $page;?>');">删除</a> 
 <?php }else{ ?>
 			<font color="#999999">观看</font>
 <?php } ?>					
@@ -110,7 +110,7 @@
 	<?php }?>	
 <?php }else{ ?>
 		<tr>
-			<td colspan="12" style="color:#999999;">先查询，后导出</td>
+			<td colspan="12" style="color:#999999;">先查询，后删除</td>
 		</tr>	
 <?php }?>
 		<tr>	
@@ -118,8 +118,8 @@
 			共<?php echo $TotalRows==null?0:$TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
-			<a href="<?php echo apth_url('?act=batch_modification&page='.($page-1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">上一页</a> &nbsp; | &nbsp; 
-			<a href="<?php echo apth_url('?act=batch_modification&page='.($page+1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">下一页</a>  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('?act=batch_deleting&page='.($page-1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">上一页</a> &nbsp; | &nbsp; 
+			<a href="<?php echo apth_url('?act=batch_deleting&page='.($page+1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
 <?php }?>	
 <?php if( $power==2 || $power==1 ){ ?>			
@@ -133,7 +133,7 @@
 			</select>
 			 &nbsp; &nbsp; 
 			<span>
-				<a href="javascript:void(0);" onclick="BatchExport();">批量导出</a>
+				<a href="javascript:void(0);" onclick="BatchExport();">批量删除</a>
 			</span>
 <?php }?>			
 			</td>
@@ -159,9 +159,9 @@ function BatchExport()
 		f = '时间';
 	}
 	var html  = '<div style="border:1px solid #dcdbdb;width:90%;margin:1rem auto;">';
-		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;">按<font color="red">['+f+']</font>查询结果导出</div>';
-		html += '<form id="ExFrm"><div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size:1rem;color:red;">导出Excel格式：<label><input type="radio" name="ext" value="0"/>.xls</label> &nbsp; <label><input type="radio" name="ext" value="1"/>.xlsx</label> &nbsp; <label><input type="radio" name="ext" value="2"/>.csv</label></div></form>';
-		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;"><input type="button" value="导出" class="btn_sreach" onclick="ExportABatch();"> &nbsp; <input type="button" value="取消" class="btn_sreach" onclick="BatchCancel();"></div>';
+		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;">按<font color="red">['+f+']</font>查询结果删除</div>';
+		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size:1rem;color:red;">删除后数据无法恢复，请小心谨慎！！！</div>';
+		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;"><input type="button" value="确定删除" class="btn_sreach" onclick="ExportABatch();"> &nbsp; <input type="button" value="取消" class="btn_sreach" onclick="BatchCancel();"></div>';
 		html += '</div>';
 		lay = layer.open({
 		  title: false,
@@ -176,32 +176,23 @@ function BatchExport()
 }
 function ExportABatch()
 {
-	var ExFrm  = $("#ExFrm").serialize();
-	
-	var ext = $("[name='ext']");
-	if( !ext.is(":checked") )
-	{
-		layer.msg('请选择导出Excel格式');
-		return false;
-	}
-	
 	layer.close(lay);
 	
 	if( ExportFlag == 1 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&id='.$id.'&');?>"+ExFrm;
+		location.href="<?php echo apth_url('?act=BatchDeletingAll&flag='.$exportflag.'&id='.$id);?>";
 	}
 	else if( ExportFlag == 2 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&s='.$s.'&');?>"+ExFrm;
+		location.href="<?php echo apth_url('?act=BatchDeletingAll&flag='.$exportflag.'&s='.$s);?>";
 	}	
 	else if(  ExportFlag == 3 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&a='.$as.'&b='.$bs.'&');?>"+ExFrm;
+		location.href="<?php echo apth_url('?act=BatchDeletingAll&flag='.$exportflag.'&a='.$as.'&b='.$bs);?>";
 	}
 	else
 	{
-		layer.msg('先查询，后导出');
+		layer.msg('先查询，后删除');
 	}	
 }
 function BatchCancel()
@@ -212,18 +203,18 @@ function query_sreach()
 {
 	var edtDateTime1 = $("#edtDateTime1").val();
 	var edtDateTime2 = $("#edtDateTime2").val();
-	location.href="<?php echo apth_url('?act=batch_modification&exportflag=3&a=');?>"+edtDateTime1+"&b="+edtDateTime2;
+	location.href="<?php echo apth_url('?act=batch_deleting&exportflag=3&a=');?>"+edtDateTime1+"&b="+edtDateTime2;
 }
 function btn_sreach()
 {
 	var search = $("#search").val();
 	if( search != '' )
 	{
-		location.href="<?php echo apth_url('?act=batch_modification&exportflag=2&s=');?>"+search;
+		location.href="<?php echo apth_url('?act=batch_deleting&exportflag=2&s=');?>"+search;
 	}
 	else
 	{
-		location.href="<?php echo apth_url('?act=batch_modification');?>";
+		location.href="<?php echo apth_url('?act=batch_deleting');?>";
 	}	
 }
 function cearter_key()
@@ -239,7 +230,7 @@ function delete_info(id,p)
 		  btn: ['确定','取消'] //按钮
 		}, function(){
 		  layer.msg('正在删除......', {icon: 1},function(){
-			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_tiku','id':id},function(data){
+			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_batch','id':id},function(data){
 				  var obj = eval("("+data+")");
 				  layer.msg(obj.txt,{time:1000},function(){
 						location.reload();
@@ -255,7 +246,7 @@ function update_info(id,p)
 function search_ify(t)
 {
 	var d = $(t).val();
-	location.href="<?php echo apth_url('?act=batch_modification&exportflag=1&page='.$page.'&id=');?>"+d;
+	location.href="<?php echo apth_url('?act=batch_deleting&exportflag=1&page='.$page.'&id=');?>"+d;
 }
 function SetShwoTotal(t)
 {
@@ -269,7 +260,7 @@ function btn_g()
 	var d = $("#g").val();
 	if( d != '' )
 	{
-		location.href="<?php echo apth_url('?act=batch_modification&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs.'&page=');?>"+d;
+		location.href="<?php echo apth_url('?act=batch_deleting&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs.'&page=');?>"+d;
 	}	
 }
 $(function(){

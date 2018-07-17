@@ -598,7 +598,101 @@ function batch_modification()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function batch_deleting()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$exportflag = htmlspecialchars($_GET['exportflag'],ENT_QUOTES);
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	
+	$as = $_GET['a']==null?null:htmlspecialchars($_GET['a'],ENT_QUOTES);
+	$bs = $_GET['b']==null?null:htmlspecialchars($_GET['b'],ENT_QUOTES);
+	$values = array(strtotime($as),strtotime($bs));
+	$a = min($values);
+	$b = max($values);
+	
+	$power = GetUserp();
+	$flRows1 = GetFenLai(0,2);
+	
+	if( $id != '' || $s!='' || ($a!=''&&$b!='') )
+	{	
+		
+		$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
+		if( $id != null )
+		{
+			$sql .= ' and b.id='.$id.' ';
+		}
+		if( $s != null )
+		{
+			$sql .= ' and (a.dry like "%'.$s.'%" or a.years like "%'.$s.'%" or a.booknames like "%'.$s.'%") ';
+		}
+		if( $t != null )
+		{
+			$sql .= ' and a.typeofs='.$t.' ';
+		}
+		if( $a!=''&&$b!='' )
+		{
+			$sql .= ' and a.publitime between '.$a.' and '.$b.' ';
+		}
+		$TotalRows = db()->query($sql)->array_nums();
+		$TotalShow = GetFilePath();
+		$TotalPage = ceil($TotalRows/$TotalShow);
+		$page = $_GET['page']==null?1:$_GET['page'];
+		if($page>=$TotalPage){$page=$TotalPage;}
+		if($page<=1||!is_numeric($page)){$page=1;}
+		$offset = ($page-1)*$TotalShow;
+		
+		$sql .= ' order by a.id desc limit '.$offset.','.$TotalShow.' ';
+		$rows = db()->query($sql)->array_rows();
+		
+	}
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 ###############################################################################################
+function BatchDeletingAll()
+{
+	$exportflag = htmlspecialchars($_GET['flag'],ENT_QUOTES);
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	
+	$as = $_GET['a']==null?null:htmlspecialchars($_GET['a'],ENT_QUOTES);
+	$bs = $_GET['b']==null?null:htmlspecialchars($_GET['b'],ENT_QUOTES);
+	$values = array(strtotime($as),strtotime($bs));
+	$a = min($values);
+	$b = max($values);
+		
+	switch ( $exportflag )
+	{
+		case 1:
+			db()->delete(PRE.'examination',array('pid'=>$id));
+		break;
+		case 2:
+			db()->delete(PRE.'examination','(dry like "%'.$s.'%" or years like "%'.$s.'%" or booknames like "%'.$s.'%")');
+		break;
+		case 3:
+			db()->delete(PRE.'examination','publitime between '.$a.' and '.$b.' ');
+		break;
+	}
+	
+	header('location:'.apth_url('?act=batch_deleting'));
+}
+function delete_batch()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$int = db()->delete(PRE.'examination',array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+	}
+}
 function BatchExport()
 {	
 	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
