@@ -600,28 +600,70 @@ function batch_modification()
 }
 ###############################################################################################
 function BatchExport()
-{
+{	
+	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
+	$ext = $haystack[$_GET['ext']];
 	Header( "Content-type: application/octet-stream "); 
 	Header( "Accept-Ranges: bytes "); 
 	Header( "Content-type:application/vnd.ms-excel "); 
-	Header( "Content-Disposition:attachment;filename=".date('Y-m-ds').".xls "); 
-
-	$t1 = strtotime(trim($_REQUEST['t1']));
-	$t2 = strtotime(trim($_REQUEST['t2']));
-	$rows = db()->select('id,code,discount,publitime,usetime,types,state')->from(PRE.'promocode')->where('publitime')->between(array($t1,$t2))->get()->array_rows();
+	Header( "Content-Disposition:attachment;filename=".date('Y-m-ds').'.'.$ext); 
+	
+	$exportflag = htmlspecialchars($_GET['flag'],ENT_QUOTES);
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	
+	$as = $_GET['a']==null?null:htmlspecialchars($_GET['a'],ENT_QUOTES);
+	$bs = $_GET['b']==null?null:htmlspecialchars($_GET['b'],ENT_QUOTES);
+	$values = array(strtotime($as),strtotime($bs));
+	$a = min($values);
+	$b = max($values);
+		
+	switch ( $exportflag )
+	{
+		case 1:
+			$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
+			if( $id != null )
+			{
+				$sql .= ' and b.id='.$id.' ';
+			}
+			$rows = db()->query($sql)->array_rows();
+		break;
+		case 2:
+			$rows = db()->select('*')->from(PRE.'examination')->where('(dry like "%'.$s.'%" or years like "%'.$s.'%" or booknames like "%'.$s.'%")')->get()->array_rows();
+		break;
+		case 3:
+			$rows = db()->select('*')->from(PRE.'examination')->where('publitime')->between(array($a,$b))->get()->array_rows();
+		break;
+	}
 	
 	if(!empty($rows))
-	{		
-		echo iconv("utf-8", "gbk", '序号')."\t".iconv("utf-8", "gbk", '优惠码')."\t".iconv("utf-8", "gbk", '打折')."\t".iconv("utf-8", "gbk", '生成时间')."\t".iconv("utf-8", "gbk", '使用时间')."\t".iconv("utf-8", "gbk", '方式')."\t".iconv("utf-8", "gbk", '状态');
-		foreach($rows as $k=>$v)
+	{	
+		if( $ext != 'csv' )
+		{	
+			echo iconv("utf-8", "gbk", '题型')."\t".iconv("utf-8", "gbk", '提干')."\t".iconv("utf-8", "gbk", '选项')."\t".iconv("utf-8", "gbk", '选项数量')."\t".iconv("utf-8", "gbk", '答案')."\t".iconv("utf-8", "gbk", '解析')."\t".iconv("utf-8", "gbk", '年份')."\t".iconv("utf-8", "gbk", '书本名称')."\t".iconv("utf-8", "gbk", '书本小标题')."\t".iconv("utf-8", "gbk", '章节')."\t".iconv("utf-8", "gbk", '题帽');
+			foreach($rows as $k=>$v)
+			{
+				echo "\n";
+	 			echo iconv("utf-8", "gbk",GetFourTypes2($v['typeofs']))."\t".iconv("utf-8", "gbk",$v['dry'])."\t".iconv("utf-8", "gbk",$v['options'])."\t".iconv("utf-8", "gbk",$v['numbers'])."\t".iconv("utf-8", "gbk",$v['answers'])."\t".iconv("utf-8", "gbk",$v['analysis'])."\t".iconv("utf-8", "gbk",$v['years'])."\t".iconv("utf-8", "gbk",$v['booknames'])."\t".iconv("utf-8", "gbk",$v['subtitles'])."\t".iconv("utf-8", "gbk",$v['chapters'])."\t".iconv("utf-8", "gbk",$v['hats']);
+			}
+		}
+		else
 		{
-			echo "\n";
- 			echo ($k+1)."\t".$v['code']."\t".$v['discount']."\t".date("Y-m-d H:i:s",$v['publitime'])."\t".date("Y-m-d H:i:s",$v['usetime'])."\t".($v['types']==1?iconv("utf-8", "gbk", '活动使用'):iconv("utf-8", "gbk", '其它使用'))."\t".($v['state']==1?iconv("utf-8", "gbk", '未使用'):iconv("utf-8", "gbk", '已使用'));
+			header('Content-Type:text/csv');
+			
+			echo iconv("utf-8", "gbk", '题型').",".iconv("utf-8", "gbk", '提干').",".iconv("utf-8", "gbk", '选项').",".iconv("utf-8", "gbk", '选项数量').",".iconv("utf-8", "gbk", '答案').",".iconv("utf-8", "gbk", '解析').",".iconv("utf-8", "gbk", '年份').",".iconv("utf-8", "gbk", '书本名称').",".iconv("utf-8", "gbk", '书本小标题').",".iconv("utf-8", "gbk", '章节').",".iconv("utf-8", "gbk", '题帽');
+			foreach($rows as $k=>$v)
+			{
+				echo "\n";
+	 			echo iconv("utf-8", "gbk",GetFourTypes2($v['typeofs'])).",".iconv("utf-8", "gbk",$v['dry']).",".iconv("utf-8", "gbk",$v['options']).",".iconv("utf-8", "gbk",$v['numbers']).",".iconv("utf-8", "gbk",$v['answers']).",".iconv("utf-8", "gbk",$v['analysis']).",".iconv("utf-8", "gbk",$v['years']).",".iconv("utf-8", "gbk",$v['booknames']).",".iconv("utf-8", "gbk",$v['subtitles']).",".iconv("utf-8", "gbk",$v['chapters']).",".iconv("utf-8", "gbk",$v['hats']);
+			}
+			
 		}
 	}
 	else
 	{
-		echo iconv("utf-8", "gbk", '时间范围内没有查找到数据');
+		echo iconv("utf-8", "gbk", '没有查找到数据');
 	}     
 }
 function delete_tiku()

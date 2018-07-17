@@ -104,10 +104,14 @@
 			</td>
 		</tr>
 	<?php }?>	
+<?php }else{ ?>
+		<tr>
+			<td colspan="12" style="color:#999999;">先查询，后导出</td>
+		</tr>	
 <?php }?>
 		<tr>	
 			<td colspan="12">		
-			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
+			共<?php echo $TotalRows==null?0:$TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
 			<a href="<?php echo apth_url('?act=batch_modification&page='.($page-1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">上一页</a> &nbsp; | &nbsp; 
@@ -134,20 +138,71 @@
 </div>
 <script>
 var ExportFlag = "<?php echo $exportflag==null?0:$exportflag;?>";
+var lay = '';
 function BatchExport()
 {
+	var f = '';
 	if( ExportFlag == 1 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&id='.$id);?>";
+		f = '分类';
 	}
 	else if( ExportFlag == 2 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&s='.$s);?>";
+		f = '关键词';
 	}	
 	else if(  ExportFlag == 3 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&a='.$as.'&b='.$bs);?>";
+		f = '时间';
+	}
+	var html  = '<div style="border:1px solid #dcdbdb;width:90%;margin:1rem auto;">';
+		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;">按<span id="strrepsts">'+f+'</span>查询结果导出</div>';
+		html += '<form id="ExFrm"><div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;">导出Excel格式：<label><input type="radio" name="ext" value="0"/>.xls</label> &nbsp; <label><input type="radio" name="ext" value="1"/>.xlsx</label> &nbsp; <label><input type="radio" name="ext" value="2"/>.csv</label></div></form>';
+		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;"><input type="button" value="导出" class="btn_sreach" onclick="ExportABatch();"> &nbsp; <input type="button" value="取消" class="btn_sreach" onclick="BatchCancel();"></div>';
+		html += '</div>';
+		lay = layer.open({
+		  title: false,
+		  type: 1,
+		  skin: 'layui-layer-demo',
+		  closeBtn: 0, 
+		  anim: 2,
+		  area: '500px',
+		  shadeClose: true,
+		  content: html
+	});	
+}
+function ExportABatch()
+{
+	var ExFrm  = $("#ExFrm").serialize();
+	
+	var ext = $("[name='ext']");
+	if( !ext.is(":checked") )
+	{
+		layer.msg('请选择导出Excel格式');
+		return false;
+	}
+	
+	layer.close(lay);
+	
+	if( ExportFlag == 1 )
+	{
+		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&id='.$id.'&');?>"+ExFrm;
+	}
+	else if( ExportFlag == 2 )
+	{
+		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&s='.$s.'&');?>"+ExFrm;
 	}	
+	else if(  ExportFlag == 3 )
+	{
+		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&a='.$as.'&b='.$bs.'&');?>"+ExFrm;
+	}
+	else
+	{
+		layer.msg('先查询，后导出');
+	}	
+}
+function BatchCancel()
+{
+	layer.close(lay);
 }
 function query_sreach()
 {
