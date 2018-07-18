@@ -533,6 +533,14 @@ function import_tiku()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function modify_import()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$flRows1 = GetFenLai(0,2);
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 function gettiku_update()
 {
 	include 'subject/'.getThemeDir().'/common.php';
@@ -686,11 +694,11 @@ function delete_batch()
 	$int = db()->delete(PRE.'examination',array('id'=>$id));
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
 function BatchExport()
@@ -699,7 +707,14 @@ function BatchExport()
 	$ext = $haystack[$_GET['ext']];
 	Header( "Content-type: application/octet-stream "); 
 	Header( "Accept-Ranges: bytes "); 
-	Header( "Content-type:application/vnd.ms-excel "); 
+	if( $ext == OFFICEXLS || $ext == OFFICECSV )
+	{
+		Header( "Content-type:application/vnd.ms-excel "); 
+	}
+	elseif( $ext == OFFICEXLSX )
+	{
+		Header('Content-Type:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	}
 	Header( "Content-Disposition:attachment;filename=".date('Y-m-ds').'.'.$ext); 
 	
 	$exportflag = htmlspecialchars($_GET['flag'],ENT_QUOTES);
@@ -733,31 +748,31 @@ function BatchExport()
 	
 	if(!empty($rows))
 	{	
-		if( $ext != 'csv' )
+		if( $ext != OFFICECSV )
 		{	
-			echo iconv("utf-8", "gbk", '题型')."\t".iconv("utf-8", "gbk", '提干')."\t".iconv("utf-8", "gbk", '选项')."\t".iconv("utf-8", "gbk", '选项数量')."\t".iconv("utf-8", "gbk", '答案')."\t".iconv("utf-8", "gbk", '解析')."\t".iconv("utf-8", "gbk", '年份')."\t".iconv("utf-8", "gbk", '书本名称')."\t".iconv("utf-8", "gbk", '书本小标题')."\t".iconv("utf-8", "gbk", '章节')."\t".iconv("utf-8", "gbk", '题帽');
+			echo iconv("utf-8", "gbk", IDOFS)."\t".iconv("utf-8", "gbk", TYPEOFS)."\t".iconv("utf-8", "gbk", DRYS)."\t".iconv("utf-8", "gbk", OPTIONS)."\t".iconv("utf-8", "gbk", NUMBERS)."\t".iconv("utf-8", "gbk", ANSWERS)."\t".iconv("utf-8", "gbk", ANALYSIS)."\t".iconv("utf-8", "gbk", YEARS)."\t".iconv("utf-8", "gbk", BOOKNAMES)."\t".iconv("utf-8", "gbk", SUBTILES)."\t".iconv("utf-8", "gbk", CHAPTERS)."\t".iconv("utf-8", "gbk", HATS);
 			foreach($rows as $k=>$v)
 			{
 				echo "\n";
-	 			echo iconv("utf-8", "gbk",GetFourTypes2($v['typeofs']))."\t".iconv("utf-8", "gbk",$v['dry'])."\t".iconv("utf-8", "gbk",$v['options'])."\t".iconv("utf-8", "gbk",$v['numbers'])."\t".iconv("utf-8", "gbk",$v['answers'])."\t".iconv("utf-8", "gbk",$v['analysis'])."\t".iconv("utf-8", "gbk",$v['years'])."\t".iconv("utf-8", "gbk",$v['booknames'])."\t".iconv("utf-8", "gbk",$v['subtitles'])."\t".iconv("utf-8", "gbk",$v['chapters'])."\t".iconv("utf-8", "gbk",$v['hats']);
+	 			echo iconv("utf-8", "gbk",$v['id'])."\t".iconv("utf-8", "gbk",GetFourTypes2($v['typeofs']))."\t".iconv("utf-8", "gbk",$v['dry'])."\t".iconv("utf-8", "gbk",$v['options'])."\t".iconv("utf-8", "gbk",$v['numbers'])."\t".iconv("utf-8", "gbk",$v['answers'])."\t".iconv("utf-8", "gbk",$v['analysis'])."\t".iconv("utf-8", "gbk",$v['years'])."\t".iconv("utf-8", "gbk",$v['booknames'])."\t".iconv("utf-8", "gbk",$v['subtitles'])."\t".iconv("utf-8", "gbk",$v['chapters'])."\t".iconv("utf-8", "gbk",$v['hats']);
 			}
 		}
 		else
 		{
 			header('Content-Type:text/csv');
 			
-			echo iconv("utf-8", "gbk", '题型').",".iconv("utf-8", "gbk", '提干').",".iconv("utf-8", "gbk", '选项').",".iconv("utf-8", "gbk", '选项数量').",".iconv("utf-8", "gbk", '答案').",".iconv("utf-8", "gbk", '解析').",".iconv("utf-8", "gbk", '年份').",".iconv("utf-8", "gbk", '书本名称').",".iconv("utf-8", "gbk", '书本小标题').",".iconv("utf-8", "gbk", '章节').",".iconv("utf-8", "gbk", '题帽');
+			echo iconv("utf-8", "gbk", IDOFS).",".iconv("utf-8", "gbk", TYPEOFS).",".iconv("utf-8", "gbk", DRYS).",".iconv("utf-8", "gbk", OPTIONS).",".iconv("utf-8", "gbk", NUMBERS).",".iconv("utf-8", "gbk", ANSWERS).",".iconv("utf-8", "gbk", ANALYSIS).",".iconv("utf-8", "gbk", YEARS).",".iconv("utf-8", "gbk", BOOKNAMES).",".iconv("utf-8", "gbk", SUBTILES).",".iconv("utf-8", "gbk", CHAPTERS).",".iconv("utf-8", "gbk", HATS);
 			foreach($rows as $k=>$v)
 			{
 				echo "\n";
-	 			echo iconv("utf-8", "gbk",GetFourTypes2($v['typeofs'])).",".iconv("utf-8", "gbk",$v['dry']).",".iconv("utf-8", "gbk",$v['options']).",".iconv("utf-8", "gbk",$v['numbers']).",".iconv("utf-8", "gbk",$v['answers']).",".iconv("utf-8", "gbk",$v['analysis']).",".iconv("utf-8", "gbk",$v['years']).",".iconv("utf-8", "gbk",$v['booknames']).",".iconv("utf-8", "gbk",$v['subtitles']).",".iconv("utf-8", "gbk",$v['chapters']).",".iconv("utf-8", "gbk",$v['hats']);
+	 			echo iconv("utf-8", "gbk",$v['id']).",".iconv("utf-8", "gbk",GetFourTypes2($v['typeofs'])).",".iconv("utf-8", "gbk",$v['dry']).",".iconv("utf-8", "gbk",$v['options']).",".iconv("utf-8", "gbk",$v['numbers']).",".iconv("utf-8", "gbk",$v['answers']).",".iconv("utf-8", "gbk",$v['analysis']).",".iconv("utf-8", "gbk",$v['years']).",".iconv("utf-8", "gbk",$v['booknames']).",".iconv("utf-8", "gbk",$v['subtitles']).",".iconv("utf-8", "gbk",$v['chapters']).",".iconv("utf-8", "gbk",$v['hats']);
 			}
 			
 		}
 	}
 	else
 	{
-		echo iconv("utf-8", "gbk", '没有查找到数据');
+		echo iconv("utf-8", "gbk", ONCHECKEDDATA);
 	}     
 }
 function delete_tiku()
@@ -766,11 +781,11 @@ function delete_tiku()
 	$int = db()->delete(PRE.'examination',array('id'=>$id));
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
 function update_tiku()
@@ -779,28 +794,28 @@ function update_tiku()
 	$data['pid'] = $_POST['pid'];
 	if( $data['pid'] == 0 )
 	{
-		echo '<script>alert("请选择分类");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+		echo '<script>alert("'.PERLISTFENLAI_1.'");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
 	}
 	$data['typeofs'] = $_POST['typeofs'];
 	$data['dry'] = $_POST['dry'];
 	if( $data['dry'] == '' )
 	{
-		echo '<script>alert("题干不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+		echo '<script>alert("'.PERLISTFENLAI_2.'");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
 	}
 	$data['options'] = $_POST['options'];
 	if( $data['options'] == '' )
 	{
-		echo '<script>alert("选项不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+		echo '<script>alert("'.PERLISTFENLAI_3.'");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
 	}
 	$data['numbers'] = $_POST['numbers'];
 	if( $data['numbers'] == '' )
 	{
-		echo '<script>alert("数量不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+		echo '<script>alert("'.PERLISTFENLAI_4.'");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
 	}
 	$data['answers'] = $_POST['answers'];
 	if( $data['answers'] == '' )
 	{
-		echo '<script>alert("答案不能留空");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
+		echo '<script>alert("'.PERLISTFENLAI_5.'");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';exit;
 	}
 	$data['analysis'] = $_POST['analysis'];
 	$data['years'] = $_POST['years'];
@@ -816,13 +831,13 @@ function update_tiku()
 	}
 	else 
 	{
-		echo '<script>alert("修改失败");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';
+		echo '<script>alert("'.QUDATEONOK.'");location.href="'.apth_url('?act=gettiku_update&id='.$id.'&page='.$_POST['page']).'";</script>';
 	}
 }
-function import_sends()
+function ImportExecution()
 {
 	$ExtFlag = $_POST['format'];
-	$data['pid'] = $_POST['pid'];
+	$pid = $_POST['pid'];
 	$file = $_FILES['file'];
 	
 	if( $file['error'] == 0 )
@@ -832,11 +847,11 @@ function import_sends()
 		$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);
 		if( !in_array($ext, $haystack) )
 		{
-			echo '<script>alert("文件格式有误");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
+			echo '<script>alert("'.FILEGESHIERROR_1.'");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
 		}
 		if( $haystack[$ExtFlag] != $ext )
 		{
-			echo '<script>alert("选择格式有误");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
+			echo '<script>alert("'.FILEGESHIERROR_2.'");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
 		}
 		$path = GetFilePath3();				
 		if( !is_dir( $path ) )
@@ -868,10 +883,94 @@ function import_sends()
 
 	for($j=2;$j<=$highestRow;$j++)
 	{
-		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue()));	
-		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue());
-		$options = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());		
+		$id = trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue());	
+		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue()));	
+		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());
+		$options = trim($objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue());		
 		$data['options'] = str_replace(array(',','，','-','－',';','；','|','｜','#','&','!','！','*','$','%','^','@','?','？','~','+','*','/','.',' '),array('-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'), trim($options));
+		$data['numbers'] = trim($objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue());
+		$data['answers'] = trim($objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue());
+		$data['analysis'] = trim($objPHPExcel->getActiveSheet()->getCell("G".$j)->getValue());
+		$data['years'] = trim($objPHPExcel->getActiveSheet()->getCell("H".$j)->getValue());
+		$data['booknames'] = trim($objPHPExcel->getActiveSheet()->getCell("I".$j)->getValue());
+		$data['subtitles'] = trim($objPHPExcel->getActiveSheet()->getCell("J".$j)->getValue());
+		$data['chapters'] = trim($objPHPExcel->getActiveSheet()->getCell("K".$j)->getValue());
+		$data['hats'] = trim($objPHPExcel->getActiveSheet()->getCell("L".$j)->getValue());
+		$data['publitime'] = time();
+		
+		$i = db()->update(PRE.'examination',$data,array('id'=>$id,'pid'=>$pid));
+	}
+
+	if( $i )
+	{
+		if(is_file($filename))
+		{
+			@unlink($filename);
+		}
+	}
+	
+	header('location:'.apth_url('?act=gettiku'));
+}
+function import_sends()
+{
+	$ExtFlag = $_POST['format'];
+	$data['pid'] = $_POST['pid'];
+	$file = $_FILES['file'];
+	
+	if( $file['error'] == 0 )
+	{
+		$extArr = explode('.', $file['name']);
+		$ext = end( $extArr );
+		$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);
+		if( !in_array($ext, $haystack) )
+		{
+			echo '<script>alert("'.FILEGESHIERROR_1.'");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
+		}
+		if( $haystack[$ExtFlag] != $ext )
+		{
+			echo '<script>alert("'.FILEGESHIERROR_2.'");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
+		}
+		$path = GetFilePath3();				
+		if( !is_dir( $path ) )
+		{
+			mkdir($path,0777);
+		}
+		$destination = $path.'/'.SPOT.mt_rand(10000,99999).mt_rand(10000,99999).mt_rand(100000,999999).'.'.$ext;	
+		move_uploaded_file($file['tmp_name'], $destination);
+	}
+	
+	require base_url('system/Classes/PHPExcel.php');
+	require base_url('system/Classes/PHPExcel/IOFactory.php');
+	require base_url('system/Classes/PHPExcel/Reader/Excel5.php');
+	
+	$filename = $destination;
+		
+	if( $ExtFlag == 0 ){
+		$objReader = PHPExcel_IOFactory::createReader(PHPEXCELXLS);
+	}elseif( $ExtFlag == 1 ){
+		$objReader = PHPExcel_IOFactory::createReader(PHPEXCELXLSX);
+	}elseif( $ExtFlag == 2 ){
+		$objReader = PHPExcel_IOFactory::createReader(PHPEXCELCSV)->setDelimiter(',')->setInputEncoding('GBK');
+	}
+
+	$objReader->setReadDataOnly(true);
+	$objPHPExcel = $objReader->load($filename);
+	$sheet = $objPHPExcel->getSheet(0); 
+	$highestRow = $sheet->getHighestRow();
+
+	for($j=2;$j<=$highestRow;$j++)
+	{
+		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue()));		
+		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue());
+		$options = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());	
+		if( $options != '' )
+		{
+			$data['options'] = str_replace(array(',','，','-','－',';','；','|','｜','#','&','!','！','*','$','%','^','@','?','？','~','+','*','/','.',' '),array('-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'), trim($options));
+		}
+		else 
+		{
+			$data['options'] = '';
+		}
 		$data['numbers'] = trim($objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue());
 		$data['answers'] = trim($objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue());
 		$data['analysis'] = trim($objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue());
@@ -898,7 +997,7 @@ function import_sends()
 	{
 		if(is_file($filename))
 		{
-			unlink($filename);
+			@unlink($filename);
 		}
 	}
 	
@@ -920,11 +1019,11 @@ function delete_exam()
 	$int = db()->delete(PRE.'createroom',array('id'=>$id));
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
 function update_room()
@@ -986,11 +1085,11 @@ function update_room()
 	$int = db()->update(PRE.'createroom',$data,array('id'=>$id));
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'修改成功'));
+		echo json_encode(array("error"=>0,'txt'=>QUDATEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
+		echo json_encode(array("error"=>1,'txt'=>QUDATEONOK));
 	}
 }
 function add_room()
@@ -1051,11 +1150,11 @@ function add_room()
 	$int = db()->insert(PRE.'createroom',$data);
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'添加成功'));
+		echo json_encode(array("error"=>0,'txt'=>ADDYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
+		echo json_encode(array("error"=>1,'txt'=>ADDONOK));
 	}
 }
 function delete_conent()
@@ -1071,11 +1170,11 @@ function delete_conent()
 		{
 			unlink( $_SERVER['DOCUMENT_ROOT'].$row['covers'] );
 		}		
-		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
 function update_dtsend()
@@ -1087,13 +1186,13 @@ function update_dtsend()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo '<script>alert("请输入标题");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		echo '<script>alert("'.PERLISTINPUTTILE_1.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 	}
 	$data['titleas'] = $_POST['titleas'];
 	$data['pid'] = $_POST['ify'];
 	if( $data['pid'] == '0' )
 	{
-		echo '<script>alert("请选择分类");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		echo '<script>alert("'.PERLISTFENLAI_1.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 	}
 	$data['depict'] = $_POST['depict'];
 	$data['tags'] = $_POST['tags'];
@@ -1110,7 +1209,7 @@ function update_dtsend()
 	$data['content'] = $_POST['content'];
 	if( $data['content'] == '' )
 	{
-		echo '<script>alert("请选入内容");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		echo '<script>alert("'.PERLISTINPUTTILE_2.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 	}
 	$data['state'] = $_POST['state'];
 	
@@ -1124,11 +1223,11 @@ function update_dtsend()
 		$haystack = array('jpeg','jpg','png','gif','bmp');
 		if( !in_array($ext, $haystack) )
 		{
-			echo '<script>alert("封面格式不正确");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+			echo '<script>alert("'.PERLISTINPUTTILE_3.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 		}
 		if( $file['size'] > (1024*1024*2) )
 		{
-			echo '<script>alert("封面大小不能超出2M");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+			echo '<script>alert("'.PERLISTINPUTTILE_4.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 		}
 		
 		$path = '/ueditor/php/upload/image/'.date('Ymd');				
@@ -1164,7 +1263,7 @@ function update_dtsend()
 	}
 	else
 	{
-		echo '<script>alert("文档创建失败");location.href="'.apth_url('?act=create_dts').'";</script>';
+		echo '<script>alert("'.PERLISTINPUTTILE_5.'");location.href="'.apth_url('?act=create_dts').'";</script>';
 	}
 }
 function create_dtsend()
@@ -1174,13 +1273,13 @@ function create_dtsend()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo '<script>alert("请输入标题");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		echo '<script>alert("'.PERLISTINPUTTILE_1.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 	}
 	$data['titleas'] = $_POST['titleas'];
 	$data['pid'] = $_POST['ify'];
 	if( $data['pid'] == '0' )
 	{
-		echo '<script>alert("请选择分类");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		echo '<script>alert("'.PERLISTFENLAI_1.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 	}
 	$data['depict'] = $_POST['depict'];
 	$data['tags'] = $_POST['tags'];
@@ -1197,7 +1296,7 @@ function create_dtsend()
 	$data['content'] = $_POST['content'];
 	if( $data['content'] == '' )
 	{
-		echo '<script>alert("请选入内容");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+		echo '<script>alert("'.PERLISTINPUTTILE_2.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 	}
 	$data['state'] = $_POST['state'];
 	
@@ -1210,11 +1309,11 @@ function create_dtsend()
 		$haystack = array('jpeg','jpg','png','gif','bmp');
 		if( !in_array($ext, $haystack) )
 		{
-			echo '<script>alert("封面格式不正确");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+			echo '<script>alert("'.PERLISTINPUTTILE_3.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 		}
 		if( $file['size'] > (1024*1024*2) )
 		{
-			echo '<script>alert("封面大小不能超出2M");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
+			echo '<script>alert("'.PERLISTINPUTTILE_4.'");location.href="'.apth_url('?act=create_dts').'";</script>';exit;
 		}
 		
 		$path = '/ueditor/php/upload/image/'.date('Ymd');				
@@ -1244,7 +1343,7 @@ function create_dtsend()
 	}
 	else
 	{
-		echo '<script>alert("文档创建失败");location.href="'.apth_url('?act=create_dts').'";</script>';
+		echo '<script>alert("'.PERLISTINPUTTILE_5.'");location.href="'.apth_url('?act=create_dts').'";</script>';
 	}
 }
 function RecordTreeDisplay()
@@ -1274,11 +1373,11 @@ function delete_classify()
 	$int = db()->delete(PRE.'fileclass',array('id'=>$id));
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
 function dclaexe()
@@ -1288,12 +1387,12 @@ function dclaexe()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_1));exit;
 	}
 	$data['sort'] = $_POST['sort'];
 	if( $data['sort'] === '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_3));exit;
 	}
 	$data['pid'] = $_POST['pid'];
 	$data['descri'] = $_POST['descri'];
@@ -1303,11 +1402,11 @@ function dclaexe()
 	$int = db()->update(PRE.'fileclass',$data,array('id'=>$id));
 	if( $int )
 	{	
-		echo json_encode(array("error"=>0,'txt'=>'修改成功','page'=>$_POST['page']));
+		echo json_encode(array("error"=>0,'txt'=>QUDATEYESOK,'page'=>$_POST['page']));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
+		echo json_encode(array("error"=>1,'txt'=>QUDATEONOK));
 	}
 }
 function add_classify()
@@ -1315,17 +1414,17 @@ function add_classify()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_1));exit;
 	}
 	$int = db()->select('*')->from(PRE.'fileclass')->where(array('title'=>$data['title']))->get()->array_nums();
 	if( $int > 0 )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_2));exit;
 	}
 	$data['sort'] = $_POST['sort'];
 	if( $data['sort'] === '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_3));exit;
 	}
 	$data['pid'] = $_POST['pid'];
 	$data['descri'] = $_POST['descri'];
@@ -1335,11 +1434,11 @@ function add_classify()
 	$int = db()->insert(PRE.'fileclass',$data);
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'添加成功'));
+		echo json_encode(array("error"=>0,'txt'=>ADDYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
+		echo json_encode(array("error"=>1,'txt'=>ADDONOK));
 	}
 }
 function delete_geturl()
@@ -1348,11 +1447,11 @@ function delete_geturl()
 	$int = db()->delete(PRE.'admin',array('id'=>$id));
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
 function delete_info()
@@ -1361,11 +1460,11 @@ function delete_info()
 	$int = db()->delete(PRE.'classify',array('id'=>$id));
 	if( $int )
 	{
-		echo json_encode(array("error"=>0,'txt'=>'删除成功'));
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'删除失败'));
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
 function sbm_update()
@@ -1375,12 +1474,12 @@ function sbm_update()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_1));exit;
 	}
 	$data['sort'] = $_POST['sort'];
 	if( $data['sort'] === '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_3));exit;
 	}
 	$data['pid'] = $_POST['pid'];
 	$data['descri'] = $_POST['descri'];
@@ -1390,11 +1489,11 @@ function sbm_update()
 	$int = db()->update(PRE.'classify',$data,array('id'=>$id));
 	if( $int )
 	{	
-		echo json_encode(array("error"=>0,'txt'=>'修改成功','page'=>$_POST['page']));
+		echo json_encode(array("error"=>0,'txt'=>QUDATEYESOK,'page'=>$_POST['page']));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'修改失败'));
+		echo json_encode(array("error"=>1,'txt'=>QUDATEONOK));
 	}
 }
 function form_sbm()
@@ -1402,17 +1501,17 @@ function form_sbm()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_1));exit;
 	}
-	$int = db()->select('*')->from(PRE.'classify')->where(array('title'=>$data['title']))->get()->array_nums();
-	if( $int > 0 )
-	{
-		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
-	}
+	//$int = db()->select('*')->from(PRE.'classify')->where(array('title'=>$data['title']))->get()->array_nums();
+	//if( $int > 0 )
+	//{
+	//	echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_2));exit;
+	//}
 	$data['sort'] = $_POST['sort'];
 	if( $data['sort'] === '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_3));exit;
 	}
 	$data['pid'] = $_POST['pid'];
 	$data['descri'] = $_POST['descri'];
@@ -1422,11 +1521,11 @@ function form_sbm()
 	$int = db()->insert(PRE.'classify',$data);
 	if( $int )
 	{	
-		echo json_encode(array("error"=>0,'txt'=>'添加成功'));
+		echo json_encode(array("error"=>0,'txt'=>ADDYESOK));
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'添加失败'));
+		echo json_encode(array("error"=>1,'txt'=>ADDONOK));
 	}
 }
 function form_logins()
@@ -1436,17 +1535,17 @@ function form_logins()
 	$data['users'] = htmlspecialchars($_POST['u'],ENT_QUOTES);
 	if( $data['users'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>0,'txt'=>'*请输入帐号*'));exit;
+		echo json_encode(array("error"=>1,f=>0,'txt'=>FROMRESETSUS_1));exit;
 	}
 	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$data['users']))->get()->array_nums();
 	if( $num == 0 )
 	{
-		echo json_encode(array("error"=>1,f=>0,'txt'=>'*帐号未注册*'));exit;
+		echo json_encode(array("error"=>1,f=>0,'txt'=>USERISEXST_2));exit;
 	}
 	$data['pwd'] = mb_substr(md5(md5(base64_decode($_POST['p']))),0,10,'utf-8');
 	if( $data['pwd'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>1,'txt'=>'*请输入密码*'));exit;
+		echo json_encode(array("error"=>1,f=>1,'txt'=>FROMRESETSUS_3));exit;
 	}
 
 	$int = db()->select('*')->from(PRE.'admin')->where(array('users'=>$data['users'],'pwd'=>$data['pwd']))->get()->array_nums();
@@ -1454,11 +1553,11 @@ function form_logins()
 	{	
 		$_SESSION['usersname'] = $data['users'];
 		
-		echo json_encode(array('error'=>'0','txt'=>'登录成功'));
+		echo json_encode(array('error'=>'0','txt'=>LOGINYESOK));
 	}
 	else
 	{
-		echo json_encode(array('error'=>'1','txt'=>'登录失败'));
+		echo json_encode(array('error'=>'1','txt'=>LOGINONOK));
 	}
 }
 function form_resets2()
@@ -1468,41 +1567,41 @@ function form_resets2()
 	$data['users'] = htmlspecialchars($_POST['u'],ENT_QUOTES);
 	if( $data['users'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>0,'txt'=>'*请输入帐号*'));exit;
+		echo json_encode(array("error"=>1,f=>0,'txt'=>FROMRESETSUS_1));exit;
 	}
 	$data['pwd'] = mb_substr(md5(md5(base64_decode($_POST['p']))),0,10,'utf-8');
 	if( $data['pwd'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>1,'txt'=>'*请输入密码*'));exit;
+		echo json_encode(array("error"=>1,f=>1,'txt'=>FROMRESETSUS_3));exit;
 	}
 	$data['tel'] = $_POST['t'];
 	if( $data['tel'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>2,'txt'=>'*请输入手机*'));exit;
+		echo json_encode(array("error"=>1,f=>2,'txt'=>FROMRESETSUS_4));exit;
 	}
 	if(!preg_match("/^0?(13|14|15|17|18)[0-9]{9}$/", $data['tel']) )
 	{
-		echo json_encode(array("error"=>"1",f=>2,"txt"=>"*手机号错误*"));exit;
+		echo json_encode(array("error"=>"1",f=>2,"txt"=>FROMRESETSUS_5));exit;
 	}
 	$data['email'] = $_POST['e'];
 	if( $data['email'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>3,'txt'=>'*请输入邮箱*'));exit;
+		echo json_encode(array("error"=>1,f=>3,'txt'=>FROMRESETSUS_6));exit;
 	}
 	if( !preg_match("/^\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}$/",$data['email']) )
 	{
-		echo json_encode(array('error'=>'1',f=>3,'txt'=>'*邮箱不正确*'));exit;
+		echo json_encode(array('error'=>'1',f=>3,'txt'=>FROMRESETSUS_7));exit;
 	}
 	$data['power'] = $_POST['power']==null?0:$_POST['power'];	
 
 	$int = db()->update(PRE.'admin',$data,array('id'=>$id));
 	if( $int )
 	{	
-		echo json_encode(array('error'=>'0','txt'=>'修改成功'));
+		echo json_encode(array('error'=>'0','txt'=>QUDATEYESOK));
 	}
 	else
 	{
-		echo json_encode(array('error'=>'1','txt'=>'修改失败'));
+		echo json_encode(array('error'=>'1','txt'=>QUDATEONOK));
 	}
 }
 function form_resets()
@@ -1510,35 +1609,35 @@ function form_resets()
 	$data['users'] = htmlspecialchars($_POST['u'],ENT_QUOTES);
 	if( $data['users'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>0,'txt'=>'*请输入帐号*'));exit;
+		echo json_encode(array("error"=>1,f=>0,'txt'=>USERISEXSTUS_1));exit;
 	}
 	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$data['users']))->get()->array_nums();
 	if( $num > 0 )
 	{
-		echo json_encode(array("error"=>1,f=>0,'txt'=>'*帐号已存在*'));exit;
+		echo json_encode(array("error"=>1,f=>0,'txt'=>USERISEXSTUS_2));exit;
 	}
 	$data['pwd'] = mb_substr(md5(md5(base64_decode($_POST['p']))),0,10,'utf-8');
 	if( $data['pwd'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>1,'txt'=>'*请输入密码*'));exit;
+		echo json_encode(array("error"=>1,f=>1,'txt'=>USERISEXSTUS_3));exit;
 	}
 	$data['tel'] = $_POST['t'];
 	if( $data['tel'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>2,'txt'=>'*请输入手机*'));exit;
+		echo json_encode(array("error"=>1,f=>2,'txt'=>USERISEXSTUS_4));exit;
 	}
 	if(!preg_match("/^0?(13|14|15|17|18)[0-9]{9}$/", $data['tel']) )
 	{
-		echo json_encode(array("error"=>"1",f=>2,"txt"=>"*手机号错误*"));exit;
+		echo json_encode(array("error"=>"1",f=>2,"txt"=>USERISEXSTUS_5));exit;
 	}
 	$data['email'] = $_POST['e'];
 	if( $data['email'] == '' )
 	{
-		echo json_encode(array("error"=>1,f=>3,'txt'=>'*请输入邮箱*'));exit;
+		echo json_encode(array("error"=>1,f=>3,'txt'=>USERISEXSTUS_6));exit;
 	}
 	if( !preg_match("/^\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}$/",$data['email']) )
 	{
-		echo json_encode(array('error'=>'1',f=>3,'txt'=>'*邮箱不正确*'));exit;
+		echo json_encode(array('error'=>'1',f=>3,'txt'=>USERISEXSTUS_7));exit;
 	}
 
 	$sql = 'select picname from '.PRE.'apack order by rand() limit 0,1';
@@ -1550,11 +1649,11 @@ function form_resets()
 	$int = db()->insert(PRE.'admin',$data);
 	if( $int )
 	{	
-		echo json_encode(array('error'=>'0','txt'=>'注册成功'));
+		echo json_encode(array('error'=>'0','txt'=>SETYESOK));
 	}
 	else
 	{
-		echo json_encode(array('error'=>'1','txt'=>'注册失败'));
+		echo json_encode(array('error'=>'1','txt'=>SETONOK));
 	}
 }
 function checked_selects()
@@ -1563,11 +1662,11 @@ function checked_selects()
 	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$u))->get()->array_nums();
 	if( $num > 0 )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'*帐号已存在*'));
+		echo json_encode(array("error"=>1,'txt'=>USERISEXST_1));
 	}
 	else
 	{
-		echo json_encode(array("error"=>0,'txt'=>'*帐号未注册*'));
+		echo json_encode(array("error"=>0,'txt'=>USERISEXST_2));
 	}
 }
 function GetOpenId()

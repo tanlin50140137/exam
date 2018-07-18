@@ -14,9 +14,7 @@
 	<h1>
 	<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp; 
-	<a href="<?php echo apth_url('?act=import_tiku');?>">添加导入题库</a>
-	 &nbsp; &nbsp; 
-	<input type="button" value="添加分类 " class="cearter_key" onclick="cearter_key();">
+	<a href="<?php echo apth_url('?act=import_tiku');?>">修改导入</a>
 	</h1>	
 </div>
 <div class="key_tablebox_allins">说明：从这里导入题库，执行导入模板格式 “.xls、.xlsx、.csv” ，除此三种外，其他格式无法导入</div>
@@ -39,7 +37,7 @@
 			</select>
 		</p>
 		<p>选择文件： <input type="file" name="file" class="input_lists2"/></p>	
-		<input type="hidden" name="act" value="import_sends"/>
+		<input type="hidden" name="act" value="ImportExecution"/>
 		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="执行" class="sbm_fl" onclick="add_classify();"/></div>
 	</form>
 </div>

@@ -13,9 +13,9 @@ if(!empty($arr))
 define("SITE_URL", $sys_protocal.$_SERVER['HTTP_HOST'].$site_url);
 define("BASE_URL", $_SERVER['DOCUMENT_ROOT'].$site_url);
 define("SPOT", ".");
-define("OFFICEXLS", "xls");
-define("OFFICEXLSX", "xlsx");
-define("OFFICECSV", "csv");
+define("OFFICEXLS","xls");
+define("OFFICEXLSX","xlsx");
+define("OFFICECSV","csv");
 define("PHPEXCELXLS", "Excel5");
 define("PHPEXCELXLSX", "Excel2007");
 define("PHPEXCELCSV", "CSV");
