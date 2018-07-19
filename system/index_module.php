@@ -703,6 +703,20 @@ function delete_batch()
 		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
+function DifferentiatedType()
+{
+	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
+	$ext = $haystack[$_GET['ext']];
+	
+	if( $ext == OFFICEXLS || $ext == OFFICEXLSX )
+	{
+		BatchExport2();
+	}
+	else 
+	{
+		BatchExport();
+	}
+}
 function BatchExport()
 {	
 	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
@@ -870,7 +884,7 @@ function BatchExport2()
 		$objPHPExcel->getActiveSheet()->setCellValue($code[3].$i, str_replace('-','&', $v['options']));
 		$objPHPExcel->getActiveSheet()->setCellValue($code[4].$i, $v['numbers']);
 		$objPHPExcel->getActiveSheet()->setCellValue($code[5].$i, $v['answers']);
-		$objPHPExcel->getActiveSheet()->setCellValue($code[6].$i, $v['analysis']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[6].$i, str_replace(array(" ","　","\t","\n","\r",",","\b","\f","\t","\v","\s"),array('','','','','','','','','','',''),$v['analysis']));
 		$objPHPExcel->getActiveSheet()->setCellValue($code[7].$i, $v['years']);
 		$objPHPExcel->getActiveSheet()->setCellValue($code[8].$i, $v['booknames']);
 		$objPHPExcel->getActiveSheet()->setCellValue($code[9].$i, $v['subtitles']);
@@ -879,6 +893,7 @@ function BatchExport2()
 		
 		$i++;
 	}
+	
 	if( $ext == $haystack[0] )
 	{
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,PHPEXCELXLS);
@@ -889,11 +904,11 @@ function BatchExport2()
 	}
 	elseif( $ext == $haystack[2] )
 	{
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,PHPEXCELCSV);
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,PHPEXCELCSV);		
 	}
 	
 	$objWriter->save('php://output');
-	
+		
 }
 
 function delete_tiku()
