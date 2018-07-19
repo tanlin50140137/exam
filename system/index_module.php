@@ -707,6 +707,9 @@ function BatchExport()
 {	
 	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
 	$ext = $haystack[$_GET['ext']];
+	
+	ob_end_clean();
+	
 	Header( "Content-type: application/octet-stream "); 
 	Header( "Accept-Ranges: bytes "); 
 	if( $ext == OFFICEXLS || $ext == OFFICECSV )
@@ -789,6 +792,7 @@ function BatchExport2()
 	$objPHPExcel = new PHPExcel();
 	
 	$filename = date('Ymdhs');
+	ob_end_clean();
 	
 	if( $ext == $haystack[0] ){
 		header('Content-Type: application/vnd.ms-excel');
@@ -822,7 +826,7 @@ function BatchExport2()
 	$values = array(strtotime($as),strtotime($bs));
 	$a = min($values);
 	$b = max($values);
-		
+	
 	switch ( $exportflag )
 	{
 		case 1:
@@ -841,20 +845,40 @@ function BatchExport2()
 		break;
 	}
 	
-	$objPHPExcel->getActiveSheet()->setCellValue('A1', 'String1');
-	$objPHPExcel->getActiveSheet()->setCellValue('B1', 'String2');	
-	$objPHPExcel->getActiveSheet()->setCellValue('C1', 'String1');
-	$objPHPExcel->getActiveSheet()->setCellValue('D1', 'String2');
-	$objPHPExcel->getActiveSheet()->setCellValue('E1', 'String1');
-	$objPHPExcel->getActiveSheet()->setCellValue('F1', 'String2');
-	$objPHPExcel->getActiveSheet()->setCellValue('G1', 'String1');
-	$objPHPExcel->getActiveSheet()->setCellValue('H1', 'String2');
-	$objPHPExcel->getActiveSheet()->setCellValue('I1', 'String2');
-	$objPHPExcel->getActiveSheet()->setCellValue('J1', 'String2');
-	$objPHPExcel->getActiveSheet()->setCellValue('K1', 'String2');
-	$objPHPExcel->getActiveSheet()->setCellValue('L1', 'String2');
-	$objPHPExcel->getActiveSheet()->setCellValue('M1', 'String2');
+	$code = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','S','Y','Z');
+	$i = 2;
 	
+	$objPHPExcel->getActiveSheet()->setTitle(PILIANGXIUGAIBIAO);	
+	$objPHPExcel->getActiveSheet()->setCellValue($code[0].'1', IDOFS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[1].'1', TYPEOFS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[2].'1', DRYS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[3].'1', OPTIONS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[4].'1', NUMBERS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[5].'1', ANSWERS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[6].'1', ANALYSIS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[7].'1', YEARS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[8].'1', BOOKNAMES);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[9].'1', SUBTILES);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[10].'1', CHAPTERS);
+	$objPHPExcel->getActiveSheet()->setCellValue($code[11].'1', HATS);
+	
+	foreach( $rows as $k => $v )
+	{	
+		$objPHPExcel->getActiveSheet()->setCellValue($code[0].$i, $v['id']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[1].$i, GetFourTypes2($v['typeofs']));
+		$objPHPExcel->getActiveSheet()->setCellValue($code[2].$i, $v['dry']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[3].$i, str_replace('-','&', $v['options']));
+		$objPHPExcel->getActiveSheet()->setCellValue($code[4].$i, $v['numbers']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[5].$i, $v['answers']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[6].$i, $v['analysis']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[7].$i, $v['years']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[8].$i, $v['booknames']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[9].$i, $v['subtitles']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[10].$i, $v['chapters']);
+		$objPHPExcel->getActiveSheet()->setCellValue($code[11].$i, $v['hats']);
+		
+		$i++;
+	}
 	if( $ext == $haystack[0] )
 	{
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,PHPEXCELXLS);
@@ -871,6 +895,7 @@ function BatchExport2()
 	$objWriter->save('php://output');
 	
 }
+
 function delete_tiku()
 {
 	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);

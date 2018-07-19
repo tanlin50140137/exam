@@ -1,4 +1,5 @@
 <?php
+define("IDOFS", "序号");
 define("TYPEOFS", "题型");
 define("DRYS", "提干");
 define("OPTIONS", "选项");
@@ -10,6 +11,7 @@ define("BOOKNAMES", "书本名称");
 define("SUBTILES", "书本小标题");
 define("CHAPTERS", "章节");
 define("HATS", "题帽");
+define("PILIANGXIUGAIBIAO", "批量修改表");
 define("ONCHECKEDDATA", "没有查找到数据");
 define("FILEGESHIERROR_1", "文件格式有误");
 define("FILEGESHIERROR_2", "选择格式有误");
@@ -45,11 +47,3 @@ define("PERLISTINPUTTILE_2", "请选入内容");
 define("PERLISTINPUTTILE_3", "封面格式不正确");
 define("PERLISTINPUTTILE_4", "封面大小不能超出2M");
 define("PERLISTINPUTTILE_5", "文档创建失败");
-define("IDOFS", "序号");
-
-
-
-
-
-
-
