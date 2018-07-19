@@ -136,7 +136,7 @@ drop table if exists htx_examination;
 create table htx_examination(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
 	pid int(10) unsigned not null default 0 comment '关联分类ID - 与题种分类',
-	typeofs tinyint(10) unsigned not null default 0 comment '题型,0=单选题,1=多选题,2=判断题,3=问答题',
+	typeofs tinyint(10) unsigned not null default 0 comment '题型,1=单选题,2=多选题,3=判断题,4=问答题',
 	dry varchar(255) not null default '' comment '题干',
 	options varchar(255) not null default '' comment '选项',
 	numbers varchar(255) not null default '' comment '选项数',

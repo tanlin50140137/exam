@@ -561,6 +561,7 @@ function batch_modification()
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	$t = $_GET['s']==null?null:htmlspecialchars($_GET['t'],ENT_QUOTES);
 	
 	$as = $_GET['a']==null?null:htmlspecialchars($_GET['a'],ENT_QUOTES);
 	$bs = $_GET['b']==null?null:htmlspecialchars($_GET['b'],ENT_QUOTES);
@@ -614,6 +615,7 @@ function batch_deleting()
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	$t = $_GET['s']==null?null:htmlspecialchars($_GET['t'],ENT_QUOTES);
 	
 	$as = $_GET['a']==null?null:htmlspecialchars($_GET['a'],ENT_QUOTES);
 	$bs = $_GET['b']==null?null:htmlspecialchars($_GET['b'],ENT_QUOTES);
@@ -734,27 +736,27 @@ function BatchExport()
 			$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
 			if( $id != null )
 			{
-				$sql .= ' and b.id='.$id.' ';
+				$sql .= ' and b.id='.$id.' order by a.id asc ';
 			}
 			$rows = db()->query($sql)->array_rows();
 		break;
 		case 2:
-			$rows = db()->select('*')->from(PRE.'examination')->where('(dry like "%'.$s.'%" or years like "%'.$s.'%" or booknames like "%'.$s.'%")')->get()->array_rows();
+			$rows = db()->select('*')->from(PRE.'examination')->where('(dry like "%'.$s.'%" or years like "%'.$s.'%" or booknames like "%'.$s.'%")')->order_by('id asc')->get()->array_rows();
 		break;
 		case 3:
-			$rows = db()->select('*')->from(PRE.'examination')->where('publitime')->between(array($a,$b))->get()->array_rows();
+			$rows = db()->select('*')->from(PRE.'examination')->where('publitime')->between(array($a,$b))->order_by('id asc')->get()->array_rows();
 		break;
 	}
 	
 	if(!empty($rows))
-	{	
+	{
 		if( $ext != OFFICECSV )
 		{	
 			echo iconv("utf-8", "gbk", IDOFS)."\t".iconv("utf-8", "gbk", TYPEOFS)."\t".iconv("utf-8", "gbk", DRYS)."\t".iconv("utf-8", "gbk", OPTIONS)."\t".iconv("utf-8", "gbk", NUMBERS)."\t".iconv("utf-8", "gbk", ANSWERS)."\t".iconv("utf-8", "gbk", ANALYSIS)."\t".iconv("utf-8", "gbk", YEARS)."\t".iconv("utf-8", "gbk", BOOKNAMES)."\t".iconv("utf-8", "gbk", SUBTILES)."\t".iconv("utf-8", "gbk", CHAPTERS)."\t".iconv("utf-8", "gbk", HATS);
 			foreach($rows as $k=>$v)
 			{
 				echo "\n";
-	 			echo iconv("utf-8", "gbk",$v['id'])."\t".iconv("utf-8", "gbk",GetFourTypes2($v['typeofs']))."\t".iconv("utf-8", "gbk",$v['dry'])."\t".iconv("utf-8", "gbk",$v['options'])."\t".iconv("utf-8", "gbk",$v['numbers'])."\t".iconv("utf-8", "gbk",$v['answers'])."\t".iconv("utf-8", "gbk",$v['analysis'])."\t".iconv("utf-8", "gbk",$v['years'])."\t".iconv("utf-8", "gbk",$v['booknames'])."\t".iconv("utf-8", "gbk",$v['subtitles'])."\t".iconv("utf-8", "gbk",$v['chapters'])."\t".iconv("utf-8", "gbk",$v['hats']);
+	 			echo iconv("utf-8", "gbk",$v['id'])."\t".iconv("utf-8", "gbk",GetFourTypes2($v['typeofs']))."\t".iconv("utf-8", "gbk",$v['dry'])."\t".iconv("utf-8", "gbk",$v['options'])."\t".iconv("utf-8", "gbk",$v['numbers'])."\t".iconv("utf-8", "gbk",$v['answers'])."\t".iconv("utf-8", "gbk",str_replace(array(" ","　","\t","\n","\r",",","\b","\f","\t","\v","\s"),array('','','','','','','','','','',''),$v['analysis']))."\t".iconv("utf-8", "gbk",$v['years'])."\t".iconv("utf-8", "gbk",$v['booknames'])."\t".iconv("utf-8", "gbk",$v['subtitles'])."\t".iconv("utf-8", "gbk",$v['chapters'])."\t".iconv("utf-8", "gbk",$v['hats']);
 			}
 		}
 		else
@@ -765,7 +767,7 @@ function BatchExport()
 			foreach($rows as $k=>$v)
 			{
 				echo "\n";
-	 			echo iconv("utf-8", "gbk",$v['id']).",".iconv("utf-8", "gbk",GetFourTypes2($v['typeofs'])).",".iconv("utf-8", "gbk",$v['dry']).",".iconv("utf-8", "gbk",$v['options']).",".iconv("utf-8", "gbk",$v['numbers']).",".iconv("utf-8", "gbk",$v['answers']).",".iconv("utf-8", "gbk",$v['analysis']).",".iconv("utf-8", "gbk",$v['years']).",".iconv("utf-8", "gbk",$v['booknames']).",".iconv("utf-8", "gbk",$v['subtitles']).",".iconv("utf-8", "gbk",$v['chapters']).",".iconv("utf-8", "gbk",$v['hats']);
+	 			echo iconv("utf-8", "gbk",$v['id']).",".iconv("utf-8", "gbk",GetFourTypes2($v['typeofs'])).",".iconv("utf-8", "gbk",$v['dry']).",".iconv("utf-8", "gbk",$v['options']).",".iconv("utf-8", "gbk",$v['numbers']).",".iconv("utf-8", "gbk",$v['answers']).",".iconv("utf-8", "gbk",str_replace(array(" ","　","\t","\n","\r",",","\b","\f","\t","\v","\s"),array('','','','','','','','','','',''),$v['analysis'])).",".iconv("utf-8", "gbk",$v['years']).",".iconv("utf-8", "gbk",$v['booknames']).",".iconv("utf-8", "gbk",$v['subtitles']).",".iconv("utf-8", "gbk",$v['chapters']).",".iconv("utf-8", "gbk",$v['hats']);
 			}
 			
 		}
@@ -774,6 +776,100 @@ function BatchExport()
 	{
 		echo iconv("utf-8", "gbk", ONCHECKEDDATA);
 	}     
+}
+function BatchExport2()
+{
+	require base_url('system/Classes/PHPExcel.php');
+	require base_url('system/Classes/PHPExcel/IOFactory.php');
+	require base_url('system/Classes/PHPExcel/Reader/Excel5.php');
+	
+	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
+	$ext = $haystack[$_GET['ext']];
+	
+	$objPHPExcel = new PHPExcel();
+	
+	$filename = date('Ymdhs');
+	
+	if( $ext == $haystack[0] ){
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.'.$ext.'"');
+		header('Cache-Control: max-age=0');
+		header('Cache-Control: max-age=1');
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+		header('Cache-Control: cache, must-revalidate');
+		header('Pragma: public');
+	}elseif( $ext == $haystack[1] ){
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="'.$filename.'.'.$ext.'"');
+		header('Cache-Control: max-age=0');
+		header('Cache-Control: max-age=1');
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+		header('Cache-Control: cache, must-revalidate');
+		header('Pragma: public');
+	}elseif( $ext == $haystack[2] ){
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.'.$ext.'"');
+		header('Cache-Control: max-age=0');
+	}
+	
+	$exportflag = htmlspecialchars($_GET['flag'],ENT_QUOTES);	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);	
+	$as = $_GET['a']==null?null:htmlspecialchars($_GET['a'],ENT_QUOTES);
+	$bs = $_GET['b']==null?null:htmlspecialchars($_GET['b'],ENT_QUOTES);
+	$values = array(strtotime($as),strtotime($bs));
+	$a = min($values);
+	$b = max($values);
+		
+	switch ( $exportflag )
+	{
+		case 1:
+			$sql = 'select b.title,a.id,a.pid,a.typeofs,a.dry,a.options,a.numbers,a.answers,a.analysis,a.years,a.booknames,a.subtitles,a.chapters,a.hats,a.publitime,a.state from '.PRE.'examination as a,'.PRE.'classify as b where a.pid=b.id';
+			if( $id != null )
+			{
+				$sql .= ' and b.id='.$id.' order by a.id asc ';
+			}
+			$rows = db()->query($sql)->array_rows();
+		break;
+		case 2:
+			$rows = db()->select('*')->from(PRE.'examination')->where('(dry like "%'.$s.'%" or years like "%'.$s.'%" or booknames like "%'.$s.'%")')->order_by('id asc')->get()->array_rows();
+		break;
+		case 3:
+			$rows = db()->select('*')->from(PRE.'examination')->where('publitime')->between(array($a,$b))->order_by('id asc')->get()->array_rows();
+		break;
+	}
+	
+	$objPHPExcel->getActiveSheet()->setCellValue('A1', 'String1');
+	$objPHPExcel->getActiveSheet()->setCellValue('B1', 'String2');	
+	$objPHPExcel->getActiveSheet()->setCellValue('C1', 'String1');
+	$objPHPExcel->getActiveSheet()->setCellValue('D1', 'String2');
+	$objPHPExcel->getActiveSheet()->setCellValue('E1', 'String1');
+	$objPHPExcel->getActiveSheet()->setCellValue('F1', 'String2');
+	$objPHPExcel->getActiveSheet()->setCellValue('G1', 'String1');
+	$objPHPExcel->getActiveSheet()->setCellValue('H1', 'String2');
+	$objPHPExcel->getActiveSheet()->setCellValue('I1', 'String2');
+	$objPHPExcel->getActiveSheet()->setCellValue('J1', 'String2');
+	$objPHPExcel->getActiveSheet()->setCellValue('K1', 'String2');
+	$objPHPExcel->getActiveSheet()->setCellValue('L1', 'String2');
+	$objPHPExcel->getActiveSheet()->setCellValue('M1', 'String2');
+	
+	if( $ext == $haystack[0] )
+	{
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,PHPEXCELXLS);
+	}
+	elseif( $ext == $haystack[1] )
+	{
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,PHPEXCELXLSX);
+	}
+	elseif( $ext == $haystack[2] )
+	{
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,PHPEXCELCSV);
+	}
+	
+	$objWriter->save('php://output');
+	
 }
 function delete_tiku()
 {
@@ -965,7 +1061,7 @@ function import_sends()
 		$options = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());	
 		if( $options != '' )
 		{
-			$data['options'] = str_replace(array(',','，','-','－',';','；','|','｜','#','&','!','！','*','$','%','^','@','?','？','~','+','*','/','.',' '),array('-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'), trim($options));
+			$data['options'] = str_replace(array('&'),array('-'), trim($options));
 		}
 		else 
 		{
@@ -981,15 +1077,18 @@ function import_sends()
 		$data['hats'] = trim($objPHPExcel->getActiveSheet()->getCell("K".$j)->getValue());
 		$data['publitime'] = time();
 		
-		$int = db()->select('*')->from(PRE.'examination')->where(array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']))->get()->array_nums();
-			
-		if( $int == 0 )
+		if( $data['typeofs'] != '' )
 		{
-			$i = db()->insert(PRE.'examination',$data);
-		}
-		else
-		{
-			$i = db()->update(PRE.'examination',$data,array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']));
+			$int = db()->select('*')->from(PRE.'examination')->where(array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']))->get()->array_nums();
+				
+			if( $int == 0 )
+			{
+				$i = db()->insert(PRE.'examination',$data);
+			}
+			else
+			{
+				$i = db()->update(PRE.'examination',$data,array('pid'=>$data['pid'],'typeofs'=>$data['typeofs'],'dry'=>$data['dry'],'options'=>$data['options'],'years'=>$data['years'],'booknames'=>$data['booknames']));
+			}
 		}
 	}
 
@@ -1005,12 +1104,12 @@ function import_sends()
 }
 function GetFourTypes($str)
 {
-	$strArr = array('单选题'=>0,'多选题'=>1,'判断题'=>2,'问答题'=>3);
+	$strArr = array('单选题'=>1,'多选题'=>2,'判断题'=>3,'问答题'=>4);
 	return $strArr[$str];
 }
 function GetFourTypes2($str)
 {
-	$strArr = array('0'=>'单选题','1'=>'多选题','2'=>'判断题','3'=>'问答题');
+	$strArr = array('1'=>'单选题','2'=>'多选题','3'=>'判断题','4'=>'问答题');
 	return $strArr[$str];
 }
 function delete_exam()

@@ -189,15 +189,15 @@ function ExportABatch()
 	
 	if( ExportFlag == 1 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&id='.$id.'&');?>"+ExFrm;
+		location.href="<?php echo apth_url('?act=BatchExport2&flag='.$exportflag.'&id='.$id.'&');?>"+ExFrm;
 	}
 	else if( ExportFlag == 2 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&s='.$s.'&');?>"+ExFrm;
+		location.href="<?php echo apth_url('?act=BatchExport2&flag='.$exportflag.'&s='.$s.'&');?>"+ExFrm;
 	}	
 	else if(  ExportFlag == 3 )
 	{
-		location.href="<?php echo apth_url('?act=BatchExport&flag='.$exportflag.'&a='.$as.'&b='.$bs.'&');?>"+ExFrm;
+		location.href="<?php echo apth_url('?act=BatchExport2&flag='.$exportflag.'&a='.$as.'&b='.$bs.'&');?>"+ExFrm;
 	}
 	else
 	{
