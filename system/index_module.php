@@ -55,7 +55,7 @@ function adminindex()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$wxfl = GetFenLai2(0);
+	$wxfl = GetFenLai2_index(0);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
@@ -133,6 +133,30 @@ function GetFenLai2($pid,$multiplier=0,$id=null)
 		{
 			$rows[] = $array;
 			GetFenLai2($array['id'],$multiplier);
+		}
+	}
+	else
+	{
+		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify {$where} ";
+		$rows = db()->query($sql)->array_rows();
+	}
+	return $rows;
+}
+function GetFenLai2_index($pid,$multiplier=0,$id=null)
+{
+	static $rows;	
+	
+	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
+	
+	$where = $id==null?'':" where id='{$id}' ";
+	if( $where == null )
+	{
+		$sql = "select id,pid,title,sort,descri,publitime,state,(select count(*) from ".PRE."examination as b where b.pid=a.id) as exa from ".PRE."classify as a where pid={$pid} ";
+		$rs = mysql_query($sql);
+		while ($array = mysql_fetch_assoc($rs))
+		{
+			$rows[] = $array;
+			GetFenLai2_index($array['id'],$multiplier);
 		}
 	}
 	else
@@ -233,13 +257,13 @@ function get_power($int)
 	switch ( $int )
 	{
 		case 0:
-			$str = '<font color="#FF0000">普通管理员</font>';
+			$str = '<font color="#FF0000">'.USERPRONAME_1.'</font>';
 		break;
 		case 1:
-			$str = '<font color="#377d02">网站编辑员</font>';
+			$str = '<font color="#377d02">'.USERPRONAME_2.'</font>';
 		break;
 		case 2:
-			$str = '<font color="#0000FF">超级管理员</font>';
+			$str = '<font color="#0000FF">'.USERPRONAME_3.'</font>';
 		break;
 	}
 	return $str;
@@ -249,13 +273,13 @@ function get_power2($int)
 	switch ( $int )
 	{
 		case 0:
-			$str = '普通管理员';
+			$str = USERPRONAME_1;
 		break;
 		case 1:
-			$str = '网站编辑员';
+			$str = USERPRONAME_2;
 		break;
 		case 2:
-			$str = '超级管理员';
+			$str = USERPRONAME_3;
 		break;
 	}
 	return $str;
@@ -298,10 +322,10 @@ function e_zfms($int)
 	switch ($int)
 	{
 		case 0:
-			$str = '<font color="#69b530">免费</font>';
+			$str = '<font color="#69b530">'.MIANFEI_E_1.'</font>';
 		break;
 		case 1:
-			$str = '<font color="#ff9800">收费</font>';
+			$str = '<font color="#ff9800">'.MIANFEI_E_2.'</font>';
 		break;
 	}
 	return $str;
@@ -311,10 +335,10 @@ function e_exam($int)
 	switch ($int)
 	{
 		case 0:
-			$str = '<font color="#69b530">练习</font>';
+			$str = '<font color="#69b530">'.MIANFEI_B_1.'</font>';
 		break;
 		case 1:
-			$str = '<font color="#cb10ea">正式考</font>';
+			$str = '<font color="#cb10ea">'.MIANFEI_B_2.'</font>';
 		break;
 	}
 	return $str;

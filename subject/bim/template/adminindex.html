@@ -15,17 +15,58 @@
 <div class="key_box">
 	<h1>后台首页</h1>	
 </div>
-<div class="key_tablebox" set-url="<?php echo apth_url('');?>" style="margin-top:30px;">
-	<script type="text/javascript">
-		d = new dTree('d');
-		d.add(0,-1,'查看所有考试分类');
-<?php if(!empty($wxfl)){?>	
-	<?php foreach($wxfl as $k=>$v){?>
-		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"];?>','<?php echo apth_url("?act=getkey_update&id=".$v["id"]);?>');
-	<?php } ?>	
-<?php } ?>			
-		document.write(d);
-	</script>
+<div class="fenlaitongji">
+	<div class="fenlaitongji_in fltj_in" >
+		<h1>分类统计</h1>
+		<div class="fenlaitongji_1">现有分类：100 个</div>
+		<div class="fenlaitongji_1">父分类：100 个</div>
+		<div class="fenlaitongji_1">子分类：100 个</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div class="fenlaitongji">
+	<div class="fenlaitongji_in fltj_in" >
+		<h1>题库统计</h1>
+		<div class="fenlaitongji_1">总共：10000 题</div>
+	</div>
+	<div class="fenlaitongji_in" set-url="<?php echo apth_url('');?>">
+		<script type="text/javascript">
+			var a = new dTree('a');
+			a.add(0,-1,'<b style="font-weight:bold;">查看每个分类下考题总数</b>');
+	<?php if(!empty($wxfl)){?>	
+		<?php foreach($wxfl as $k=>$v){?>
+			a.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"].' -> '.$v["exa"]." 题 ";?>','<?php echo apth_url("?act=getkey_update&id=".$v["id"]);?>');
+		<?php } ?>	
+	<?php } ?>			
+			document.write(a);
+		</script>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div class="fenlaitongji">
+	<div class="fenlaitongji_in fltj_in" >
+		<h1>考场统计</h1>
+		<div class="fenlaitongji_1">创建：50 个</div>
+		<div class="fenlaitongji_1">浏览：50 个</div>
+		<div class="fenlaitongji_1">支付：50 个</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div class="fenlaitongji">
+	<div class="fenlaitongji_in fltj_in" >
+		<h1>资讯统计</h1>
+		<div class="fenlaitongji_1">文档分类：50 个</div>
+		<div class="fenlaitongji_1">文档数量：50 个</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div class="fenlaitongji">
+	<div class="fenlaitongji_in fltj_in" >
+		<h1>用户统计</h1>
+		<div class="fenlaitongji_1">普通管理员：50 个</div>
+		<div class="fenlaitongji_1">编辑管理员：50 个</div>
+	</div>
+	<div style="clear:both;"></div>
 </div>
 </body>
 </html>
