@@ -64,7 +64,7 @@ INSERT INTO htx_apack(picname) VALUES('default/545846580001fede02200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545850200001359c02200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545864190001966102200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545867340001101702200220.jpg');
-#分类
+#考题分类
 drop table if exists htx_classify;
 create table htx_classify(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
@@ -110,7 +110,23 @@ create table htx_createdts(
 	key key_pid(pid),
 	key key_title(title),
 	key key_publitime(publitime),
-	key key_tags(tags)
+	key key_tags(tags),
+	key key_state(state)
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#发布公告
+drop table if exists htx_notice;
+create table htx_notice(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	pid int(10) unsigned not null default 0 comment '考场ID',
+	title varchar(255) not null default '' comment '正标题',	
+	content MediumText not null comment '内容,大文本',
+	static_n varchar(255) not null default '' comment '静态名称',
+	publitime int(11) unsigned not null default 0 comment '公告时间',
+	state tinyint(10) unsigned not null default 0 comment '状态,0=发布,1=草稿箱',
+	key key_pid(pid),
+	key key_title(title),
+	key key_publitime(publitime),
+	key key_state(state)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
 #创建考场
 drop table if exists htx_createroom;

@@ -419,6 +419,42 @@ function getpay()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function notice_list()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$power = GetUserp();
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
+	
+	$sql  = ' select a.id,a.pid,a.title,a.content,a.static_n,a.publitime,a.state,b.title as name from '.PRE.'notice as a,'.PRE.'createroom as b where a.pid=b.id ';
+	
+	if( $id != 0 )
+	{
+		$sql  .= ' and  b.id='.$id.' ';
+	}
+	
+	if( $s != '' )
+	{
+		$sql  .= ' and  (a.title like "%'.$s.'%" or b.title like "%'.$s.'%") ';
+	}
+	
+	$TotalRows = db()->query($sql)->array_nums();
+	$TotalShow = GetFilePath();
+	$TotalPage = ceil($TotalRows/$TotalShow);
+	$page = $_GET['page']==null?1:$_GET['page'];
+	if($page>=$TotalPage){$page=$TotalPage;}
+	if($page<=1||!is_numeric($page)){$page=1;}
+	$offset = ($page-1)*$TotalShow;
+	
+	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';
+	$rows = db()->query($sql)->array_rows();
+	
+	$flRows1 = db()->select('*')->from(PRE.'createroom')->get()->array_rows();
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 function gethelp()
 {
 	include 'subject/'.getThemeDir().'/common.php';
@@ -509,6 +545,56 @@ function create_dts()
 	$flRows1 = GetFenLai3(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+function announcements()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$sql = 'select a.id,a.title,b.pid from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id';	
+	$flRows = db()->query($sql)->array_rows();
+	$flRows1 = UpwardsLookup2($flRows);
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+function UpwardsLookup2($flRows1)
+{
+	$rows = UpwardsLookup($flRows1);
+	
+	$h = array_reverse($flRows1);
+	foreach( $h as $k => $v )
+	{
+		$lenth = array_search($v['title'], $rows);
+		$index[$k] = $lenth;
+		if( $k == 0 )
+		{
+			$rs[] = array_slice($rows, 0, $lenth+1);
+		}
+		else 
+		{
+			$rs[] = array_slice($rows, $index[$k-1]+1, $lenth-$index[$k-1]);
+		}
+	}
+	
+	$h2 = array_reverse($rs);
+	
+	foreach( $flRows1 as $ks => $vs )
+	{
+		$flRows1[$ks]['ifl'] = $h2[$ks];
+	}
+	
+	return $flRows1;
+}
+function UpwardsLookup($array)
+{
+	static $rows;
+	foreach( $array as $k => $v )
+	{
+		$rows[] = $v['title'];
+		$rs1 = db()->select('id,pid,title')->from(PRE.'classify')->where(array('id'=>$v['pid']))->get()->array_rows();
+		UpwardsLookup($rs1);
+	}
+	$r = array_reverse($rows);
+	return $r;
 }
 function conent_update()
 {
@@ -731,6 +817,37 @@ function batch_deleting()
 	}
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+function notice_dtsend()
+{
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo '<script>alert("'.PERLISTINPUTTILE_1.'");location.href="'.apth_url('?act=announcements').'";</script>';exit;
+	}
+	$data['ify'] = $_POST['ify'];
+	if( $data['ify'] == 0 )
+	{
+		echo '<script>alert("'.PERLISTFENLAI_6.'");location.href="'.apth_url('?act=announcements').'";</script>';exit;
+	}
+	$data['content'] = $_POST['content'];
+	if( $data['content'] == '' )
+	{
+		echo '<script>alert("'.PERLISTINPUTTILE_2.'");location.href="'.apth_url('?act=announcements').'";</script>';exit;
+	}
+	$data['state'] = $_POST['state'];
+	$data['static_n'] = mt_rand(10000,99999).mt_rand(10000,99999).mt_rand(100000,999999);
+	$data['publitime'] = time();
+	
+	$int = db()->insert(PRE.'notice', $data);
+	if( $int )
+	{
+		
+	}
+	else 
+	{
+		echo '<script>alert("'.ADDONOK.'");location.href="'.apth_url('?act=announcements').'";</script>';exit;
+	}
 }
 function BatchDeletingAll()
 {

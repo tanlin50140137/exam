@@ -20,6 +20,7 @@ define("PERLISTFENLAI_2", "题干不能留空");
 define("PERLISTFENLAI_3", "选项不能留空");
 define("PERLISTFENLAI_4", "数量不能留空");
 define("PERLISTFENLAI_5", "答案不能留空");
+define("PERLISTFENLAI_6", "请选择考场");
 define("QUDATEONOK", "修改失败");
 define("QUDATEYESOK", "修改成功");
 define("DELETEYESOK", "删除成功");

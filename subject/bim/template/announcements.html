@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>显示文档分类</title>
+<title>发布公告</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
@@ -16,45 +16,41 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=create_dts');?>">创建文档</a>
+		<a href="<?php echo apth_url('?act=announcements');?>">发布公告</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=getpay');?>">查看文档列表</a>
+		<a href="<?php echo apth_url('?act=notice_list');?>">查看公告列表</a>
 	</h1>	
 </div>
 
 <div class="key_tablebox_all">
 	<div class="key_tablebox_allins">
-		发布文档
+		发布公告
 	</div>
 <form id="_frm" action="<?php echo apth_url('index.php');?>" method="post" enctype="multipart/form-data">	
 	<table class="key_tablebox_lists">
 		<tr>
 			<td class="key_tablebox_height key_tab_w"><p>标 题</p></td>
-			<td class="key_tablebox_height"><p><input type="text" name="title" value="" placeholder="文章标题" class="input_lists"/></p></td>
+			<td class="key_tablebox_height"><p><input type="text" name="title" value="" placeholder="公布新创建的考场" class="input_lists"/></p></td>
 		</tr>
 		<tr>
-			<td class="key_tablebox_height key_tab_w"><p>副 标</p></td>
-			<td class="key_tablebox_height"><p><input type="text" name="titleas" value="" placeholder="文章副标题" class="input_lists"/></p></td>
-		</tr>
-		<tr>
-			<td class="key_tablebox_height key_tab_w"><p>分 类</p></td>
+			<td class="key_tablebox_height key_tab_w"><p>考 场</p></td>
 			<td class="key_tablebox_height2">
 				<p>
 					<select name="ify" class="key_table_ify">
-						<option value="0">--请选择分类--</option>
+						<option value="0">--请选择考场--</option>
 <?php if(!empty($flRows1)){?>
 			<?php foreach( $flRows1 as $k => $v ){?>	
-						<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+						<option value="<?php echo $v['id'];?>">
+							<?php echo $v['title'].'（属 ';?>
+							<?php foreach($v['ifl'] as $ks=>$vs){?>
+							<?php echo $vs.' -> ';?>
+							<?php }?>
+							）
+						</option>
 			<?php }?>
 <?php }?>					
 					</select>
 				</p>			
-			</td>
-		</tr>
-		<tr>
-			<td class="key_tablebox_height key_tab_w"><p>描 述</p></td>
-			<td class="key_tablebox_height2">
-				<p><textarea name="depict" class="key_tablebox_txt" placeholder="文章摘要" ></textarea></p>
 			</td>
 		</tr>
 		<tr>
@@ -63,23 +59,6 @@
 				<p>
 					<script id="container" name="content" type="text/plain" style="width:90%;height:16rem;"></script>
     			</p>
-			</td>
-		</tr>
-		<tr>
-			<td class="key_tablebox_height key_tab_w"><p>标 签</p></td>
-			<td class="key_tablebox_height"><p><input type="text" name="tags" value="" placeholder="多个标签请使用“,”隔开" class="input_lists"/></p></td>
-		</tr>
-		<tr>
-			<td class="key_tablebox_height key_tab_w"><p>封 面</p></td>
-			<td class="key_tablebox_height2" style="padding:10px 0;">
-				<p style="padding-left:10px;"><input type="file" name="file" id="covers" onchange="previewImage(this);" class="input_lists2"/> <span>封面图片格式要求（jpeg，jpg，png，gif，bmp）；大小不能超出2M</span></p>
-				<p style="margin-top:10px;padding-left:10px;"><img src="<?php echo apth_url('subject/bim/images/l_dg.png');?>" id="img_url" alt="文章封面" class="input_imgs"/></p>
-			</td>
-		</tr>
-		<tr>
-			<td class="key_tablebox_height key_tab_w"><p>定 时</p></td>
-			<td class="key_tablebox_height">
-				<p><input type="text" name="timing" value="" placeholder="<?php echo date('Y-m-d H:i:s');?>" class="input_lists2"/> <span>定时发布格式要求（2018-01-01 00:00:00）</span></p>
 			</td>
 		</tr>
 		<tr>
@@ -95,8 +74,8 @@
 			<td class="key_tablebox_height key_tab_w"></td>
 			<td class="key_tablebox_height2">
 				<p>
-					<input type="hidden" name="act" value="create_dtsend"/>
-					<input type="button" value="提交" class="key_table_tijiao" onclick="frm_send();"/>
+					<input type="hidden" name="act" value="notice_dtsend"/>
+					<input type="button" value="发布" class="key_table_tijiao" onclick="frm_send();"/>
 				</p>				
 			</td>
 		</tr>
@@ -123,7 +102,7 @@ function frm_send()
 	var ify = $("[name='ify']").val();
 	if( ify == '0' )
 	{
-		layer.msg('请选择分类');
+		layer.msg('请选择考场');
 		$("[name='ify']").focus();
 		return false;
 	}
@@ -134,13 +113,6 @@ function frm_send()
 	{
 		layer.msg('请输入内容');
 		ue.focus();
-		return false;
-	}	
-	var covers = $("#covers").val();
-	if(covers=='')
-	{
-		layer.msg('请选择封面');
-		$("#covers").focus();
 		return false;
 	}
 	$("#_frm").submit();
