@@ -16,6 +16,8 @@
 <div class="key_box">
 	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp;
+	 <a href="<?php echo apth_url('?act=gettiku');?>">题库管理</a>
+	 &nbsp; &nbsp; &nbsp;
 <?php if( $power==2 || $power==1 ){?>	 
 	<input type="button" value="添加导入" class="cearter_key" onclick="cearter_key();"/>
 	 &nbsp; &nbsp; &nbsp;
@@ -71,9 +73,11 @@
 		<a href="<?php echo apth_url('?act=gettiku&t=3');?>">判断题</a>
 		&nbsp; &nbsp; 
 		<a href="<?php echo apth_url('?act=gettiku&t=4');?>">问答题</a>
+<?php if( $power==2 ){?>		
 		<span style="float:right;">
 			<a href="<?php echo apth_url('?act=batch_deleting');?>">批量删除</a>
 		</span>
+<?php } ?>		
 		<span style="float:right;margin-right:1.5rem;">
 			<a href="<?php echo apth_url('?act=batch_modification');?>">批量修改</a>
 		</span>

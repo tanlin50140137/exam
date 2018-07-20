@@ -1,6 +1,5 @@
 <?php
 header('content-type:text/html;charset=utf-8');
-
 function index()
 {
 	include 'subject/'.getThemeDir().'/common.php';
@@ -57,7 +56,48 @@ function adminindex()
 	
 	$wxfl = GetFenLai2_index(0);
 	
+	$totalfl = db()->select('*')->from(PRE.'classify')->get()->array_nums();
+	$totalpfl = db()->select('*')->from(PRE.'classify')->where(array('pid'=>0))->get()->array_nums();
+	$totalzfl = GetAllPfl();
+	
+	$totaltiku = db()->select('*')->from(PRE.'examination')->get()->array_nums();
+	
+	$totalkaoc = db()->select('*')->from(PRE.'createroom')->get()->array_nums();
+	
+	$totalzxfl = db()->select('*')->from(PRE.'fileclass')->get()->array_nums();
+	$totalzxsl = db()->select('*')->from(PRE.'createdts')->get()->array_nums();
+	
+	$totalpu = db()->select('*')->from(PRE.'admin')->where(array('power'=>0))->get()->array_nums();
+	$totalbu = db()->select('*')->from(PRE.'admin')->where(array('power'=>1))->get()->array_nums();
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+function GetAllPfl()
+{
+	$totalpfl = db()->select('*')->from(PRE.'classify')->where(array('pid'=>0))->get()->array_rows();
+	foreach( $totalpfl as $k => $v )
+	{
+		$int = GetZiShenNums($v['id']);
+	}
+	return $int;
+}
+function GetZiShenNums($pid)
+{
+	static $count;
+	$sql = 'select * from '.PRE.'classify where pid='.$pid;
+	$rows1 = db()->query($sql)->array_rows();
+	$count += count($rows1);
+	foreach( $rows1 as $k => $v )
+	{
+		$sql = 'select * from '.PRE.'classify where pid='.$v['id'];
+		$rows2 = db()->query($sql)->array_rows();
+		$count += count($rows2);
+		foreach( $rows2 as $k2 => $v2 )
+		{
+			GetZiShenNums($v2['id']);
+		}
+	}
+	return $count;
 }
 function getkey()
 {	
@@ -91,7 +131,7 @@ function GetFenLai($pid,$multiplier=0)
 	$int = db()->select('*')->from(PRE."classify")->get()->array_nums();
 	
 	$multiplier = $rows==null?0:$multiplier+2;
-	$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."classify where pid={$pid}";
+	$sql = "select id,pid,title,sort,descri,publitime,state,(select count(*) from ".PRE."createdts as b where b.pid=a.id) as c from ".PRE."classify as a where pid={$pid}";
 	$rs = mysql_query($sql);
 	while ($array = mysql_fetch_assoc($rs))
 	{
@@ -175,7 +215,7 @@ function GetFenLai4($pid,$multiplier=0,$id=null)
 	$where = $id==null?'':" where id='{$id}' ";
 	if( $where == null )
 	{
-		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."fileclass where pid={$pid} ";
+		$sql = "select id,pid,title,sort,descri,publitime,state,(select count(*) from ".PRE."createdts as b where b.pid=a.id) as c from ".PRE."fileclass as a where pid={$pid} ";
 		$rs = mysql_query($sql);
 		while ($array = mysql_fetch_assoc($rs))
 		{
@@ -185,7 +225,7 @@ function GetFenLai4($pid,$multiplier=0,$id=null)
 	}
 	else
 	{
-		$sql = "select id,pid,title,sort,descri,publitime,state from ".PRE."fileclass {$where} ";
+		$sql = "select id,pid,title,sort,descri,publitime,state,(select count(*) from ".PRE."createdts as b where b.pid=a.id) as c from ".PRE."fileclass {$where} ";
 		$rows = db()->query($sql)->array_rows();
 	}
 	return $rows;
@@ -195,10 +235,10 @@ function GetState( $int )
 	switch ( $int )
 	{
 		case 0:
-			$str = '显示';
+			$str = SHOWZH_CN_1;
 		break;
 		case 1:
-			$str = '<font color="red">隐藏</font>';
+			$str = '<font color="red">'.SHOWZH_CN_2.'</font>';
 		break;
 	}
 	return $str;
@@ -208,10 +248,10 @@ function GetState2( $int , $id, $page)
 	switch ( $int )
 	{
 		case 0:
-			$str = '发布';
+			$str = SHOWZH_CN_3;
 		break;
 		case 1:
-			$str = '<a href="'.apth_url('?act=conent_update&id='.$id.'&page='.$page).'">[草稿箱]</a>';
+			$str = '<a href="'.apth_url('?act=conent_update&id='.$id.'&page='.$page).'">'.SHOWZH_CN_4.'</a>';
 		break;
 	}
 	return $str;
@@ -496,20 +536,27 @@ function examqm_update()
 	
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$row = db()->select('id,pid,title,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
+	$row = db()->select('id,pid,title,sort,tariff,descri,roomsets,solve,typeofs,rule1,rule2,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
 
 	if( $row['rule1'] != null )
 	{
-		$rule = unserialize($row['rule1']);
+		$rule = mb_unserialize($row['rule1']);
 	}
+	
 	if( $row['rule2'] != null )
 	{
 		$rule2 = unserialize($row['rule2']);
 	}
-		
+	
 	$flRows1 = GetFenLai(0,2);
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+function mb_unserialize($serial_str) 
+{
+    $serial_str= preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $serial_str );
+    $serial_str= str_replace("\r", "", $serial_str);
+    return unserialize($serial_str);
 }
 function gettiku()
 {
@@ -685,7 +732,6 @@ function batch_deleting()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
-###############################################################################################
 function BatchDeletingAll()
 {
 	$exportflag = htmlspecialchars($_GET['flag'],ENT_QUOTES);
@@ -1043,7 +1089,11 @@ function ImportExecution()
 
 	for($j=2;$j<=$highestRow;$j++)
 	{
-		$id = trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue());	
+		$id = trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue());
+		if( !is_numeric( $id ) )
+		{
+			echo '<script>alert("'.MODILEERRORZH_CN_1.'");location.href="'.apth_url('?act=modify_import').'";</script>';exit;
+		}	
 		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue()));	
 		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());
 		$options = trim($objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue());		
@@ -1120,7 +1170,12 @@ function import_sends()
 
 	for($j=2;$j<=$highestRow;$j++)
 	{
-		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue()));		
+		$typeofs = trim($objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue());
+		if( is_numeric( $typeofs ) )
+		{
+			echo '<script>alert("'.MODILEERRORZH_CN_2.'");location.href="'.apth_url('?act=import_tiku').'";</script>';exit;
+		}	
+		$data['typeofs'] = GetFourTypes($typeofs);
 		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue());
 		$options = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());	
 		if( $options != '' )
@@ -1168,12 +1223,12 @@ function import_sends()
 }
 function GetFourTypes($str)
 {
-	$strArr = array('单选题'=>1,'多选题'=>2,'判断题'=>3,'问答题'=>4);
+	$strArr = array(DANXUANTI_1=>1,DANXUANTI_2=>2,DANXUANTI_3=>3,DANXUANTI_4=>4);
 	return $strArr[$str];
 }
 function GetFourTypes2($str)
 {
-	$strArr = array('1'=>'单选题','2'=>'多选题','3'=>'判断题','4'=>'问答题');
+	$strArr = array('1'=>DANXUANTI_1,'2'=>DANXUANTI_2,'3'=>DANXUANTI_3,'4'=>DANXUANTI_4);
 	return $strArr[$str];
 }
 function delete_exam()
@@ -1225,24 +1280,25 @@ function update_room()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_1));exit;
 	}
 	$int = db()->select('*')->from(PRE.'fileclass')->where(array('title'=>$data['title']))->get()->array_nums();
 	if( $int > 0 )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_2));exit;
 	}
 	$data['sort'] = $_POST['sort'];
 	if( $data['sort'] === '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_3));exit;
 	}
 	$data['pid'] = $_POST['pid'];
 	if( $data['pid'] == 0 )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请选择分类'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAI_1));exit;
 	}
-	$data['descri'] = $_POST['descri'];
+	$data['solve'] = $_POST['solve'];
+	$data['descri'] = $_POST['descri']==''?'':$_POST['descri'];
 	$data['state'] = $_POST['state'];
 		
 	$int = db()->update(PRE.'createroom',$data,array('id'=>$id));
@@ -1289,24 +1345,25 @@ function add_room()
 	$data['title'] = $_POST['title'];
 	if( $data['title'] == '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类名称'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_1));exit;
 	}
 	$int = db()->select('*')->from(PRE.'fileclass')->where(array('title'=>$data['title']))->get()->array_nums();
 	if( $int > 0 )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'分类名称已存在'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_2));exit;
 	}
 	$data['sort'] = $_POST['sort'];
 	if( $data['sort'] === '' )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请输入分类排序'));exit;
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_3));exit;
 	}
 	$data['pid'] = $_POST['pid'];
 	if( $data['pid'] == 0 )
 	{
-		echo json_encode(array("error"=>1,'txt'=>'请选择分类'));exit;
-	}
-	$data['descri'] = $_POST['descri'];
+		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAI_1));exit;
+	}	
+	$data['solve'] = $_POST['solve'];
+	$data['descri'] = $_POST['descri']==''?'':$_POST['descri'];
 	$data['state'] = $_POST['state'];
 	$data['publitime'] = time();
 		
@@ -1666,11 +1723,6 @@ function form_sbm()
 	{
 		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_1));exit;
 	}
-	//$int = db()->select('*')->from(PRE.'classify')->where(array('title'=>$data['title']))->get()->array_nums();
-	//if( $int > 0 )
-	//{
-	//	echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAIS_2));exit;
-	//}
 	$data['sort'] = $_POST['sort'];
 	if( $data['sort'] === '' )
 	{

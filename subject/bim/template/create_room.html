@@ -28,7 +28,10 @@
 	<?php }?>
 			</select>
 		</p>
-		<p>考场描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
+		<p>揽题方式： <label><input type="radio" name="solve" value="0" checked="checked" />只揽所选分类</label> &nbsp; &nbsp; <label><input type="radio" name="solve" value="1" />包括所有子分类</label></p>	
+		<div>考场描述： <font color="#999999">（建议做详细描述）</font>
+		<script id="editor" type="text/plain" name="descri" style="width:1024px;"></script>
+		</div>
 		<p>资费模式： <label><input type="radio" name="tariff" value="0" checked="checked" onclick="SetState(1);"/>免费</label> &nbsp; &nbsp; <label><input type="radio" name="tariff" value="1" onclick="SetState(2);"/>收费</label></p>		
 		<div class="t_guizhe" style="display:none;">
 			<div class="t_guizhe_list" style="font-weight:bold;">设置考场收费规则</div>
@@ -136,7 +139,16 @@
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="创建" class="sbm_fl" onclick="add_classify();"/></div>
 	</form>
 </div>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/ueditor/ueditor.config.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/ueditor/ueditor.all.js');?>"></script>
 <script>
+var ue = UE.getEditor("editor",{
+    toolbars:[["Undo","Redo","bold","italic","underline","forecolor", "backcolor","indent","justifyleft", "justifycenter", "justifyright","lineheight","fontfamily", "fontsize", "emotion","insertimage","insertvideo","link","unlink","horizontal","inserttable","spechars","cleardoc","formatmatch","selectall","pagebreak"]],
+    autoClearinitialContent:false,
+    wordCount:true,
+    elementPathEnabled:false
+    //initialFrameHeight:50
+});
 function all_mixing2(t,i)
 {
 	var objs = $(".typeofs_xuan");

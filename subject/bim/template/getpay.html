@@ -14,16 +14,16 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-<?php if( $power==2 || $power==1 ){?>		 
-		<input type="button" value="创建分类 " class="cearter_key" onclick="file_classify();"/>
-		&nbsp;
+		 <a href="<?php echo apth_url('?act=getpay');?>">文档列表</a>
+		 &nbsp; &nbsp; &nbsp; 
+<?php if( $power==2 || $power==1 ){?>
 		<input type="button" value="创建文档" class="cearter_key" onclick="create_dts();"/>
 <?php } ?>		
 	</h1>	
 </div>
 <div class="key_tablebox_all">
 <div style="line-height:30px;padding:0 0.6rem;">
-	<a href="<?php echo apth_url('?act=show_classify');?>" class="WenDongFenlai">文档分类</a>
+	<a href="<?php echo apth_url('?act=show_classify');?>" class="WenDongFenlai">查看文档分类</a>
 </div>
 <div class="key_tablebox_allins">
 	搜索：
@@ -155,10 +155,6 @@ function btn_sreach()
 	{
 		location.href="<?php echo apth_url('?act=getpay');?>";
 	}	
-}
-function file_classify()
-{
-	location.href="<?php echo apth_url('?act=file_classify');?>"
 }
 function sbm_fl()
 {

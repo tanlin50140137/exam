@@ -36,22 +36,27 @@ function Logins(m){
 		$("[name='pwd']").focus();
 		return false;
 	}	
-	//验证帐号密码	
+
 	$.post(url,{"act":"form_logins","u":u,"p":p},function(data){
 		var obj = eval("("+data+")");
 		if( obj.error == 0 )
-		{//注册成功
+		{
 			layer.msg(obj.txt,{time:2000},function(){
 				location.href = url+"?act=adminfrom";
 			});
 		}	
 		else
-		{//错误提示
+		{
 			$(".tishiinfo:eq("+obj.f+")").text(obj.txt);
 		}	
 	});
 }
 $(function(){
+	$(document).keyup(function (e) {
+	    if ( e.keyCode == 13 ) {
+	    	$(".btn_login").click();
+	    }  
+	});
 	$("[name='users1']").blur(function(){
 		var u = $("[name='users1']").val();
 		if( $("[name='users1']").val() != '' )
@@ -62,7 +67,7 @@ $(function(){
 		$.post(url,{"act":"checked_selects","u":u},function(data){
 			var obj = eval("("+data+")");
 			if( obj.error == 0 )
-			{//未注册
+			{
 				flag_users_name = true;
 				flag_txt = obj.txt;
 				$(".tishiinfo:eq(0)").text(obj.txt);
@@ -84,7 +89,7 @@ $(function(){
 		$.post(url,{"act":"checked_selects","u":u},function(data){
 			var obj = eval("("+data+")");
 			if( obj.error == 1 )
-			{//被占用
+			{
 				flag_users_name = true;
 				flag_txt = obj.txt;
 				$(".tishiinfo:eq(0)").text(obj.txt);
@@ -152,17 +157,17 @@ function reset_s(m)
 		$("[name='email']").focus();
 		return false;
 	}
-	//验证帐号密码
+
 	$.post(url,{"act":"form_resets","u":u,"p":p,"t":t,"e":e,'power':2},function(data){
 		var obj = eval("("+data+")");
 		if( obj.error == 0 )
-		{//注册成功
+		{
 			layer.msg(obj.txt,{time:2000},function(){
 				location.href = url+"?act=index";
 			});
 		}	
 		else
-		{//错误提示
+		{
 			$(".tishiinfo:eq("+obj.f+")").text(obj.txt);
 		}	
 	});
