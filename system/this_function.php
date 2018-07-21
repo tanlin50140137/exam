@@ -1,6 +1,5 @@
 <?php
 header('content-type:text/html;charset=utf-8');
-
 function db()
 {
 	return new This_Linked();
@@ -37,7 +36,7 @@ function load_theme($dir='default')
 	else 
 	{
 		header("content-type:text/html;charset=utf-8");
-		echo '加载失败：主题首页不存在 或 未启用主题 !';
+		echo ERRORTISHIZH_CN_1;
 	}
 }
 function apth_url($url='')
@@ -77,7 +76,7 @@ function CloseSite()
 	if( $review['closesite'] == "ON" )
 	{
 		header("content-type:text/html;charset=utf-8");
-		echo '网站已经关闭，无法访问';exit;
+		echo ERRORTISHIZH_CN_2;exit;
 	}
 }
 function getThemeDir()
@@ -152,45 +151,45 @@ function get_day_formt($t)
 {
 	$int = time()-$t;
 	if( $int < 86400 )
-	{#秒->分->时 换算
+	{
 		$i = 0;
 		while ( $int >= 60 )
 		{
 			$int /= 60;
 			$i++;
 		}
-		$ext = array('秒前','分钟前','小时前');
+		$ext = array(QITATISHIZH_CN_1,QITATISHIZH_CN_2,QITATISHIZH_CN_3);
 	}
 	
 	if( $int >= 86400 && $int < 2592000)
-	{#时->天 换算
+	{
 		$i = 0;
 		while ( $int >= 86400 )
 		{
 			$int /= 86400;
 			$i++;
 		}
-		$ext = array('小时前','天前');
+		$ext = array(QITATISHIZH_CN_3,QITATISHIZH_CN_4);
 	}
 	if( $int >= 2592000 && $int < 31104000)
-	{#天->月 换算
+	{
 		$i = 0;
 		while ( $int >= 2592000 )
 		{
 			$int /= 2592000;
 			$i++;
 		}
-		$ext = array('天前','个月前');
+		$ext = array(QITATISHIZH_CN_4,QITATISHIZH_CN_5);
 	}
 	if( $int >= 31104000 )
-	{#月->年 换算
+	{
 		$i = 0;
 		while ( $int >= 31104000 )
 		{
 			$int /= 31104000;
 			$i++;
 		}
-		$ext = array('个月前','年前');
+		$ext = array(QITATISHIZH_CN_5,QITATISHIZH_CN_6);
 	}
 	return floor($int).$ext[$i];
 }
@@ -219,4 +218,12 @@ function GetFilePath3()
 	$spot = SPOT;
 	$filename = base_url($spot.'external');
 	return $filename;
+}
+function StrSubs($str,$int=10,$imt='...')
+{
+	if( mb_strlen($str,'utf-8') > $int )
+	{
+		$str = mb_substr($str, 0, $int,'utf-8').$imt;
+	}
+	return $str;
 }

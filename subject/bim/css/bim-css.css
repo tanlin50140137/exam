@@ -107,6 +107,7 @@ html{height:92%;}
 .btn_g{padding:0 0.5rem;}
 
 .key_tablebox_allins{border:1px solid #ded5d5;margin:6px 0;height:50px;background:#f4f4f4;line-height:50px;padding:0 10px;}
+.key_tablebox_all .key_tablebox_allins a:hover{color:red;}
 .btn_sreach{border: 1px solid #3571cc;padding:0.21rem;border-radius:0.2rem;background:#3571cc;color:antiquewhite;}
 .btn_sreach:hover{background:#86b2f5;color:#383535;}
 
@@ -131,11 +132,11 @@ html{height:92%;}
 .t_guizhe2{border:1px solid #d8cdcd;padding:5px;}
 .t_guizhe_list2{line-height:25px;}
 
-
-
-
-
-
+.fenlaitongji{border:1px solid #ded5d5;padding:0.8rem;margin-top:1rem;}
+.fenlaitongji h1{font-size:15px;height:2rem;line-height:2rem;font-weight:bold;}
+.fenlaitongji_1{line-height:1.5rem;}
+.fenlaitongji_in{float:left;}
+.fltj_in{width:20rem;}
 
 
 

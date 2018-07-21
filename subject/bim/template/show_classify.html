@@ -16,7 +16,7 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		文档分类
+		<a href="<?php echo apth_url('?act=show_classify');?>">文档分类</a>
 <?php if( $power==2 || $power==1 ){ ?>		
 		 &nbsp; &nbsp; &nbsp; 
 		<input type="button" value="创建分类 " class="cearter_key" onclick="file_classify();"/>
@@ -47,6 +47,7 @@
 			<td>序号</td>
 			<td>PID</td>
 			<td>分类名称</td>
+			<td>文档数量</td>
 			<td>排序</td>
 			<td>创间时间</td>
 			<td>状态</td>
@@ -58,6 +59,7 @@
 			<td><?php echo ($k+1);?></td>
 			<td><?php echo $v['pid'];?></td>
 			<td><?php echo $v['title'];?></td>
+			<td><?php echo $v['c'];?></td>
 			<td><?php echo $v['sort'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><?php echo GetState($v['state']);?></td>
@@ -76,7 +78,7 @@
 	<?php }?>	
 <?php }?>
 		<tr>	
-			<td colspan="7">			
+			<td colspan="8">			
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
@@ -107,7 +109,7 @@
 		d.add(0,-1,'查看所有考试分类');
 <?php if(!empty($flRows2)){?>	
 	<?php foreach($flRows2 as $k=>$v){?>
-		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"];?>','<?php echo apth_url("?act=classify_update&id=".$v["id"]);?>');
+		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"].' -> 文档数 '.$v["c"].' 个';?>','<?php echo apth_url("?act=classify_update&id=".$v["id"]);?>');
 	<?php } ?>	
 <?php } ?>			
 		document.write(d);

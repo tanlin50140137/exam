@@ -64,7 +64,7 @@ INSERT INTO htx_apack(picname) VALUES('default/545846580001fede02200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545850200001359c02200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545864190001966102200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545867340001101702200220.jpg');
-#分类
+#考题分类
 drop table if exists htx_classify;
 create table htx_classify(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
@@ -110,7 +110,23 @@ create table htx_createdts(
 	key key_pid(pid),
 	key key_title(title),
 	key key_publitime(publitime),
-	key key_tags(tags)
+	key key_tags(tags),
+	key key_state(state)
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#发布公告
+drop table if exists htx_notice;
+create table htx_notice(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	pid int(10) unsigned not null default 0 comment '考场ID',
+	title varchar(255) not null default '' comment '正标题',	
+	content MediumText not null comment '内容,大文本',
+	static_n varchar(255) not null default '' comment '静态名称',
+	publitime int(11) unsigned not null default 0 comment '公告时间',
+	state tinyint(10) unsigned not null default 0 comment '状态,0=发布,1=草稿箱',
+	key key_pid(pid),
+	key key_title(title),
+	key key_publitime(publitime),
+	key key_state(state)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
 #创建考场
 drop table if exists htx_createroom;
@@ -118,12 +134,14 @@ create table htx_createroom(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
 	pid int(10) unsigned not null default 0 comment '关联分类ID',
 	title varchar(255) not null default '' comment '考场名称',
+	solve tinyint(10) unsigned not null default 0 comment '揽题方式,0=只揽所选分类,1=包括所有子分类',
 	sort varchar(255) not null default '' comment '考场排序',
 	tariff tinyint(10) unsigned not null default 0 comment '资费模式,0=免费,1=收费',
-	descri varchar(255) not null default '' comment '考场描述',
-	setting tinyint(10) unsigned not null default 0 comment '设置考场,0=练习,1=真考',
+	descri MediumText not null comment '考场描述',
+	roomsets tinyint(10) unsigned not null default 0 comment '设置考场,0=练习,1=正式考',
 	typeofs tinyint(10) unsigned not null default 0 comment '题型,0=单选题,1=多选题,2=判断题,3=问答题',
-	rule text not null comment '规则',	
+	rule1 text not null comment '规则1',	
+	rule2 text not null comment '规则2',	
 	publitime int(11) unsigned not null default 0 comment '考场创间时间',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',
 	key key_pid(pid),
@@ -135,7 +153,7 @@ drop table if exists htx_examination;
 create table htx_examination(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
 	pid int(10) unsigned not null default 0 comment '关联分类ID - 与题种分类',
-	typeofs tinyint(10) unsigned not null default 0 comment '题型,0=单选题,1=多选题,2=判断题,3=问答题',
+	typeofs tinyint(10) unsigned not null default 0 comment '题型,1=单选题,2=多选题,3=判断题,4=问答题',
 	dry varchar(255) not null default '' comment '题干',
 	options varchar(255) not null default '' comment '选项',
 	numbers varchar(255) not null default '' comment '选项数',

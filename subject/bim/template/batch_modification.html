@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>批量修改</title>
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<link rel="stylesheet" href="<?php echo apth_url('subject/bim/treeview/jquery.treeview.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<link rel="StyleSheet" href="<?php echo apth_url('subject/bim/css/jquery-ui.custom.css');?>" type="text/css" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-ui.custom.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-ui-timepicker-addon.js');?>"></script>
+</head>
+<body>
+<div class="key_box">
+	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
+	 &nbsp; &nbsp; &nbsp;
+	<a href="<?php echo apth_url('?act=batch_modification');?>">批量修改（批量导出Excel）</a>
+	 &nbsp; &nbsp; &nbsp;
+	<a href="<?php echo apth_url('?act=batch_deleting');?>">批量删除</a>	
+	 &nbsp; &nbsp; &nbsp;
+	<a href="<?php echo apth_url('?act=gettiku');?>">返回题库</a>
+	</h1>	
+</div>
+<div class="addfl">
+	<form id="ify_frm">
+		<p>分类名称： <input type="text" name="title" value="" class="ad_fls" id="ad_fls1"/></p>
+		<p>分类排序： <input type="text" name="sort" value="0" class="ad_fls" id="ad_fls2" style="width:5.8rem;"/></p>
+		<p>
+			添加父类：
+			<select name="pid" class="ad_fls2">
+				<option value="0">添加为顶级类</option>
+	<?php if(!empty($flRows1)){?>
+		<?php foreach( $flRows1 as $k => $v ){?>	
+				<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+		<?php }?>		
+	<?php }?>
+			</select>
+		</p>
+		<p>分类描述： <input type="text" name="descri" value="" class="ad_fls"/></p>
+		<p>分类状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
+		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="button" value="添加" class="sbm_fl" onclick="sbm_fl();"/></div>
+	</form>
+</div>
+<div class="key_tablebox_all">
+	<div class="key_tablebox_allins">
+		搜索分类：
+		<select onchange="search_ify(this);" class="ad_fls2">
+				<option value="">--请选择分类--</option>
+	<?php if(!empty($flRows1)) { ?>
+		<?php foreach( $flRows1 as $k => $v ) { ?>
+			<?php if($id == $v['id']) { ?>	
+				<option value="<?php echo $v['id'];?>" selected="selected"><?php echo $v['title'];?></option>
+			<?php } else { ?>
+				<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+			<?php } ?>	
+		<?php } ?>		
+	<?php } ?>
+		</select>
+		&nbsp; &nbsp; &nbsp; &nbsp;
+		关键词：
+		<input type="text" id="search" value="<?php echo $s;?>" placeholder="题干/年份/书本名称" class="ad_fls">
+		<input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();">
+		&nbsp; &nbsp; &nbsp; &nbsp;
+		时间：
+		<input type="text" id="edtDateTime1" readonly="readonly" value="<?php echo $as;?>" class="ad_fls" style="width:12.6rem;"/>
+		至
+		<input type="text" id="edtDateTime2" readonly="readonly" value="<?php echo $bs;?>" class="ad_fls" style="width:12.6rem;"/>
+		<input type="button" value="查询" class="btn_sreach" onclick="query_sreach();">
+	</div>
+<table class="key_tablebox tableBox">
+		<tr>
+			<td>序号</td>
+			<td>分类名称</td>
+			<td>题型</td>
+			<td>题干</td>
+			<td>选项</td>
+			<td>选项数</td>
+			<td>答案</td>
+			<td>考题年份</td>
+			<td>书本名称</td>
+			<td>创间时间</td>
+			<td>状态</td>
+			<td>操作</td>
+		</tr>
+<?php if( !empty( $rows ) ){?>
+	<?php foreach( $rows as $k => $v ){?>	
+		<tr>
+			<td><?php echo ($k+1);?></td>
+			<td title="<?php echo $v['title'];?>"><?php echo StrSubs($v['title'],20);?></td>
+			<td><?php echo GetFourTypes2($v['typeofs']);?></td>
+			<td title="<?php echo $v['dry'];?>"><?php echo StrSubs($v['dry'],20);?></td>
+			<td><?php echo $v['options'];?></td>
+			<td><?php echo $v['numbers'];?></td>
+			<td><?php echo $v['answers'];?></td>
+			<td><?php echo $v['years'];?></td>
+			<td title="<?php echo $v['booknames'];?>"><?php echo StrSubs($v['booknames'],20);?></td>
+			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
+			<td><?php echo GetState($v['state']);?></td>
+			<td>
+<?php if( $power==2 || $power==1 ){ ?>			
+				<a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a> 
+<?php }else{ ?>
+			<font color="#999999">观看</font>
+<?php } ?>					
+			</td>
+		</tr>
+	<?php }?>	
+<?php }else{ ?>
+		<tr>
+			<td colspan="12" style="color:#999999;">先查询，后导出</td>
+		</tr>	
+<?php }?>
+		<tr>	
+			<td colspan="12">		
+			共<?php echo $TotalRows==null?0:$TotalRows;?>条 &nbsp; &nbsp; 
+<?php if($TotalRows>$TotalShow){?>			
+			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('?act=batch_modification&page='.($page-1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">上一页</a> &nbsp; | &nbsp; 
+			<a href="<?php echo apth_url('?act=batch_modification&page='.($page+1).'&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs);?>">下一页</a>  &nbsp; &nbsp; 
+			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
+<?php }?>	
+<?php if( $power==2 || $power==1 ){ ?>			
+			<select onchange="SetShwoTotal(this);">
+				<option value="5" <?php echo $TotalShow==5?'selected="selected"':''?> >显示5条</option>
+				<option value="10" <?php echo $TotalShow==10?'selected="selected"':''?> >显示10条</option>
+				<option value="20" <?php echo $TotalShow==20?'selected="selected"':''?> >显示20条</option>
+				<option value="30" <?php echo $TotalShow==30?'selected="selected"':''?> >显示30条</option>
+				<option value="50" <?php echo $TotalShow==50?'selected="selected"':''?> >显示50条</option>
+				<option value="100" <?php echo $TotalShow==100?'selected="selected"':''?> >显示100条</option>
+			</select>
+			 &nbsp; &nbsp; 
+			<span>
+				<a href="javascript:void(0);" onclick="BatchExport();">批量导出</a>
+			</span>
+<?php }?>			
+			</td>
+		</tr>					
+</table>
+</div>
+<script>
+var ExportFlag = "<?php echo $exportflag==null?0:$exportflag;?>";
+var lay = '';
+function BatchExport()
+{
+	var f = '';
+	if( ExportFlag == 1 )
+	{
+		f = '分类';
+	}
+	else if( ExportFlag == 2 )
+	{
+		f = '关键词';
+	}	
+	else if(  ExportFlag == 3 )
+	{
+		f = '时间';
+	}
+	var html  = '<div style="border:1px solid #dcdbdb;width:90%;margin:1rem auto;">';
+		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;">按<font color="red">['+f+']</font>查询结果导出</div>';
+		html += '<form id="ExFrm"><div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size:1rem;color:red;">导出Excel格式：<label><input type="radio" name="ext" value="0"/>.xls</label> &nbsp; <label><input type="radio" name="ext" value="1"/>.xlsx</label> &nbsp; <label><input type="radio" name="ext" value="2"/>.csv</label></div></form>';
+		html += '<div style="height:2.5rem;line-height:2.5rem;text-align:center;font-size: 1rem;"><input type="button" value="导出" class="btn_sreach" onclick="ExportABatch();"> &nbsp; <input type="button" value="取消" class="btn_sreach" onclick="BatchCancel();"></div>';
+		html += '</div>';
+		lay = layer.open({
+		  title: false,
+		  type: 1,
+		  skin: 'layui-layer-demo',
+		  closeBtn: 0, 
+		  anim: 2,
+		  area: '500px',
+		  shadeClose: true,
+		  content: html
+	});	
+}
+function ExportABatch()
+{
+	var ExFrm  = $("#ExFrm").serialize();
+	
+	var ext = $("[name='ext']");
+	if( !ext.is(":checked") )
+	{
+		layer.msg('请选择导出Excel格式');
+		return false;
+	}
+	
+	layer.close(lay);
+	
+	if( ExportFlag == 1 )
+	{
+		location.href="<?php echo apth_url('?act=DifferentiatedType&flag='.$exportflag.'&id='.$id.'&');?>"+ExFrm;
+	}
+	else if( ExportFlag == 2 )
+	{
+		location.href="<?php echo apth_url('?act=DifferentiatedType&flag='.$exportflag.'&s='.$s.'&');?>"+ExFrm;
+	}	
+	else if(  ExportFlag == 3 )
+	{
+		location.href="<?php echo apth_url('?act=DifferentiatedType&flag='.$exportflag.'&a='.$as.'&b='.$bs.'&');?>"+ExFrm;
+	}
+	else
+	{
+		layer.msg('先查询，后导出');
+	}	
+}
+function BatchCancel()
+{
+	layer.close(lay);
+}
+function query_sreach()
+{
+	var edtDateTime1 = $("#edtDateTime1").val();
+	var edtDateTime2 = $("#edtDateTime2").val();
+	location.href="<?php echo apth_url('?act=batch_modification&exportflag=3&a=');?>"+edtDateTime1+"&b="+edtDateTime2;
+}
+function btn_sreach()
+{
+	var search = $("#search").val();
+	if( search != '' )
+	{
+		location.href="<?php echo apth_url('?act=batch_modification&exportflag=2&s=');?>"+search;
+	}
+	else
+	{
+		location.href="<?php echo apth_url('?act=batch_modification');?>";
+	}	
+}
+function cearter_key()
+{
+	location.href = "<?php echo apth_url('?act=import_tiku');?>";
+}
+function Diachronic(){
+	window.history.go(-1);
+}
+function delete_info(id,p)
+{
+	layer.confirm('您是否要删除这条分类？删除后无法恢复，分类下的信息将会全部丢失！', {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+		  layer.msg('正在删除......', {icon: 1},function(){
+			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_tiku','id':id},function(data){
+				  var obj = eval("("+data+")");
+				  layer.msg(obj.txt,{time:1000},function(){
+						location.reload();
+					});
+			  });
+		  });		  
+		}, function(){});
+}
+function update_info(id,p)
+{
+	location.href = "<?php echo apth_url('?act=gettiku_update&id=');?>"+id+'&page='+p;
+}
+function search_ify(t)
+{
+	var d = $(t).val();
+	location.href="<?php echo apth_url('?act=batch_modification&exportflag=1&page='.$page.'&id=');?>"+d;
+}
+function SetShwoTotal(t)
+{
+	var c = $(t).val();
+	$.post('<?php echo apth_url("index.php");?>',{'act':'SetShwoTotal','c':c},function(d){
+		location.reload();
+	});
+}
+function btn_g()
+{
+	var d = $("#g").val();
+	if( d != '' )
+	{
+		location.href="<?php echo apth_url('?act=batch_modification&id='.$id.'&s='.$s.'&a='.$as.'&b='.$bs.'&page=');?>"+d;
+	}	
+}
+$(function(){
+	$(".tableBox p:eq(0),.tableBox p:eq(1)").css({"font-weight":"bold"});
+	$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	$(".tableBox tr").hover(function(){
+		$(this).css({"background":"#FFFFDD"});
+	},function(){
+		$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	});
+});
+
+var as = "<?php echo $as;?>";
+var bs = "<?php echo $bs;?>";
+
+$(function(){
+	//日期时间控件
+	var dt = new Date();
+if( as=='' && bs=='' )
+{	
+	$("#edtDateTime1").val(dt.getFullYear()+"-"+getInts(dt.getMonth()+1)+"-"+getInts(dt.getDate())+" "+getInts(dt.getHours())+":"+getInts(dt.getMinutes())+":"+getInts(dt.getSeconds()));
+	$("#edtDateTime2").val(dt.getFullYear()+"-"+getInts(dt.getMonth()+1)+"-"+getInts(dt.getDate())+" "+getInts(dt.getHours())+":"+getInts(dt.getMinutes())+":"+getInts(dt.getSeconds()));
+}	
+	function getInts(int){if(int<10){var int = "0"+int;} return int;};
+	$.datepicker.regional["zh-CN"] = {
+	  closeText: "完成",
+	  prevText: "上个月",
+	  nextText: "下个月",
+	  currentText: "现在",
+	  monthNames: ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+	  monthNamesShort: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+	  dayNames: ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],
+	  dayNamesShort: ["周日","周一","周二","周三","周四","周五","周六"],
+	  dayNamesMin: ["日","一","二","三","四","五","六"],
+	  weekHeader: "周",
+	  dateFormat: "yy-mm-dd",
+	  firstDay: 1,
+	  isRTL: false,
+	  showMonthAfterYear: true,
+	  yearSuffix: " 年  "
+	};
+	$.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+	$.timepicker.regional["zh-CN"] = {
+	  timeOnlyTitle: "时间",
+	  timeText: "时间",
+	  hourText: "小时",
+	  minuteText: "分钟",
+	  secondText: "秒钟",
+	  millisecText: "毫秒",
+	  currentText: "现在",
+	  closeText: "完成",
+	  timeFormat: "HH:mm:ss",
+	  ampm: false
+	};
+	$.timepicker.setDefaults($.timepicker.regional["zh-CN"]);
+	$("#edtDateTime1").datetimepicker({
+	  showSecond: true
+	});
+	$("#edtDateTime2").datetimepicker({
+	  showSecond: true
+	});
+});
+</script>
+</body>
+</html>
