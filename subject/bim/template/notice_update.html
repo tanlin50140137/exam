@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>发布公告</title>
+<title>修改公告</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
@@ -16,7 +16,7 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=announcements');?>">发布公告</a>
+		<a href="<?php echo apth_url('?act=notice_update&page='.$_GET['page'].'&id='.$id);?>">修改公告</a>
 		 &nbsp; &nbsp; &nbsp; 
 		<a href="<?php echo apth_url('?act=notice_list');?>">查看公告列表</a>
 	</h1>	
@@ -24,13 +24,13 @@
 
 <div class="key_tablebox_all">
 	<div class="key_tablebox_allins">
-		发布公告
+		修改公告
 	</div>
 <form id="_frm" action="<?php echo apth_url('index.php');?>" method="post" enctype="multipart/form-data">	
 	<table class="key_tablebox_lists">
 		<tr>
 			<td class="key_tablebox_height key_tab_w"><p>标 题</p></td>
-			<td class="key_tablebox_height"><p><input type="text" name="title" value="" placeholder="公布新创建的考场" class="input_lists"/></p></td>
+			<td class="key_tablebox_height"><p><input type="text" name="title" value="<?php echo $row['title'];?>" placeholder="公布新创建的考场" class="input_lists"/></p></td>
 		</tr>
 		<tr>
 			<td class="key_tablebox_height key_tab_w"><p>考 场</p></td>
@@ -39,13 +39,22 @@
 					<select name="ify" class="key_table_ify">
 						<option value="0">--请选择考场--</option>
 <?php if(!empty($flRows1)){?>
-			<?php foreach( $flRows1 as $k => $v ){?>	
+			<?php foreach( $flRows1 as $k => $v ){?>
+					<?php if( $v['id'] == $row['pid'] ){ ?>	
+						<option value="<?php echo $v['id'];?>" selected="selected">
+							<?php $temp='';foreach($v['ifl'] as $ks=>$vs){?>
+							<?php $temp.=($temp==''?'':'/').$vs;?>
+							<?php }?>
+							<?php echo $v['kc'].' 所属分类（'.$temp.'）';?>
+						</option>
+					<?php }else{ ?>
 						<option value="<?php echo $v['id'];?>">
 							<?php $temp='';foreach($v['ifl'] as $ks=>$vs){?>
 							<?php $temp.=($temp==''?'':'/').$vs;?>
 							<?php }?>
 							<?php echo $v['kc'].' 所属分类（'.$temp.'）';?>
 						</option>
+					<?php }?>	
 			<?php }?>
 <?php }?>					
 					</select>
@@ -56,7 +65,7 @@
 			<td class="key_tablebox_height key_tab_w"><p>内 容</p></td>
 			<td class="key_tablebox_height2">
 				<p>
-					<script id="container" name="content" type="text/plain" style="width:90%;height:16rem;"></script>
+					<script id="container" name="content" type="text/plain" style="width:90%;height:16rem;"><?php echo $row['content'];?></script>
     			</p>
 			</td>
 		</tr>
@@ -64,8 +73,8 @@
 			<td class="key_tablebox_height key_tab_w"><p>状 态</p></td>
 			<td class="key_tablebox_height">
 				<p>
-					<label><input type="radio" name="state" checked="checked" value="0"/>发布</label> &nbsp; &nbsp; &nbsp;
-					<label><input type="radio" name="state" value="1"/>草稿箱</label>
+					<label><input type="radio" name="state" <?php echo $row['state']==0?'checked="checked"':'';?> value="0"/>发布</label> &nbsp; &nbsp; &nbsp;
+					<label><input type="radio" name="state" <?php echo $row['state']==1?'checked="checked"':'';?> value="1"/>草稿箱</label>
 				</p>				
 			</td>
 		</tr>
@@ -73,7 +82,9 @@
 			<td class="key_tablebox_height key_tab_w"></td>
 			<td class="key_tablebox_height2">
 				<p>
-					<input type="hidden" name="act" value="notice_dtsend"/>
+					<input type="hidden" name="act" value="notice_upinfo"/>
+					<input type="hidden" name="page" value="<?php echo $_GET['page'];?>"/>
+					<input type="hidden" name="id" value="<?php echo $id;?>"/>
 					<input type="button" value="发布" class="key_table_tijiao" onclick="frm_send();"/>
 				</p>				
 			</td>

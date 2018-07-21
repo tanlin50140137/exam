@@ -44,8 +44,7 @@
 			<td>序号</td>
 			<td>分类</td>
 			<td>标题</td>
-			<td>创建时间</td>
-			<td>定时发布</td>
+			<td>公告时间</td>
 			<td>状态</td>
 			<td>操作</td>
 		</tr>
@@ -53,11 +52,10 @@
 	<?php foreach( $rows as $k => $v ){?>	
 		<tr>
 			<td><?php echo ($k+1);?></td>
-			<td><?php echo $v['ify'];?></td>
+			<td><?php echo $v['name'];?></td>
 			<td><?php echo $v['title'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
-			<td><?php echo $v['timing']==0?'未定时':date('Y.m.d H:i:s',$v['timing']);?></td>
-			<td><?php echo GetState2($v['state'],$v['id'],$page);?></td>
+			<td><?php echo GetState3($v['state'],$v['id'],$page);?></td>
 			<td>
 <?php if( $power==2 || $power==1 ){?>			
 			<a href="javascript:void(0);" onclick="update_info('<?php echo $v['id'];?>','<?php echo $page;?>');">修改</a>
@@ -73,7 +71,7 @@
 	<?php }?>	
 <?php }?>
 		<tr>	
-			<td colspan="7">			
+			<td colspan="6">			
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
@@ -108,7 +106,7 @@ function delete_info(id,p)
 		  btn: ['确定','取消'] //按钮
 		}, function(){
 		  layer.msg('正在删除......', {icon: 1},function(){
-			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_conent','id':id},function(data){
+			  $.post('<?php echo apth_url("index.php");?>',{'act':'delete_notice','id':id},function(data){
 				  var obj = eval("("+data+")");
 				  layer.msg(obj.txt,{time:1000},function(){
 						location.reload();
@@ -119,7 +117,7 @@ function delete_info(id,p)
 }
 function update_info(id,p)
 {
-	location.href = "<?php echo apth_url('?act=conent_update&id=');?>"+id+'&page='+p;
+	location.href = "<?php echo apth_url('?act=notice_update&id=');?>"+id+'&page='+p;
 }
 function search_ify(t)
 {

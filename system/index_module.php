@@ -256,6 +256,19 @@ function GetState2( $int , $id, $page)
 	}
 	return $str;
 }
+function GetState3( $int , $id, $page)
+{
+	switch ( $int )
+	{
+		case 0:
+			$str = SHOWZH_CN_3;
+		break;
+		case 1:
+			$str = '<a href="'.apth_url('?act=notice_update&id='.$id.'&page='.$page).'">'.SHOWZH_CN_4.'</a>';
+		break;
+	}
+	return $str;
+}
 function SetShwoTotal()
 {
 	$spot = SPOT;
@@ -455,6 +468,20 @@ function notice_list()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function notice_update()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
+	
+	$sql = 'select a.id,a.title as kc,b.pid,b.title from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id';	
+	$flRows = db()->query($sql)->array_rows();
+	$flRows1 = UpwardsLookup2($flRows);
+	
+	$row = db()->select('id,pid,title,content,static_n,publitime,state')->from(PRE.'notice')->where(array('id'=>$id))->get()->array_row();
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 function gethelp()
 {
 	include 'subject/'.getThemeDir().'/common.php';
@@ -550,7 +577,7 @@ function announcements()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$sql = 'select a.id,a.title,b.pid from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id';	
+	$sql = 'select a.id,a.title as kc,b.pid,b.title from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id';	
 	$flRows = db()->query($sql)->array_rows();
 	$flRows1 = UpwardsLookup2($flRows);
 	
@@ -559,7 +586,6 @@ function announcements()
 function UpwardsLookup2($flRows1)
 {
 	$rows = UpwardsLookup($flRows1);
-	
 	$h = array_reverse($flRows1);
 	foreach( $h as $k => $v )
 	{
@@ -825,8 +851,8 @@ function notice_dtsend()
 	{
 		echo '<script>alert("'.PERLISTINPUTTILE_1.'");location.href="'.apth_url('?act=announcements').'";</script>';exit;
 	}
-	$data['ify'] = $_POST['ify'];
-	if( $data['ify'] == 0 )
+	$data['pid'] = $_POST['ify'];
+	if( $data['pid'] == 0 )
 	{
 		echo '<script>alert("'.PERLISTFENLAI_6.'");location.href="'.apth_url('?act=announcements').'";</script>';exit;
 	}
@@ -842,11 +868,44 @@ function notice_dtsend()
 	$int = db()->insert(PRE.'notice', $data);
 	if( $int )
 	{
-		
+		header('location:'.apth_url('?act=notice_list'));
 	}
 	else 
 	{
 		echo '<script>alert("'.ADDONOK.'");location.href="'.apth_url('?act=announcements').'";</script>';exit;
+	}
+}
+function notice_upinfo()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	$data['title'] = $_POST['title'];
+	if( $data['title'] == '' )
+	{
+		echo '<script>alert("'.PERLISTINPUTTILE_1.'");location.href="'.apth_url('?act=notice_update&page='.$_POST['page'].'&id='.$id).'";</script>';exit;
+	}
+	$data['pid'] = $_POST['ify'];
+	if( $data['pid'] == 0 )
+	{
+		echo '<script>alert("'.PERLISTFENLAI_6.'");location.href="'.apth_url('?act=notice_update&page='.$_POST['page'].'&id='.$id).'";</script>';exit;
+	}
+	$data['content'] = $_POST['content'];
+	if( $data['content'] == '' )
+	{
+		echo '<script>alert("'.PERLISTINPUTTILE_2.'");location.href="'.apth_url('?act=notice_update&page='.$_POST['page'].'&id='.$id).'";</script>';exit;
+	}
+	$data['state'] = $_POST['state'];
+	$data['static_n'] = mt_rand(10000,99999).mt_rand(10000,99999).mt_rand(100000,999999);
+	$data['publitime'] = time();
+	
+	$int = db()->update(PRE.'notice', $data, array('id'=>$id));
+	if( $int )
+	{
+		header('location:'.apth_url('?act=notice_list&page='.$_POST['page']));
+	}
+	else 
+	{
+		echo '<script>alert("'.QUDATEONOK.'");location.href="'.apth_url('?act=notice_update&page='.$_POST['page'].'&id='.$id).'";</script>';exit;
 	}
 }
 function BatchDeletingAll()
@@ -876,6 +935,19 @@ function BatchDeletingAll()
 	}
 	
 	header('location:'.apth_url('?act=batch_deleting'));
+}
+function delete_notice()
+{
+	$id = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$int = db()->delete(PRE.'notice',array('id'=>$id));
+	if( $int )
+	{
+		echo json_encode(array("error"=>0,'txt'=>DELETEYESOK));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
+	}
 }
 function delete_batch()
 {
