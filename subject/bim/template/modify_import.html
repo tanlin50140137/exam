@@ -25,17 +25,6 @@
 		<label><input type="radio" name="format" value="1" />.xlsx</label> &nbsp; &nbsp; 
 		<label><input type="radio" name="format" value="2" />.csv</label> &nbsp; &nbsp; 
 		</p>
-		<p>
-			题库分类：
-			<select name="pid" class="ad_fls2" id="ad_fls3">
-				<option value="0">请选择分类</option>
-	<?php if(!empty($flRows1)){?>
-		<?php foreach( $flRows1 as $k => $v ){?>
-			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
-		<?php }?>		
-	<?php }?>
-			</select>
-		</p>
 		<p>选择文件： <input type="file" name="file" class="input_lists2"/></p>	
 		<input type="hidden" name="act" value="ImportExecution"/>
 		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="执行" class="sbm_fl" onclick="add_classify();"/></div>
@@ -48,13 +37,7 @@ function cearter_key()
 }
 function add_classify()
 {
-	var p = $("#ad_fls3").val();
 	var f = $(".input_lists2").val();
-	if( p == 0 )
-	{
-		layer.tips('请选择分类','#ad_fls3');
-		return false;
-	}
 	if( f == '' )
 	{
 		layer.tips('选择文件','.input_lists2');

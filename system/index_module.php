@@ -720,8 +720,6 @@ function modify_import()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$flRows1 = GetFenLai(0,2);
-	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 function gettiku_update()
@@ -1232,7 +1230,6 @@ function update_tiku()
 function ImportExecution()
 {
 	$ExtFlag = $_POST['format'];
-	$pid = $_POST['pid'];
 	$file = $_FILES['file'];
 	
 	if( $file['error'] == 0 )
@@ -1297,7 +1294,7 @@ function ImportExecution()
 		$data['hats'] = trim($objPHPExcel->getActiveSheet()->getCell("L".$j)->getValue());
 		$data['publitime'] = time();
 		
-		$i = db()->update(PRE.'examination',$data,array('id'=>$id,'pid'=>$pid));
+		$i = db()->update(PRE.'examination',$data,array('id'=>$id));
 	}
 
 	if( $i )
