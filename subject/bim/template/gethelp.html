@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>帮助中心</title>
+<title>资源管理器</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
@@ -13,26 +13,56 @@
 <div class="key_box">
 	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp; 
-	 <a href="<?php echo apth_url('?act=gethelp');?>">帮助中心</a>
+	 <a href="<?php echo apth_url('?act=gethelp');?>">资源管理器</a>
+<?php if( $upApth != '' ){ ?>	 
+	 &nbsp; &nbsp; &nbsp;
+	 <a href="<?php echo apth_url('?act=gethelp&path='.urlencode($upApth));?>">返回上一层</a>
+<?php } ?>	 
+	 &nbsp; &nbsp; &nbsp;
+	 <a href="<?php echo $upApth==''?'javascript:void(0);':apth_url('?act=gethelp&path='.urlencode($filename));?>">当前 <?php echo $filename;?></a> 
 	 </h1>	
 </div>
 <table class="key_tablebox tableBox" style="margin-top:10px;">
+<?php if( !empty( $files ) ){ ?>
 		<tr>
-			<td>序号</td>
-			<td>OPENID</td>
-			<td>APPKEY</td>
-			<td>生成时间</td>
+			<td>名称</td>
+			<td>大小</td>
+			<td>创建时间</td>
 			<td>操作</td>
 		</tr>
+	<?php foreach( $files as $k => $v ){ ?>		
 		<tr>
-			<td>1</td>
-			<td>2018070316345469</td>
-			<td>sdgh5263598ikolpuyhn5360r1g5s8l</td>
-			<td>2018-07-03 17:16:30</td>
-			<td>删除</td>
+			<td>
+				<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>	
+			</td>
+		<?php if( !is_dir( $filename.'/'.$v )){?>
+			<td><?php echo getBtSize( $filename.'/'.$v );?></td>
+		<?php }else{ ?>
+			<td></td>
+		<?php } ?>				
+			<td><?php echo getFilecTIME($filename.'/'.$v);?></td>
+			<td>修改｜删除</td>
 		</tr>
+	<?php } ?>	
+<?php }else{ ?>
+	<?php if( is_dir( $filename ) ){?>
+		<tr>
+			<td colspan="4">空文件夹</td>
+		</tr>
+	<?php } ?>	
+	<?php if( is_file( $filename ) ){?>
+		<div style="width:90%;margin:auto;"><textarea class="div_text bianji-textarea-l"><?php echo $strs;?></textarea></div>
+	<?php } ?>	
+<?php } ?>		
 </table>
 <script>
+$(".bianji-textarea-l").height($(".bianji-textarea-l")[0].scrollHeight);
+$(".bianji-textarea-l").on("keyup keydown", function(){
+    $(this).height(this.scrollHeight);
+});
 function Diachronic(){
 	window.history.go(-1);
 }

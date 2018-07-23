@@ -486,6 +486,26 @@ function gethelp()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
+	$filename = $_GET['path']==null?ALL_ROOTS:urldecode($_GET['path']); 
+	
+	if($_GET['path']!=null )
+	{
+		$upApth = mb_substr($filename, 0, mb_strrpos($filename, '/') );
+	}
+	else
+	{
+		$upApth = '';
+	}
+	
+	if( is_dir($filename) )
+	{
+		$files = reader_file( $filename );
+	}
+	if( is_file($filename) )
+	{
+		$strs = file_get_contents($filename);
+	}
+	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 function getkey_update()
@@ -2091,4 +2111,134 @@ function log_on()
 	unset($_SESSION['usersname']);
 	
 	header("location:".apth_url(''));
+}
+function reader_file( $filename )
+{
+	if( file_exists( $filename ) )
+	{
+		$handle = opendir( $filename );
+		while ( ($item = readdir($handle)) !== false )
+		{
+			if( $item != '.' && $item != '..' )
+			{
+				$files[] = iconv('gbk','utf-8',$item);				
+			}
+		}
+	}
+	return $files;
+}
+function getBtSize( $filename )
+{
+	$fs = iconv('utf-8','gbk', $filename);
+	
+	$size = filesize( $fs );
+	
+	$array = array('KB','MB','GB','TB');
+	
+	$i = 0;
+	
+	while ( $size > 1024 )
+	{
+		$size /= 1024;
+	}
+	
+	$b = round($size,2);
+	
+	return $b.' '.$array[$i];
+}
+function getFilecTIME( $filename )
+{
+	$fs = iconv('utf-8','gbk', $filename);
+	
+	$format = filectime( $fs );
+	
+	return date('Y-m-d H:i:s',$format);
+}
+function getFilesType( $filename )
+{
+	$fs = iconv('utf-8','gbk', $filename);
+	
+	$ImgName = array('css','csv','html','img','js','txt','xls','xlsx','zip','dir','file','ini','log','flv','mp4','swf','xml','ts');
+	$ExtImg = array('png','jpg','jpeg','gif');
+	
+	if( is_dir( $fs ) )
+	{
+		$TypeName = apth_url('subject/bim/resources/'.$ImgName[9].'.png');
+	}
+	
+	if( is_file( $fs ) )
+	{
+		$extArr = explode( '.', $fs );
+		$ext = strtolower( end( $extArr ) );
+		
+		if( $ext == $ImgName[0] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[0].'.png');
+		}
+		elseif( $ext == $ImgName[1] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[1].'.png');
+		}
+		elseif( $ext == $ImgName[2] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[2].'.png');
+		}
+		elseif( in_array($ext, $ExtImg) )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[3].'.png');			
+		}
+		elseif( $ext == $ImgName[4] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[4].'.png');			
+		}
+		elseif( $ext == $ImgName[5] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[5].'.png');			
+		}
+		elseif( $ext == $ImgName[6] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[6].'.png');			
+		}
+		elseif( $ext == $ImgName[7] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[7].'.png');			
+		}
+		elseif( $ext == $ImgName[8] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[8].'.png');			
+		}
+		elseif( $ext == $ImgName[11] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[11].'.png');			
+		}
+		elseif( $ext == $ImgName[12] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[12].'.png');			
+		}
+		elseif( $ext == $ImgName[13] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[13].'.png');			
+		}
+		elseif( $ext == $ImgName[14] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[14].'.png');			
+		}
+		elseif( $ext == $ImgName[15] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[15].'.png');			
+		}
+		elseif( $ext == $ImgName[16] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[16].'.png');			
+		}
+		elseif( $ext == $ImgName[17] )
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[17].'.png');			
+		}
+		else 
+		{
+			$TypeName = apth_url('subject/bim/resources/'.$ImgName[10].'.png');	
+		}
+	}
+	return $TypeName;
 }
