@@ -68,7 +68,7 @@
 			<div class="t_guizhe_list">
 				<span style="font-weight:bold;">考场规则：</span><br/>
 				<div class="add_rules">
-					<div class="cloxe_xxx">
+					<div class="cloxe_xxx2">
 						<span>1</span>、考试时间： <input type="text" name="times" placeholder="2" value="<?php echo $rule2['times'];?>" class="r_setvals" style="width:1rem;padding:0 0.2rem;"/> 小时&nbsp; <br/>
 						<span>2</span>、选择题型：			
 						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="0" onclick="all_mixing2(this,0);" <?php echo $rule2['typeofs'][0]==='0'?'checked="checked"':''?> />单选题</label> &nbsp; 
@@ -249,7 +249,7 @@ function AddRules()
 	html += '<label><input type="radio" name="r_radio'+(i+1)+'" value="2" class="r_radio"/>显示折后价</label> &nbsp; ';
 	html += '<label><input type="radio" name="r_radio'+(i+1)+'" value="3" checked="checked" class="r_radio"/>显示所有价格</label> &nbsp; &nbsp; &nbsp; &nbsp; ';
 	html += '<label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则</label> &nbsp;  &nbsp; </div>';
-	$(".add_rules").append(html);	
+	$(".add_rules:eq(0)").append(html);	
 }
 function SetState(t)
 {
