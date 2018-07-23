@@ -16,7 +16,7 @@
 	 <a href="<?php echo apth_url('?act=gethelp');?>">帮助中心</a>
 	 </h1>	
 </div>
-<table class="key_tablebox">
+<table class="key_tablebox tableBox" style="margin-top:10px;">
 		<tr>
 			<td>序号</td>
 			<td>OPENID</td>
@@ -36,6 +36,15 @@
 function Diachronic(){
 	window.history.go(-1);
 }
+$(function(){
+	$(".tableBox p:eq(0),.tableBox p:eq(1)").css({"font-weight":"bold"});
+	$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	$(".tableBox tr").hover(function(){
+		$(this).css({"background":"#FFFFDD"});
+	},function(){
+		$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	});
+});
 </script>
 </body>
 </html>
