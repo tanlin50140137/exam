@@ -8,6 +8,7 @@
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/auto-line-number.js');?>"></script>
 </head>
 <body>
 <div class="key_box">
@@ -30,13 +31,52 @@
 			<td>创建时间</td>
 			<td>操作</td>
 		</tr>
-	<?php foreach( $files as $k => $v ){ ?>		
+	<?php foreach( $files as $k => $v ){ ?>	
+		<?php 
+			$ext_1=iconv('utf-8','gbk', $filename.'/'.$v );
+			$ext2 = '';
+			if( is_file( $ext_1 ) )
+			{
+				$extArr2 = explode('.', $v);
+				$ext2 = strtolower( end( $extArr2 ) );
+			}
+		?>			
 		<tr>
 			<td>
+		<?php if( is_dir( $ext_1 ) ){?>		
 				<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">
 					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
 					<?php echo $v?>
-				</a>	
+				</a>
+		<?php } ?>	
+		<?php if( is_file( $ext_1 ) ){?>
+			<?php if( $ext2 == $zipArr[0] ){?>
+				<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>
+			<?php }elseif( $ext2 == $zipArr[1] ){ ?>
+				<a href="<?php echo apth_url($v);?>">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>
+			<?php }elseif( $ext2 == $zipArr[2] ){ ?>
+				<a href="<?php echo apth_url($v);?>">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>
+			<?php }elseif( in_array($ext2,$imgArr) ){ ?>
+				<a href="javascript:void(0);" onclick="getImgApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>
+			<?php }else{ ?>
+				<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>
+			<?php } ?>	
+		<?php } ?>			
 			</td>
 		<?php if( !is_dir( $filename.'/'.$v )){?>
 			<td><?php echo getBtSize( $filename.'/'.$v );?></td>
@@ -44,25 +84,39 @@
 			<td></td>
 		<?php } ?>				
 			<td><?php echo getFilecTIME($filename.'/'.$v);?></td>
-			<td>修改｜删除</td>
+			<td>
+		
+<?php if( is_dir( $ext_1 ) ){?>			
+			<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">打开</a>｜删除
+<?php } ?>	
+
+<?php if( is_file( $ext_1 ) ){?>
+	<?php if( in_array($ext2, $zipArr) ){ ?>
+			<a href="<?php echo apth_url($v);?>">下载</a>｜删除
+	<?php }else if( in_array($ext2, $imgArr) ){ ?>	
+			<a href="javascript:void(0);" onclick="getImgApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">浏览</a>｜删除
+	<?php }else{ ?>
+			<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">修改</a>｜删除
+	<?php } ?>	
+<?php } ?>	
+		
+			</td>
 		</tr>
 	<?php } ?>	
 <?php }else{ ?>
-	<?php if( is_dir( $filename ) ){?>
+	<?php if( is_dir( $is_files ) ){?>
 		<tr>
 			<td colspan="4">空文件夹</td>
 		</tr>
 	<?php } ?>	
-	<?php if( is_file( $filename ) ){?>
-		<div style="width:90%;margin:auto;"><textarea class="div_text bianji-textarea-l"><?php echo $strs;?></textarea></div>
+	<?php if( is_file( $is_files ) ){?>
+		<div style="width:90%;margin:auto;"><textarea class="div_text bianji-textarea-l" disabled="disabled" id="text"><?php echo $strs;?></textarea></div>
 	<?php } ?>	
 <?php } ?>		
 </table>
+<div class="bianji-textarea-l tableBox" style="display:none;"></div>
 <script>
-$(".bianji-textarea-l").height($(".bianji-textarea-l")[0].scrollHeight);
-$(".bianji-textarea-l").on("keyup keydown", function(){
-    $(this).height(this.scrollHeight);
-});
+$(".bianji-textarea-l:eq(0)").height($(".bianji-textarea-l:eq(0)")[0].scrollHeight);
 function Diachronic(){
 	window.history.go(-1);
 }
@@ -75,6 +129,23 @@ $(function(){
 		$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
 	});
 });
+$("#text").setTextareaCount({
+	width: "50px",
+	bgColor: "#ded5d5",
+	color: "#FFFFFF",
+	display: "inline-block"
+});
+function getImgApth(p)
+{
+	layer.open({
+	  type: 1,
+	  title: false,
+	  closeBtn: 0,
+	  skin: 'layui-layer-nobg',
+	  shadeClose: true,
+	  content: '<img src="'+p+'"/>'
+	});
+}
 </script>
 </body>
 </html>

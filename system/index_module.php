@@ -486,7 +486,11 @@ function gethelp()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	$filename = $_GET['path']==null?ALL_ROOTS:urldecode($_GET['path']); 
+	$zipArr = array('zip','rar','rar5');
+	$imgArr = array('jpeg','jpg','png','gif');
+	
+	$path2 = urldecode($_GET['path']);
+	$filename = $_GET['path']==null?ALL_ROOTS:$path2; 
 	
 	if($_GET['path']!=null )
 	{
@@ -497,15 +501,26 @@ function gethelp()
 		$upApth = '';
 	}
 	
-	if( is_dir($filename) )
+	$is_files = iconv('utf-8','gbk', $filename);
+
+	if( is_dir($is_files) )
 	{
 		$files = reader_file( $filename );
 	}
-	if( is_file($filename) )
+	if( is_file($is_files) )
 	{
-		$strs = file_get_contents($filename);
+		$extArr = explode('.', $is_files);
+		$ext = strtolower( end( $extArr ) );	
+		if( $ext == 'zip' )
+		{
+			$strs = ReadingZIP( $filename );		
+		}
+		else 
+		{
+			$strs = file_get_contents($filename);
+		}	
 	}
-	
+		
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
 function getkey_update()
@@ -2241,4 +2256,19 @@ function getFilesType( $filename )
 		}
 	}
 	return $TypeName;
+}
+function ReadingZIP( $filename )
+{
+	$fs = iconv('utf-8','gbk', $filename);
+	
+	$zip = zip_open( $fs );
+	
+	while( $h = zip_read( $zip ) )
+	{
+		$str .= zip_entry_name( $h )."\n";
+	}
+	
+	zip_close( $zip );
+	
+	return $str;
 }
