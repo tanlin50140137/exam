@@ -5,10 +5,12 @@
 <title>资源管理器</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<link  href="<?php echo apth_url('subject/bim/viewer/dist/viewer.css');?>" rel="stylesheet">
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/auto-line-number.js');?>"></script>
+<script src="<?php echo apth_url('subject/bim/viewer/dist/viewer.js');?>"></script>
 </head>
 <body>
 <div class="key_box">
@@ -75,6 +77,16 @@
 					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
 					<?php echo $v?>
 				</a>
+			<?php }elseif( $ext2 == $officeArr[2] ){ ?>
+				<a href="javascript:void(0);" onclick="getOfficeApth('<?php echo apth_url('subject/bim/ViewerJS/#'.str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v));?>');">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>
+			<?php }elseif( $ext2 == $officeArr[4] ){ ?>
+				<a href="javascript:void(0);" onclick="getOfficeApth('<?php echo apth_url('subject/bim/ViewerJS/#'.str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v));?>');">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>		
 			<?php }else{ ?>
 				<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">
 					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
@@ -174,6 +186,10 @@ function getVodieApth(p)
 			video:p
 	};
 	var player=new ckplayer(videoObject);
+}
+function getOfficeApth(p)
+{
+	open(p,'new');
 }
 </script>
 </body>

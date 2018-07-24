@@ -488,7 +488,8 @@ function gethelp()
 	
 	$zipArr = array('zip','rar','rar5');
 	$imgArr = array('jpeg','jpg','png','gif');
-	$vodeArr = array('mp4','flv','swf','ts');
+	$vodeArr = array('mp4','flv','swf','ts','m3u8');
+	$officeArr = array('xls','xlsx','pdf','csv','odp');
 	
 	$path2 = urldecode($_GET['path']);
 	$filename = $_GET['path']==null?ALL_ROOTS:$path2; 
@@ -518,7 +519,7 @@ function gethelp()
 		}
 		else 
 		{
-			$strs = file_get_contents($filename);
+			$strs = file_get_contents($is_files);
 		}	
 	}
 		
