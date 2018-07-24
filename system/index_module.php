@@ -488,6 +488,7 @@ function gethelp()
 	
 	$zipArr = array('zip','rar','rar5');
 	$imgArr = array('jpeg','jpg','png','gif');
+	$vodeArr = array('mp4','flv','swf','ts');
 	
 	$path2 = urldecode($_GET['path']);
 	$filename = $_GET['path']==null?ALL_ROOTS:$path2; 

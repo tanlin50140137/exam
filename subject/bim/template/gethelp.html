@@ -65,6 +65,11 @@
 					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
 					<?php echo $v?>
 				</a>
+			<?php }elseif( in_array($ext2,$vodeArr) ){ ?>
+				<a href="javascript:void(0);" onclick="getVodieApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">
+					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
+					<?php echo $v?>
+				</a>
 			<?php }elseif( in_array($ext2,$imgArr) ){ ?>
 				<a href="javascript:void(0);" onclick="getImgApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">
 					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
@@ -95,6 +100,8 @@
 			<a href="<?php echo apth_url($v);?>">下载</a>｜删除
 	<?php }else if( in_array($ext2, $imgArr) ){ ?>	
 			<a href="javascript:void(0);" onclick="getImgApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">浏览</a>｜删除
+	<?php }elseif( in_array($ext2,$vodeArr) ){ ?>
+			<a href="javascript:void(0);" onclick="getVodieApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">观看</a>｜删除
 	<?php }else{ ?>
 			<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">修改</a>｜删除
 	<?php } ?>	
@@ -115,6 +122,7 @@
 <?php } ?>		
 </table>
 <div class="bianji-textarea-l tableBox" style="display:none;"></div>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/ckplayer/ckplayer.js');?>"></script>
 <script>
 $(".bianji-textarea-l:eq(0)").height($(".bianji-textarea-l:eq(0)")[0].scrollHeight);
 function Diachronic(){
@@ -145,6 +153,27 @@ function getImgApth(p)
 	  shadeClose: true,
 	  content: '<img src="'+p+'"/>'
 	});
+}
+function getVodieApth(p)
+{
+	var html = '<div style="border:1px solid #0e0e0e;width:780px;height:450px;margin:10px auto;" id="video"></div>';
+	layer.open({
+	  title:false,
+	  type: 1,
+	  skin: 'layui-layer-demo',
+	  closeBtn: 0,
+	  area: '800px',
+	  anim: 2,
+	  shadeClose: true,
+	  content: html
+	});
+	var videoObject = {
+			container: '#video',
+			variable: 'player',
+			flashplayer:false,
+			video:p
+	};
+	var player=new ckplayer(videoObject);
 }
 </script>
 </body>
