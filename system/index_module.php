@@ -2265,7 +2265,7 @@ function ReadingZIP( $filename )
 	
 	$zip = zip_open( $fs );
 	
-	while( $h = zip_read( $zip ) )
+	while( ($h = zip_read( $zip )) !== false )
 	{
 		$str .= zip_entry_name( $h )."\n";
 	}
