@@ -911,6 +911,24 @@ function up_bianjis()
 	file_put_contents($filename, $data);
 	echo 'OK';
 }
+function delete_files()
+{
+	$filename = urldecode( $_POST['apth'] );
+	$is_files = iconv('utf-8','gbk', $filename);
+	
+	if( is_dir( $is_files ) )
+	{
+	
+	}
+	
+	if( is_file( $is_files ) )
+	{
+		if( unlink( $is_files ) )
+		{
+			echo 'OK';
+		}
+	}
+}
 function notice_dtsend()
 {
 	$data['title'] = $_POST['title'];

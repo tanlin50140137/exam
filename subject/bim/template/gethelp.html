@@ -104,21 +104,21 @@
 			<td>
 		
 <?php if( is_dir( $ext_1 ) ){?>			
-			<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">打开</a>｜删除
+			<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">打开</a>
 <?php } ?>	
 
 <?php if( is_file( $ext_1 ) ){?>
 	<?php if( in_array($ext2, $zipArr) ){ ?>
-			<a href="<?php echo apth_url($v);?>">下载</a>｜删除
+			<a href="<?php echo apth_url($v);?>">下载</a>
 	<?php }else if( in_array($ext2, $imgArr) ){ ?>	
-			<a href="javascript:void(0);" onclick="getImgApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">浏览</a>｜删除
+			<a href="javascript:void(0);" onclick="getImgApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">浏览</a>
 	<?php }elseif( in_array($ext2,$vodeArr) ){ ?>
-			<a href="javascript:void(0);" onclick="getVodieApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">观看</a>｜删除
+			<a href="javascript:void(0);" onclick="getVodieApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">观看</a>
 	<?php }else{ ?>
-			<a href="javascript:void(0);" onclick="setUpdateFile('<?php echo apth_url('?act=iframe_bianji&path='.urlencode($filename.'/'.$v));?>','<?php echo $filename.'/'.$v;?>');">修改</a>｜删除
+			<a href="javascript:void(0);" onclick="setUpdateFile('<?php echo apth_url('?act=iframe_bianji&path='.urlencode($filename.'/'.$v));?>','<?php echo $filename.'/'.$v;?>');">修改</a>
 	<?php } ?>	
 <?php } ?>	
-		
+			| <a href="javascript:void(0);" onclick="delete_files('<?php echo urlencode($filename.'/'.$v);?>');">删除</a>
 			</td>
 		</tr>
 	<?php } ?>	
@@ -202,6 +202,23 @@ function setUpdateFile(p,n)
 		 area: ['1000px', '95%'],
 		 content: p //iframe的url
 	}); 	
+}
+function delete_files(p)
+{
+	layer.confirm('确定要删除文件？', {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+		  layer.msg('正在删除中......', {icon: 1},function(){
+			  $.post("<?php echo apth_url('index.php');?>",{'act':'delete_files','apth':p},function(d){
+					if( d == 'OK' )
+					{
+						layer.msg('删除成功',{time:1000},function(){		
+							location.reload();
+						});
+					}
+				});
+		  });		  
+		}, function(){});
 }
 </script>
 </body>
