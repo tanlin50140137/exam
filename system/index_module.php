@@ -879,6 +879,38 @@ function batch_deleting()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function iframe_bianji()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	$path2 = urldecode($_GET['path']);
+	$filename = $_GET['path']==null?ALL_ROOTS:$path2; 
+	
+	if($_GET['path']!=null )
+	{
+		$upApth = mb_substr($filename, 0, mb_strrpos($filename, '/') );
+	}
+	else
+	{
+		$upApth = '';
+	}
+	
+	$is_files = iconv('utf-8','gbk', $filename);
+
+	if( is_file( $is_files ) )
+	{
+		$strs = file_get_contents($is_files);	
+	}
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
+function up_bianjis()
+{
+	$filename = $_POST['apth'];
+	$data = $_POST['txt'];	
+	file_put_contents($filename, $data);
+	echo 'OK';
+}
 function notice_dtsend()
 {
 	$data['title'] = $_POST['title'];

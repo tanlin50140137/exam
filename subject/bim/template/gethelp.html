@@ -115,7 +115,7 @@
 	<?php }elseif( in_array($ext2,$vodeArr) ){ ?>
 			<a href="javascript:void(0);" onclick="getVodieApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">观看</a>｜删除
 	<?php }else{ ?>
-			<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">修改</a>｜删除
+			<a href="javascript:void(0);" onclick="setUpdateFile('<?php echo apth_url('?act=iframe_bianji&path='.urlencode($filename.'/'.$v));?>','<?php echo $filename.'/'.$v;?>');">修改</a>｜删除
 	<?php } ?>	
 <?php } ?>	
 		
@@ -190,6 +190,18 @@ function getVodieApth(p)
 function getOfficeApth(p)
 {
 	open(p,'new');
+}
+var index;
+function setUpdateFile(p,n)
+{
+	index = layer.open({
+		 type: 2,
+		 title: 'TanLin '+n+' 可编辑文档',
+		 shadeClose: true,
+		 shade: 0.8,
+		 area: ['1000px', '95%'],
+		 content: p //iframe的url
+	}); 	
 }
 </script>
 </body>
