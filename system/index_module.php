@@ -918,7 +918,10 @@ function delete_files()
 	
 	if( is_dir( $is_files ) )
 	{
-	
+		if( delete_dir( $is_files ) )
+		{
+			echo 'OK';
+		}
 	}
 	
 	if( is_file( $is_files ) )
@@ -2184,6 +2187,7 @@ function reader_file( $filename )
 	if( file_exists( $filename ) )
 	{
 		$handle = opendir( $filename );
+		
 		while ( ($item = readdir($handle)) !== false )
 		{
 			if( $item != '.' && $item != '..' )
@@ -2191,8 +2195,44 @@ function reader_file( $filename )
 				$files[] = iconv('gbk','utf-8',$item);				
 			}
 		}
+		
+		closedir( $handle );
+		
 	}
+	
 	return $files;
+	
+}
+function delete_dir( $filename )
+{
+	if( is_dir( $filename ) )
+	{
+		$path = $filename;
+		$handle = opendir($path);
+		
+		while ( ($item = readdir( $handle )) !== false )
+		{
+			if( $item != '.' && $item != '..' )
+			{
+				if( is_file( $filename.'/'.$item ) )
+				{
+					unlink( $filename.'/'.$item );
+				}
+				
+				if( is_dir( $filename.'/'.$item ) )
+				{
+					delete_dir( $filename.'/'.$item );
+				}
+			}
+		}
+		
+		closedir( $handle );
+		
+		if( rmdir( $filename ) ) 
+		{
+			return true;
+		}		
+	}
 }
 function getBtSize( $filename )
 {

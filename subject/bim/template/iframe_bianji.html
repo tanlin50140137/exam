@@ -5,19 +5,19 @@
 <title>文本编辑器</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
-<link  href="<?php echo apth_url('subject/bim/viewer/dist/viewer.css');?>" rel="stylesheet">
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/auto-line-number.js');?>"></script>
-<script src="<?php echo apth_url('subject/bim/viewer/dist/viewer.js');?>"></script>
 </head>
 <body>
 <div class="key_box">
 	<h1 style="padding-left:18px;">
 	 <a href="<?php echo apth_url('?act=iframe_bianji&path='.urlencode($is_files));?>">刷新</a> 
 	 &nbsp; &nbsp; &nbsp;
-	 <a href="javascript:void(0);" onclick="SaveTheFile();">保存文件</a> 
+	 <a href="javascript:void(0);" onclick="SaveTheFile();">
+	 <img src="<?php echo apth_url('subject/bim/resources/save.png');?>" align="absmiddle"/>保存文件
+	 </a> 
 	 &nbsp; &nbsp; &nbsp;
 	 <a href="javascript:void(0);" onclick="ResetFile();">取消</a> 
 	 </h1>	

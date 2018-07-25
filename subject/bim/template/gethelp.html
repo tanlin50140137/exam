@@ -5,12 +5,10 @@
 <title>资源管理器</title>
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
-<link  href="<?php echo apth_url('subject/bim/viewer/dist/viewer.css');?>" rel="stylesheet">
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/auto-line-number.js');?>"></script>
-<script src="<?php echo apth_url('subject/bim/viewer/dist/viewer.js');?>"></script>
 </head>
 <body>
 <div class="key_box">
@@ -86,7 +84,7 @@
 				<a href="javascript:void(0);" onclick="getOfficeApth('<?php echo apth_url('subject/bim/ViewerJS/#'.str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v));?>');">
 					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
 					<?php echo $v?>
-				</a>		
+				</a>			
 			<?php }else{ ?>
 				<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">
 					<img src="<?php echo getFilesType($filename.'/'.$v);?>" align="absmiddle" />
@@ -142,11 +140,11 @@ function Diachronic(){
 }
 $(function(){
 	$(".tableBox p:eq(0),.tableBox p:eq(1)").css({"font-weight":"bold"});
-	$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
-	$(".tableBox tr").hover(function(){
+	$(".tableBox:eq(0) tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+	$(".tableBox:eq(0) tr").hover(function(){
 		$(this).css({"background":"#FFFFDD"});
 	},function(){
-		$(".tableBox tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
+		$(".tableBox:eq(0) tr").filter(":even").css("background","#F4F4F4").end().filter(":odd").css("background","#FFFFFF");
 	});
 });
 $("#text").setTextareaCount({
