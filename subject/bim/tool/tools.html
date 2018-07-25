@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/layer/theme/default/layer.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo apth_url('subject/bim/css/bim-css.css');?>" />
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
+<title>工具</title>
+</head>
+<body>
+<div style="width:800px;margin:150px auto;">
+	<!-- 
+		data:,文本数据
+		data:text/plain,文本数据
+		data:text/html,HTML代码
+		data:text/html;base64,base64编码的HTML代码
+		data:text/css,CSS代码
+		data:text/css;base64,base64编码的CSS代码
+		data:text/JavaScript,Javascript代码
+		data:text/javascript;base64,base64编码的Javascript代码
+		data:image/gif;base64,base64编码的gif图片数据
+		data:image/png;base64,base64编码的png图片数据
+		data:image/jpeg;base64,base64编码的jpeg图片数据
+		data:image/x-icon;base64,base64编码的icon图片数据 
+	-->
+	<h1 style="margin-bottom:10px;">TOIMG64：<input type="file" name="file"/></h1>
+	<h1 style="margin-bottom:10px;">TOText64：<textarea style="width:800px;"></textarea></h1>
+	<h1><input type="button" value="TOIMG64" onclick="TOIMG64();"/> &nbsp; &nbsp; <input type="button" value="TOText64"/></h1>
+	<div>
+		<textarea id="txt" style="width:800px;margin-top:10px;height:250px;padding:5px;">sdfsdf</textarea>
+	</div>
+</div>
+<script>
+function TOIMG64()
+{
+		
+}
+</script>
+</body>
+</html>

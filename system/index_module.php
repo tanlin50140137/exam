@@ -910,6 +910,12 @@ function adduserspic()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function tools()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	require 'subject/'.getThemeDir().'/tool/'.__FUNCTION__.'.html';
+}
 function CreateDirectory()
 {
 	$f = $_POST['f'];
