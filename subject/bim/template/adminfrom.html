@@ -16,7 +16,7 @@
 	</a>
 	<ul class="right_allboxs">
 		<li class="pic_imgs">
-			<a href="<?php echo apth_url('?act=geturl_update&id='.$row['id']);?>" target="show_winds"><img src="<?php echo apth_url('subject/bim/'.$row['pic']);?>" alt="<?php echo $usersname;?>"/></a>
+			<a href="<?php echo apth_url('?act=geturl_update&id='.$row['id']);?>" target="show_winds"><img src="<?php echo $row['pic'];?>" alt="<?php echo $usersname;?>"/></a>
 		</li>
 		<li class="pic_imgs2"><a href="<?php echo apth_url('?act=geturl_update&id='.$row['id']);?>" target="show_winds"><?php echo $usersname;?></a></li>
 		<li class="pic_imgs2"><a href="<?php echo apth_url('?act=geturl');?>" target="show_winds"><?php echo get_power2($row['power']);?></a></li>

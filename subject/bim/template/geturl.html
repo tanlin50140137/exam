@@ -52,7 +52,7 @@ function Diachronic(){
 	<?php if( $v['power']==0 || $v['power']==1 ){?>	
 		<tr>
 			<td><?php echo ($k+1);?></td>
-			<td><img src="<?php echo apth_url('subject/bim/'.$v['pic']);?>" class="pic_useradin"/></td>
+			<td><img src="<?php echo $v['pic'];?>" class="pic_useradin"/></td>
 			<td><?php echo $v['users'];?></td>
 			<td><?php echo get_power($v['power']);?></td>
 			<td><?php echo $v['tel'];?></td>
@@ -73,7 +73,7 @@ function Diachronic(){
 <?php }else{ ?>
 		<tr>
 			<td><?php echo ($k+1);?></td>
-			<td><img src="<?php echo apth_url('subject/bim/'.$v['pic']);?>" class="pic_useradin"/></td>
+			<td><img src="<?php echo $v['pic'];?>" class="pic_useradin"/></td>
 			<td><?php echo $v['users'];?></td>
 			<td><?php echo get_power($v['power']);?></td>
 			<td><?php echo $v['tel'];?></td>

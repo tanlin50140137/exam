@@ -12,7 +12,7 @@ create table htx_admin(
 	h_pay   varchar(255) not null default '' comment '历时金额',
 	t_pay   varchar(255) not null default '' comment '当前可用金额',
 	ky_date varchar(255) not null default '' comment '可用天数',
-	pic     varchar(255) not null default '' comment '头像',
+	pic     MediumText not null comment '头像',
 	pay_time  int(11) unsigned not null default 0 comment '续费时间',
 	dqy_time  int(11) unsigned not null default 0 comment '到期时间',
 	tzy_time  int(11) unsigned not null default 0 comment '通知时间',
