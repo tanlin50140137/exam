@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Tanlin
+ * @author Tanlin 
  * */
 $sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
 $arr = explode('/', $_SERVER['REQUEST_URI']);

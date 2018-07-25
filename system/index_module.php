@@ -904,6 +904,12 @@ function iframe_bianji()
 	
 	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
 }
+function adduserspic()
+{
+	include 'subject/'.getThemeDir().'/common.php';
+	
+	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+}
 function CreateDirectory()
 {
 	$f = $_POST['f'];
@@ -2384,4 +2390,30 @@ function ReadingZIP( $filename )
 	zip_close( $zip );
 	
 	return $str;
+}
+function External()
+{
+	$picture = $_FILES['picture'];	
+	if( $picture['error'] == 0 )
+	{
+		$extArr = explode('.', $picture['name']);
+		$ext = end( $extArr );
+		
+		$d = 'data:image/'.$ext.';base64,';
+		
+		$str1 = file_get_contents( $picture['tmp_name'] );
+		$str2 = base64_encode( $str1 );
+		
+		$data = $d.$str2;
+		
+		$int = db()->insert(PRE.'apack',array('picname'=>$data));
+		if( $int )
+		{
+			echo json_encode(array("error"=>0,'txt'=>ADDYESOK));
+		}
+		else 
+		{
+			echo json_encode(array("error"=>1,'txt'=>ADDONOK));
+		}
+	}
 }

@@ -64,6 +64,13 @@ INSERT INTO htx_apack(picname) VALUES('default/545846580001fede02200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545850200001359c02200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545864190001966102200220.jpg');
 INSERT INTO htx_apack(picname) VALUES('default/545867340001101702200220.jpg');
+drop table if exists htx_apack;
+create table htx_apack(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	picapth varchar(255) not null default '' comment '头像地址',
+	picname MediumText not null comment '头像图片名称',
+	picsize varchar(255) not null default '' comment '头像大小'
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';
 #考题分类
 drop table if exists htx_classify;
 create table htx_classify(
