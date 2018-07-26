@@ -8,6 +8,7 @@ $URI = substr($SCRIPT_NAME, 0,strrpos($SCRIPT_NAME, '/') );
 define("SITE_URL", $sys_protocal.$_SERVER['HTTP_HOST'].$URI);
 define("BASE_URL", $_SERVER['DOCUMENT_ROOT'].$URI);
 define("SPOT", ".");
+define("BOOLS", true);
 define("OFFICEXLS","xls");
 define("OFFICEXLSX","xlsx");
 define("OFFICECSV","csv");

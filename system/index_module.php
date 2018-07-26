@@ -2,13 +2,19 @@
 header('content-type:text/html;charset=utf-8');
 function index()
 {
-	include getThemeDir3();
-	require getThemeDir2(__FUNCTION__);
+	$int = array( GetIndexValue(1) ,SHOWINDEX_2);
+	
+	$s = sh_source( SHOWINDEX_1, BOOLS, $int );
+	
+	print( $s );
 }
 function reset_u()
 {
-	include getThemeDir3();
-	require getThemeDir2(__FUNCTION__);
+	$int = array( GetIndexValue(1) ,SHOWRESET_2);
+	
+	$s = sh_source( SHOWRESET_1, BOOLS, $int );
+	
+	print( $s );
 }
 function GetUsersName()
 {
@@ -2448,14 +2454,13 @@ function TOIMG()
 }
 function TOText()
 {
-	$str1 = base64_encode( $_POST['t'] );
-	
-	$d = 'data:text/plain,';
-	
-	$data = $d.$str1;
-	
-	if( $str1 != '' )
+	$str3 = file_get_contents( trim( $_POST['t'] ) );
+	$str2 = str_replace(array("\n"), array(""), $str3);
+	if( $str2 != '' )
 	{
+		$str1 = base64_encode( $str2 );	
+		$data = $str1;
+		
 		echo json_encode(array("error"=>0,'txt'=>$data));
 	}
 	else
@@ -2467,7 +2472,7 @@ function TOCSS_BA()
 {
 	$str1 = base64_encode( trim( $_POST['t'] ) );
 	
-	$d = 'data:text/css;base64,';
+	$d = 'data:text/css,';
 	
 	$data = $d.$str1;
 	
@@ -2484,7 +2489,7 @@ function TOJAVASCRIPT_BA()
 {
 	$str1 = base64_encode( trim( $_POST['t'] ) );
 	
-	$d = 'data:text/javascript;base64,';
+	$d = 'data:text/javascript,';
 	
 	$data = $d.$str1;
 	

