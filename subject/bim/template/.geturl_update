@@ -13,7 +13,7 @@
 <div class="key_box">
 	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp; 
-	 <a href="<?php echo apth_url('?act=geturl_update&id='.$id.'&page='.$_GET['page']);?>">修改用户</a>
+	 <a href="<?php echo apth_url('index.php/geturl_update&id='.$id.'&page='.$_GET['page']);?>">修改用户</a>
 	 </h1>	
 </div>
 <div class="addfl" style="display:block;">
@@ -32,7 +32,7 @@
 <?php }?>				
 			</select>
 		</p>
-		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="修改用户" class="sbm_fl" onclick="add_user(this);" set-url="<?php echo apth_url('index.php');?>"/>  &nbsp; &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=geturl');?>">取消</a></div>
+		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="button" value="修改用户" class="sbm_fl" onclick="add_user(this);" set-url="<?php echo apth_url('index.php');?>"/>  &nbsp; &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('index.php/geturl');?>">取消</a></div>
 		<input type="hidden" name="id" value="<?php echo $id;?>"/>
 	</form>
 </div>
@@ -95,7 +95,7 @@ function add_user(m)
 		if( obj.error == 0 )
 		{//修改成功
 			layer.msg(obj.txt,{time:1000},function(){
-				location.href = url+"?act=geturl";
+				location.href = url+"/geturl";
 			});
 		}	
 		else

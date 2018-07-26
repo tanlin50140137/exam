@@ -35,7 +35,7 @@
 			a.add(0,-1,'<b style="font-weight:bold;">查看每个分类下考题总数</b>');
 	<?php if(!empty($wxfl)){?>	
 		<?php foreach($wxfl as $k=>$v){?>
-			a.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"].'  ->  已导入'.$v["exa"]." 题 ";?>','<?php echo apth_url("?act=gettiku");?>');
+			a.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"].'  ->  已导入'.$v["exa"]." 题 ";?>','<?php echo apth_url("index.php/gettiku");?>');
 		<?php } ?>	
 	<?php } ?>			
 			document.write(a);

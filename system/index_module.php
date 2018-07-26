@@ -2,12 +2,12 @@
 header('content-type:text/html;charset=utf-8');
 function index()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	require getThemeDir2(__FUNCTION__);
 }
 function reset_u()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	require getThemeDir2(__FUNCTION__);
 }
 function GetUsersName()
@@ -28,7 +28,7 @@ function GetUserp()
 }
 function adminfrom()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 		
 	$usersname = GetUsersName();
 	
@@ -43,7 +43,7 @@ function adminfrom()
 }
 function menu()
 {
-	include 'subject/'.getThemeDir().'/common.php';	
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -51,7 +51,7 @@ function menu()
 }
 function adminindex()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$wxfl = GetFenLai2_index(0);
 	
@@ -99,7 +99,7 @@ function GetZiShenNums($pid)
 }
 function getkey()
 {	
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -279,7 +279,7 @@ function SetShwoTotal()
 }
 function geturl()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -335,14 +335,14 @@ function get_power2($int)
 	}
 	return $str;
 }
-function examqm()
+function e_xamqm()
 {
 	$power = GetUserp();
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.roomsets,a.descri,a.rule1,a.rule2,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
 	if( $id != '' )
@@ -396,7 +396,7 @@ function e_exam($int)
 }
 function getpay()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -432,7 +432,7 @@ function getpay()
 }
 function notice_list()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -468,7 +468,7 @@ function notice_list()
 }
 function notice_update()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -482,7 +482,7 @@ function notice_update()
 }
 function gethelp()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -529,7 +529,7 @@ function getkey_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$flRows1 = GetFenLai(0,2);
 	
@@ -539,7 +539,7 @@ function getkey_update()
 }
 function addusers()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -547,7 +547,7 @@ function addusers()
 }
 function geturl_update()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$power = GetUserp();
 	
@@ -559,7 +559,7 @@ function geturl_update()
 }
 function file_classify()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$flRows1 = GetFenLai3(0,2);
 	
@@ -569,7 +569,7 @@ function show_classify()
 {
 	$power = GetUserp();
 	
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -594,7 +594,7 @@ function classify_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$flRows1 = GetFenLai3(0,2);
 	
@@ -604,7 +604,7 @@ function classify_update()
 }
 function create_dts()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$flRows1 = GetFenLai3(0,2);
 	
@@ -612,7 +612,7 @@ function create_dts()
 }
 function announcements()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$sql = 'select a.id,a.title as kc,b.pid,b.title from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id';	
 	$flRows = db()->query($sql)->array_rows();
@@ -663,7 +663,7 @@ function conent_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 
 	$flRows1 = GetFenLai3(0,2);
 
@@ -673,17 +673,17 @@ function conent_update()
 }
 function create_room()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$flRows1 = GetFenLai(0,2);
 	
 	require getThemeDir2(__FUNCTION__);
 }
-function examqm_update()
+function e_xamqm_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$row = db()->select('id,pid,title,sort,tariff,descri,roomsets,solve,typeofs,rule1,rule2,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
 
@@ -709,7 +709,7 @@ function mb_unserialize($serial_str)
 }
 function gettiku()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
@@ -747,7 +747,7 @@ function gettiku()
 }
 function import_tiku()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$flRows1 = GetFenLai(0,2);
 	
@@ -755,13 +755,13 @@ function import_tiku()
 }
 function modify_import()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	require getThemeDir2(__FUNCTION__);
 }
 function gettiku_update()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -773,7 +773,7 @@ function gettiku_update()
 }
 function batch_modification()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$exportflag = htmlspecialchars($_GET['exportflag'],ENT_QUOTES);
 	
@@ -827,7 +827,7 @@ function batch_modification()
 }
 function batch_deleting()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$exportflag = htmlspecialchars($_GET['exportflag'],ENT_QUOTES);
 	
@@ -881,7 +881,7 @@ function batch_deleting()
 }
 function iframe_bianji()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include getThemeDir3();
 	
 	$path2 = urldecode($_GET['path']);
 	$filename = $_GET['path']==null?ALL_ROOTS:$path2; 
@@ -906,15 +906,13 @@ function iframe_bianji()
 }
 function adduserspic()
 {
-	include 'subject/'.getThemeDir().'/common.php';
-	
+	include getThemeDir3();	
 	require getThemeDir2(__FUNCTION__);
 }
 function tools()
 {
-	include 'subject/'.getThemeDir().'/common.php';
-	
-	require getThemeDir2(__FUNCTION__);
+	include getThemeDir3();	
+	require getThemeDir2(__FUNCTION__,'tool');
 }
 function CreateDirectory()
 {

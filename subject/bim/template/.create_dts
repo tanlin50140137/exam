@@ -16,9 +16,9 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=create_dts');?>">创建文档</a>
+		<a href="<?php echo apth_url('index.php/create_dts');?>">创建文档</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=getpay');?>">查看文档列表</a>
+		<a href="<?php echo apth_url('index.php/getpay');?>">查看文档列表</a>
 	</h1>	
 </div>
 

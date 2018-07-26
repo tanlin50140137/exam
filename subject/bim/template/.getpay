@@ -14,7 +14,7 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		 <a href="<?php echo apth_url('?act=getpay');?>">文档列表</a>
+		 <a href="<?php echo apth_url('index.php/getpay');?>">文档列表</a>
 		 &nbsp; &nbsp; &nbsp; 
 <?php if( $power==2 || $power==1 ){?>
 		<input type="button" value="创建文档" class="cearter_key" onclick="create_dts();"/>
@@ -25,9 +25,9 @@
 </div>
 <div class="key_tablebox_all">
 <div style="line-height:30px;padding:0 0.6rem;">
-	<a href="<?php echo apth_url('?act=show_classify');?>" class="WenDongFenlai">查看文档分类</a>
+	<a href="<?php echo apth_url('index.php/show_classify');?>" class="WenDongFenlai">查看文档分类</a>
 	 &nbsp; &nbsp; 
-	<a href="<?php echo apth_url('?act=notice_list');?>" class="WenDongFenlai">查看公告列表</a>
+	<a href="<?php echo apth_url('index.php/notice_list');?>" class="WenDongFenlai">查看公告列表</a>
 </div>
 <div class="key_tablebox_allins">
 	搜索：
@@ -84,7 +84,7 @@
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
-			<a href="<?php echo apth_url('?act=getpay&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=getpay&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('index.php/getpay&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('index.php/getpay&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
 <?php }?>
 <?php if( $power==2 || $power==1 ){?>			
@@ -104,11 +104,11 @@
 <script>
 function Announcements()
 {
-	location.href = "<?php echo apth_url('?act=announcements');?>";	
+	location.href = "<?php echo apth_url('index.php/announcements');?>";	
 }
 function create_dts()
 {
-	location.href = "<?php echo apth_url('?act=create_dts');?>";	
+	location.href = "<?php echo apth_url('index.php/create_dts');?>";	
 }
 function Diachronic(){
 	window.history.go(-1);
@@ -130,12 +130,12 @@ function delete_info(id,p)
 }
 function update_info(id,p)
 {
-	location.href = "<?php echo apth_url('?act=conent_update&id=');?>"+id+'&page='+p;
+	location.href = "<?php echo apth_url('index.php/conent_update&id=');?>"+id+'&page='+p;
 }
 function search_ify(t)
 {
 	var d = $(t).val();
-	location.href="<?php echo apth_url('?act=getpay&page='.$page.'&id=');?>"+d;
+	location.href="<?php echo apth_url('index.php/getpay&page='.$page.'&id=');?>"+d;
 }
 function SetShwoTotal(t)
 {
@@ -149,7 +149,7 @@ function btn_g()
 	var d = $("#g").val();
 	if( d != '' )
 	{
-		location.href="<?php echo apth_url('?act=getpay&page=');?>"+d;
+		location.href="<?php echo apth_url('index.php/getpay&page=');?>"+d;
 	}	
 }
 function btn_sreach()
@@ -157,11 +157,11 @@ function btn_sreach()
 	var search = $("#search").val();
 	if( search != '' )
 	{
-		location.href="<?php echo apth_url('?act=getpay&s=');?>"+search;
+		location.href="<?php echo apth_url('index.php/getpay&s=');?>"+search;
 	}
 	else
 	{
-		location.href="<?php echo apth_url('?act=getpay');?>";
+		location.href="<?php echo apth_url('index.php/getpay');?>";
 	}	
 }
 function sbm_fl()

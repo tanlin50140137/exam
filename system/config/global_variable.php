@@ -3,14 +3,10 @@
  * @author Tanlin 
  * */
 $sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
-$arr = explode('/', $_SERVER['REQUEST_URI']);
-if(!empty($arr))
-{
-	array_pop($arr);
-	$site_url = join('/',$arr);
-}
-define("SITE_URL", $sys_protocal.$_SERVER['HTTP_HOST'].$site_url);
-define("BASE_URL", $_SERVER['DOCUMENT_ROOT'].$site_url);
+$SCRIPT_NAME = $_SERVER['SCRIPT_NAME'];
+$URI = substr($SCRIPT_NAME, 0,strrpos($SCRIPT_NAME, '/') );
+define("SITE_URL", $sys_protocal.$_SERVER['HTTP_HOST'].$URI);
+define("BASE_URL", $_SERVER['DOCUMENT_ROOT'].$URI);
 define("SPOT", ".");
 define("OFFICEXLS","xls");
 define("OFFICEXLSX","xlsx");

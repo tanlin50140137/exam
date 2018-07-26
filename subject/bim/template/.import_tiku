@@ -14,7 +14,7 @@
 	<h1>
 	<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp; 
-	<a href="<?php echo apth_url('?act=import_tiku');?>">添加导入题库</a>
+	<a href="<?php echo apth_url('index.php/import_tiku');?>">添加导入题库</a>
 	 &nbsp; &nbsp; 
 	<input type="button" value="添加分类 " class="cearter_key" onclick="cearter_key();">
 	</h1>	
@@ -46,7 +46,7 @@
 <script>
 function cearter_key()
 {
-	location.href="<?php echo apth_url('?act=getkey');?>";
+	location.href="<?php echo apth_url('index.php/getkey');?>";
 }
 function add_classify()
 {

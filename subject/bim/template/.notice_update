@@ -16,9 +16,9 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=notice_update&page='.$_GET['page'].'&id='.$id);?>">修改公告</a>
+		<a href="<?php echo apth_url('index.php/notice_update&page='.$_GET['page'].'&id='.$id);?>">修改公告</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=notice_list');?>">查看公告列表</a>
+		<a href="<?php echo apth_url('index.php/notice_list');?>">查看公告列表</a>
 	</h1>	
 </div>
 

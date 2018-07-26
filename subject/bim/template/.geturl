@@ -13,7 +13,7 @@
 <div class="key_box">
 	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp; 
-	<a href="<?php echo apth_url('?act=geturl');?>">用户管理</a>
+	<a href="<?php echo apth_url('index.php/geturl');?>">用户管理</a>
 	 &nbsp; &nbsp; &nbsp; 
 <?php if( $power==2 ){?>	
 	<input type="button" value="添加用户" class="cearter_key" onclick="cearter_key();"/>
@@ -27,7 +27,7 @@
 </div>
 <script>
 function cearter_key(){
-	location.href = "<?php echo apth_url('?act=addusers');?>";
+	location.href = "<?php echo apth_url('index.php/addusers');?>";
 }
 </script>
 <script>
@@ -96,7 +96,7 @@ function Diachronic(){
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
-			<a href="<?php echo apth_url('?act=geturl&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=geturl&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('index.php/geturl&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('index.php/geturl&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
 <?php }?>
 <?php if( $power==2 || $power==1 ){?>			
@@ -130,7 +130,7 @@ function delete_info(id,p)
 }
 function update_info(id,p)
 {
-	location.href = "<?php echo apth_url('?act=geturl_update&id=');?>"+id+'&page='+p;
+	location.href = "<?php echo apth_url('index.php/geturl_update&id=');?>"+id+'&page='+p;
 }
 function SetShwoTotal(t)
 {
@@ -144,7 +144,7 @@ function btn_g()
 	var d = $("#g").val();
 	if( d != '' )
 	{
-		location.href="<?php echo apth_url('?act=geturl&page=');?>"+d;
+		location.href="<?php echo apth_url('index.php/geturl&page=');?>"+d;
 	}	
 }
 $(function(){
@@ -160,7 +160,7 @@ function btn_sreach(){
 	var search = $("#search").val();
 	if( search != '' )
 	{
-		location.href="<?php echo apth_url('?act=geturl&s=');?>"+search;
+		location.href="<?php echo apth_url('index.php/geturl&s=');?>"+search;
 	}
 	else
 	{

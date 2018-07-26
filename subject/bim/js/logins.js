@@ -42,7 +42,7 @@ function Logins(m){
 		if( obj.error == 0 )
 		{
 			layer.msg(obj.txt,{time:2000},function(){
-				location.href = url+"?act=adminfrom";
+				location.href = url+"/adminfrom";
 			});
 		}	
 		else
@@ -163,7 +163,7 @@ function reset_s(m)
 		if( obj.error == 0 )
 		{
 			layer.msg(obj.txt,{time:2000},function(){
-				location.href = url+"?act=index";
+				location.href = url;
 			});
 		}	
 		else

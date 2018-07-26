@@ -68,7 +68,7 @@ function sbm_update()
 			if( obj.error == 0 )
 			{
 				layer.msg(obj.txt,{time:1000},function(){
-					location.href="<?php echo apth_url('?act=show_classify&page=');?>"+obj.page;
+					location.href="<?php echo apth_url('index.php/show_classify&page=');?>"+obj.page;
 				});
 			}
 			else

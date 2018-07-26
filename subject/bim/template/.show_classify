@@ -16,7 +16,7 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		<a href="<?php echo apth_url('?act=show_classify');?>">文档分类</a>
+		<a href="<?php echo apth_url('index.php/show_classify');?>">文档分类</a>
 <?php if( $power==2 || $power==1 ){ ?>		
 		 &nbsp; &nbsp; &nbsp; 
 		<input type="button" value="创建分类 " class="cearter_key" onclick="file_classify();"/>
@@ -82,7 +82,7 @@
 			共<?php echo $TotalRows;?>条 &nbsp; &nbsp; 
 <?php if($TotalRows>$TotalShow){?>			
 			当前 <?php echo $page;?>/<?php echo $TotalPage;?> 页  &nbsp; &nbsp; 
-			<a href="<?php echo apth_url('?act=show_classify&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('?act=show_classify&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
+			<a href="<?php echo apth_url('index.php/show_classify&page='.($page-1));?>">上一页</a> &nbsp; | &nbsp; <a href="<?php echo apth_url('index.php/show_classify&page='.($page+1));?>">下一页</a>  &nbsp; &nbsp; 
 			跳转至 <input type="text" id="g"/> 页 <input type="button" value="G" onclick="btn_g();" class="btn_g"/>  &nbsp; &nbsp; 
 <?php }?>	
 <?php if( $power==2 || $power==1 ){ ?>		
@@ -109,7 +109,7 @@
 		d.add(0,-1,'查看所有考试分类');
 <?php if(!empty($flRows2)){?>	
 	<?php foreach($flRows2 as $k=>$v){?>
-		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"].' -> 文档数 '.$v["c"].' 个';?>','<?php echo apth_url("?act=classify_update&id=".$v["id"]);?>');
+		d.add('<?php echo $v["id"];?>','<?php echo $v["pid"];?>','<?php echo $v["title"].' -> 文档数 '.$v["c"].' 个';?>','<?php echo apth_url("index.php/classify_update&id=".$v["id"]);?>');
 	<?php } ?>	
 <?php } ?>			
 		document.write(d);
@@ -154,12 +154,12 @@ function delete_info(id,p)
 }
 function update_info(id,p)
 {
-	location.href = "<?php echo apth_url('?act=classify_update&id=');?>"+id+'&page='+p;
+	location.href = "<?php echo apth_url('index.php/classify_update&id=');?>"+id+'&page='+p;
 }
 function search_ify(t)
 {
 	var d = $(t).val();
-	location.href="<?php echo apth_url('?act=show_classify&page='.$page.'&id=');?>"+d;
+	location.href="<?php echo apth_url('index.php/show_classify&page='.$page.'&id=');?>"+d;
 }
 function SetShwoTotal(t)
 {
@@ -173,12 +173,12 @@ function btn_g()
 	var d = $("#g").val();
 	if( d != '' )
 	{
-		location.href="<?php echo apth_url('?act=show_classify&page=');?>"+d;
+		location.href="<?php echo apth_url('index.php/show_classify&page=');?>"+d;
 	}	
 }
 function file_classify()
 {
-	location.href="<?php echo apth_url('?act=file_classify');?>"
+	location.href="<?php echo apth_url('index.php/file_classify');?>"
 }
 function sbm_fl()
 {

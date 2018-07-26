@@ -62,7 +62,7 @@ function add_classify()
 			if( obj.error == 0 )
 			{
 				layer.msg(obj.txt,{time:1000},function(){
-					location.href="<?php echo apth_url('?act=show_classify');?>";
+					location.href="<?php echo apth_url('index.php/show_classify');?>";
 				});
 			}
 			else

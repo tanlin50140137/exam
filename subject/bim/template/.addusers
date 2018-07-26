@@ -12,9 +12,9 @@
 <body>
 <div class="key_box">
 	<h1>
-	<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=addusers');?>">添加用户</a>
+	<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a> &nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('index.php/addusers');?>">添加用户</a>
 	<?php if($power == 2 ){?>
-	&nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('?act=adduserspic');?>">添加头像</a>
+	&nbsp; &nbsp; &nbsp; <a href="<?php echo apth_url('index.php/adduserspic');?>">添加头像</a>
 	<?php }?>
 	</h1>	
 </div>
@@ -95,7 +95,7 @@ function add_user(m)
 		if( obj.error == 0 )
 		{//注册成功
 			layer.msg(obj.txt,{time:2000},function(){
-				location.href = url+"?act=geturl";
+				location.href = url+"/geturl";
 			});
 		}	
 		else

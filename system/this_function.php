@@ -28,8 +28,8 @@ function xml_str2($array)
 }
 function load_theme($dir='default')
 {
-	$dir = $dir==''?'404':$dir;
-	if(is_file(BASE_URL.'/subject/'.$dir.'/index.php'))
+	$dir = $dir==''?'404':$dir;	
+	if( is_file(BASE_URL.'/subject/'.$dir.'/index.php') )
 	{
 		require BASE_URL.'/subject/'.$dir.'/index.php';
 	}
@@ -83,9 +83,13 @@ function getThemeDir()
 {
 	return 'bim';
 }
-function getThemeDir2($name)
+function getThemeDir3()
 {
-	return 'subject/bim/template/'.SPOT.$name;
+	return 'subject/bim/common.php';
+}
+function getThemeDir2($name,$t='template')
+{
+	return 'subject/bim/'.$t.'/'.SPOT.$name;
 }
 function GetInts($int)
 {

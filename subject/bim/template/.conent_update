@@ -16,7 +16,7 @@
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 		 &nbsp; &nbsp; &nbsp; 
-		修改文档
+		<a href="<?php echo apth_url('index.php/conent_update&id='.$id.'&page='.$page)?>">修改文档</a>
 	</h1>	
 </div>
 

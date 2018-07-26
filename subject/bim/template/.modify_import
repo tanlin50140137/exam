@@ -14,7 +14,7 @@
 	<h1>
 	<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp; 
-	<a href="<?php echo apth_url('?act=modify_import');?>">修改导入</a>
+	<a href="<?php echo apth_url('index.php/modify_import');?>">修改导入</a>
 	</h1>	
 </div>
 <div class="key_tablebox_allins">说明：从这里修改导入题库，执行导入模板格式 “.xls、.xlsx、.csv” ，除此三种外，其他格式无法使用</div>
@@ -33,7 +33,7 @@
 <script>
 function cearter_key()
 {
-	location.href="<?php echo apth_url('?act=getkey');?>";
+	location.href="<?php echo apth_url('index.php/getkey');?>";
 }
 function add_classify()
 {

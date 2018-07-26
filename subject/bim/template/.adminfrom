@@ -11,25 +11,25 @@
 </head>
 <body style="height:100%;">
 <div class="admin_box">
-	<a href="<?php echo apth_url('?act=adminfrom');?>">
+	<a href="<?php echo apth_url('index.php/adminfrom');?>">
 		<div class="adming_logo"></div>
 	</a>
 	<ul class="right_allboxs">
 		<li class="pic_imgs">
-			<a href="<?php echo apth_url('?act=geturl_update&id='.$row['id']);?>" target="show_winds"><img src="<?php echo $row['pic'];?>" alt="<?php echo $usersname;?>"/></a>
+			<a href="<?php echo apth_url('index.php/geturl_update&id='.$row['id']);?>" target="show_winds"><img src="<?php echo $row['pic'];?>" alt="<?php echo $usersname;?>"/></a>
 		</li>
-		<li class="pic_imgs2"><a href="<?php echo apth_url('?act=geturl_update&id='.$row['id']);?>" target="show_winds"><?php echo $usersname;?></a></li>
-		<li class="pic_imgs2"><a href="<?php echo apth_url('?act=geturl');?>" target="show_winds"><?php echo get_power2($row['power']);?></a></li>
-		<li class="pic_imgs2"><a href="<?php echo apth_url('?act=log_on');?>">注销</a></li>
+		<li class="pic_imgs2"><a href="<?php echo apth_url('index.php/geturl_update&id='.$row['id']);?>" target="show_winds"><?php echo $usersname;?></a></li>
+		<li class="pic_imgs2"><a href="<?php echo apth_url('index.php/geturl');?>" target="show_winds"><?php echo get_power2($row['power']);?></a></li>
+		<li class="pic_imgs2"><a href="<?php echo apth_url('index.php/log_on');?>">注销</a></li>
 	</ul>
 </div>
 <table class="adming_all">
 	<tr>
 		<td class="ta_left">
-			<iframe src="<?php echo apth_url('?act=menu');?>" width="100%" height="90%" scrolling="no" frameborder="0"></iframe>
+			<iframe src="<?php echo apth_url('index.php/menu');?>" width="100%" height="90%" scrolling="no" frameborder="0"></iframe>
 		</td>
 		<td class="ta_right">
-			<iframe src="<?php echo apth_url('?act=adminindex');?>" name="show_winds" width="100%" height="90%" scrolling="auto"  frameborder="0"></iframe>
+			<iframe src="<?php echo apth_url('index.php/adminindex');?>" name="show_winds" width="100%" height="90%" scrolling="auto"  frameborder="0"></iframe>
 		</td>
 	</tr>
 </table>
