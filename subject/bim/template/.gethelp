@@ -15,12 +15,14 @@
 	<h1><a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
 	 &nbsp; &nbsp; &nbsp; 
 	 <a href="<?php echo apth_url('?act=gethelp');?>">资源管理器</a>
-<?php if( $upApth != '' ){ ?>	 
-	 &nbsp; &nbsp; &nbsp;
-	 <a href="<?php echo apth_url('?act=gethelp&path='.urlencode($upApth));?>">返回上一层</a>
-<?php } ?>	 
+<?php if($power==1||$power==2){?>	 
+	<?php if( $upApth != '' ){ ?>	 
+		 &nbsp; &nbsp; &nbsp;
+		 <a href="<?php echo apth_url('?act=gethelp&path='.urlencode($upApth));?>">返回上一层</a>
+	<?php } ?>	 
 	 &nbsp; &nbsp; &nbsp;
 	 <a href="<?php echo $upApth==''?'javascript:void(0);':apth_url('?act=gethelp&path='.urlencode($filename));?>">当前 <?php echo $filename;?></a> 
+<?php } ?>	 
 	 </h1>	
 </div>
 <table class="key_tablebox tableBox" style="margin-top:10px;">
@@ -101,23 +103,35 @@
 			<td><?php echo getFilecTIME($filename.'/'.$v);?></td>
 			<td>
 		
-<?php if( is_dir( $ext_1 ) ){?>		
-			<a href="javascript:void(0);" onclick="Establish('<?php echo urlencode($filename.'/'.$v);?>');">创建</a>	
-			| <a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">打开</a>
+<?php if( is_dir( $ext_1 ) ){?>	
+	<?php if($power==2){?>	
+			<a href="javascript:void(0);" onclick="Establish('<?php echo urlencode($filename.'/'.$v);?>');">创建</a>	| 
+	<?php } ?>	
+	<?php if($power==2||$power==1){?>	
+			<a href="<?php echo apth_url('?act=gethelp&path='.urlencode($filename.'/'.$v));?>">打开</a>
+	<?php } ?>			
 <?php } ?>	
 
 <?php if( is_file( $ext_1 ) ){?>
 	<?php if( in_array($ext2, $zipArr) ){ ?>
+		<?php if($power==2||$power==1){?>
 			<a href="<?php echo apth_url($v);?>">下载</a>
+		<?php } ?>	
 	<?php }else if( in_array($ext2, $imgArr) ){ ?>	
+		<?php if($power==2||$power==1){?>
 			<a href="javascript:void(0);" onclick="getImgApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">浏览</a>
+		<?php } ?>		
 	<?php }elseif( in_array($ext2,$vodeArr) ){ ?>
 			<a href="javascript:void(0);" onclick="getVodieApth('<?php echo str_replace($_SERVER['DOCUMENT_ROOT'], 'http://127.0.0.1',$filename.'/'.$v);?>');">观看</a>
 	<?php }else{ ?>
+		<?php if($power==2){?>
 			<a href="javascript:void(0);" onclick="setUpdateFile('<?php echo apth_url('?act=iframe_bianji&path='.urlencode($filename.'/'.$v));?>','<?php echo $filename.'/'.$v;?>');">修改</a>
+		<?php } ?>	
 	<?php } ?>	
 <?php } ?>	
+<?php if($power==2){?>
 			| <a href="javascript:void(0);" onclick="delete_files('<?php echo urlencode($filename.'/'.$v);?>');">删除</a>
+<?php } ?>			
 			</td>
 		</tr>
 	<?php } ?>	

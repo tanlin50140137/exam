@@ -17,7 +17,9 @@
 	<li><a href="<?php echo apth_url('?act=examqm');?>" target="show_winds">考场管理</a></li>
 	<li><a href="<?php echo apth_url('?act=getpay');?>" target="show_winds">资讯管理</a></li>
 	<li><a href="<?php echo apth_url('?act=geturl');?>" target="show_winds">用户管理</a></li>
+	<?php if( $power==1 || $power==2 ){ ?>
 	<li><a href="<?php echo apth_url('?act=gethelp');?>" target="show_winds">资源管理</a></li>
+	<?php } ?>
 </ul>
 </body>
 </html>

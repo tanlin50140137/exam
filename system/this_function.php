@@ -83,6 +83,10 @@ function getThemeDir()
 {
 	return 'bim';
 }
+function getThemeDir2($name)
+{
+	return 'subject/bim/template/'.SPOT.$name;
+}
 function GetInts($int)
 {
 	if( $int < 10 )

@@ -24,17 +24,160 @@
 		data:image/jpeg;base64,base64编码的jpeg图片数据
 		data:image/x-icon;base64,base64编码的icon图片数据 
 	-->
-	<h1 style="margin-bottom:10px;">TOIMG64：<input type="file" name="file"/></h1>
-	<h1 style="margin-bottom:10px;">TOText64：<textarea style="width:800px;"></textarea></h1>
-	<h1><input type="button" value="TOIMG64" onclick="TOIMG64();"/> &nbsp; &nbsp; <input type="button" value="TOText64"/></h1>
+	<h1 style="margin-bottom:10px;">TOIMG：<input type="file" id="covers" name="file" onchange="previewImage(this);"/></h1>
+	<div style="display:none;" id="dis_div"><img src="#" id="img_url" width="100"/></div>
+	<h1 style="margin-bottom:10px;">TOText：<textarea style="width:800px;" id="t"></textarea></h1>
+	<h1>
+	<input type="button" value="TOIMG" onclick="TOIMG();"/> &nbsp; &nbsp; 
+	<input type="button" value="TOText" onclick="TOText();"/> &nbsp; &nbsp;
+	<input type="button" value="TOCSS" onclick="TOCSS();"/> &nbsp; &nbsp;
+	<input type="button" value="TOJAVASCRIPT" onclick="TOJAVASCRIPT();"/> &nbsp; &nbsp;
+	</h1>
 	<div>
-		<textarea id="txt" style="width:800px;margin-top:10px;height:250px;padding:5px;">sdfsdf</textarea>
+		<textarea id="txt" style="width:800px;margin-top:10px;height:250px;padding:5px;"></textarea>
 	</div>
 </div>
 <script>
-function TOIMG64()
+function TOJAVASCRIPT()
 {
-		
+	var formData = new FormData();		
+	var f = document.getElementById("t");
+	formData.append("act",'TOJAVASCRIPT_BA');
+	formData.append("t",f.value);
+	$.ajax({
+		url:"<?php echo apth_url('index.php');?>",
+		type:"post",
+		data:formData,
+		cache : false,          
+		processData : false,  
+		contentType : false,
+		success:function(data){
+			var obj = eval("("+data+")");
+			if( obj.error == 0 )
+			{
+				$("#txt").val(obj.txt);	
+				$(f).val('');
+			}
+			else
+			{
+				$("#txt").val(obj.txt);	
+			}	
+		}
+	});	
+}
+function TOCSS()
+{
+	var formData = new FormData();		
+	var f = document.getElementById("t");
+	formData.append("act",'TOCSS_BA');
+	formData.append("t",f.value);
+	$.ajax({
+		url:"<?php echo apth_url('index.php');?>",
+		type:"post",
+		data:formData,
+		cache : false,          
+		processData : false,  
+		contentType : false,
+		success:function(data){
+			var obj = eval("("+data+")");
+			if( obj.error == 0 )
+			{
+				$("#txt").val(obj.txt);	
+				$(f).val('');
+			}
+			else
+			{
+				$("#txt").val(obj.txt);	
+			}	
+		}
+	});	
+}
+function TOIMG()
+{
+	var formData = new FormData();		
+	var f = document.getElementById("covers");
+	formData.append("picture",f.files[0]);
+	formData.append("act",'TOIMG');
+	$.ajax({
+		url:"<?php echo apth_url('index.php');?>",
+		type:"post",
+		data:formData,
+		cache : false,          
+		processData : false,  
+		contentType : false,
+		success:function(data){
+			var obj = eval("("+data+")");
+			if( obj.error == 0 )
+			{
+				$("#txt").val(obj.txt);	
+				$(f).val('');
+				$("#dis_div").hide();
+			}
+			else
+			{
+				$("#txt").val(obj.txt);	
+			}	
+		}
+	});
+}
+function TOText()
+{
+	var formData = new FormData();		
+	var f = document.getElementById("t");
+	formData.append("act",'TOText');
+	formData.append("t",f.value);
+	$.ajax({
+		url:"<?php echo apth_url('index.php');?>",
+		type:"post",
+		data:formData,
+		cache : false,          
+		processData : false,  
+		contentType : false,
+		success:function(data){
+			var obj = eval("("+data+")");
+			if( obj.error == 0 )
+			{
+				$("#txt").val(obj.txt);	
+				$(f).val('');
+			}
+			else
+			{
+				$("#txt").val(obj.txt);	
+			}	
+		}
+	});
+}
+function previewImage(file){
+	$("#dis_div").show();
+	if(file.files && file.files[0]){
+		var img = $("#img_url")[0];
+		var reader = new FileReader(),rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;;  
+	
+		var size = file.size;
+		var Max_Size = 2000*1024;
+		var width,height;
+		var image = new Image();
+	
+		reader.onload = function(evt){
+			img.src=evt.target.result;
+			var data = evt.target.result;
+			image.onload=function(){
+				width = image.width;
+				height = image.height;
+				/*
+				if(width>img.width && height>img.height){ 
+					alert("图片宽高不符合要求，请上传宽高"+img.width+"*"+img.height+"像素图片");
+				}
+				*/
+			};
+			image.src= data; 
+		} 
+	
+		if(!rFilter.test(file.files[0].type)) { alert("文件类型不正确 "); return; }
+		if(size>Max_Size){ alert("文件大小不能超出2M"); return; }
+		    
+		reader.readAsDataURL(file.files[0]);
+	}    
 }
 </script>
 </body>

@@ -3,14 +3,12 @@ header('content-type:text/html;charset=utf-8');
 function index()
 {
 	include 'subject/'.getThemeDir().'/common.php';
-	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function reset_u()
 {
 	include 'subject/'.getThemeDir().'/common.php';
-	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function GetUsersName()
 {
@@ -40,15 +38,16 @@ function adminfrom()
 		header('location:'.apth_url(''));exit;
 	}
 	
-	$row = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();
-		
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	$row = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();		
+	require getThemeDir2(__FUNCTION__);
 }
 function menu()
 {
-	include 'subject/'.getThemeDir().'/common.php';
+	include 'subject/'.getThemeDir().'/common.php';	
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	$power = GetUserp();
+	
+	require getThemeDir2(__FUNCTION__);
 }
 function adminindex()
 {
@@ -69,8 +68,7 @@ function adminindex()
 	
 	$totalpu = db()->select('*')->from(PRE.'admin')->where(array('power'=>0))->get()->array_nums();
 	$totalbu = db()->select('*')->from(PRE.'admin')->where(array('power'=>1))->get()->array_nums();
-	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function GetAllPfl()
 {
@@ -122,7 +120,7 @@ function getkey()
 	}
 	$flag = GetFilePath2();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function GetFenLai($pid,$multiplier=0)
 {
@@ -303,7 +301,7 @@ function geturl()
 	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';	
 	$rows = db()->query($sql)->array_rows();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function get_power($int)
 {
@@ -368,7 +366,7 @@ function examqm()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function e_zfms($int)
 {
@@ -430,7 +428,7 @@ function getpay()
 	
 	$flRows1 = GetFenLai3(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function notice_list()
 {
@@ -466,7 +464,7 @@ function notice_list()
 	
 	$flRows1 = db()->select('*')->from(PRE.'createroom')->get()->array_rows();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function notice_update()
 {
@@ -480,11 +478,13 @@ function notice_update()
 	
 	$row = db()->select('id,pid,title,content,static_n,publitime,state')->from(PRE.'notice')->where(array('id'=>$id))->get()->array_row();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function gethelp()
 {
 	include 'subject/'.getThemeDir().'/common.php';
+	
+	$power = GetUserp();
 	
 	$zipArr = array('zip','rar','rar5');
 	$imgArr = array('jpeg','jpg','png','gif');
@@ -523,7 +523,7 @@ function gethelp()
 		}	
 	}
 		
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function getkey_update()
 {
@@ -535,7 +535,7 @@ function getkey_update()
 	
 	$row = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('id'=>$id))->get()->array_row();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function addusers()
 {
@@ -543,7 +543,7 @@ function addusers()
 	
 	$power = GetUserp();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function geturl_update()
 {
@@ -555,7 +555,7 @@ function geturl_update()
 	
 	$row = db()->select('*')->from(PRE.'admin')->where(array('id'=>$id))->get()->array_row();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function file_classify()
 {
@@ -563,7 +563,7 @@ function file_classify()
 	
 	$flRows1 = GetFenLai3(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function show_classify()
 {
@@ -588,7 +588,7 @@ function show_classify()
 	}
 	$flag = GetFilePath2();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function classify_update()
 {
@@ -600,7 +600,7 @@ function classify_update()
 	
 	$row = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'fileclass')->where(array('id'=>$id))->get()->array_row();	
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function create_dts()
 {
@@ -608,7 +608,7 @@ function create_dts()
 	
 	$flRows1 = GetFenLai3(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function announcements()
 {
@@ -618,7 +618,7 @@ function announcements()
 	$flRows = db()->query($sql)->array_rows();
 	$flRows1 = UpwardsLookup2($flRows);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function UpwardsLookup2($flRows1)
 {
@@ -669,7 +669,7 @@ function conent_update()
 
 	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function create_room()
 {
@@ -677,7 +677,7 @@ function create_room()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function examqm_update()
 {
@@ -699,7 +699,7 @@ function examqm_update()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function mb_unserialize($serial_str) 
 {
@@ -743,7 +743,7 @@ function gettiku()
 	$sql .= ' order by a.id desc limit '.$offset.','.$TotalShow.' ';
 	$rows = db()->query($sql)->array_rows();
 		
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function import_tiku()
 {
@@ -751,13 +751,13 @@ function import_tiku()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function modify_import()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function gettiku_update()
 {
@@ -769,7 +769,7 @@ function gettiku_update()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function batch_modification()
 {
@@ -823,7 +823,7 @@ function batch_modification()
 		
 	}	
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function batch_deleting()
 {
@@ -877,7 +877,7 @@ function batch_deleting()
 		
 	}
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function iframe_bianji()
 {
@@ -902,19 +902,19 @@ function iframe_bianji()
 		$strs = file_get_contents($is_files);	
 	}
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function adduserspic()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	require 'subject/'.getThemeDir().'/template/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function tools()
 {
 	include 'subject/'.getThemeDir().'/common.php';
 	
-	require 'subject/'.getThemeDir().'/tool/'.__FUNCTION__.'.html';
+	require getThemeDir2(__FUNCTION__);
 }
 function CreateDirectory()
 {
@@ -2421,5 +2421,81 @@ function External()
 		{
 			echo json_encode(array("error"=>1,'txt'=>ADDONOK));
 		}
+	}
+}
+function TOIMG()
+{
+	$picture = $_FILES['picture'];	
+	if( $picture['error'] == 0 )
+	{
+		$extArr = explode('.', $picture['name']);
+		$ext = end( $extArr );
+		
+		$d = 'data:image/'.$ext.';base64,';
+		
+		$str1 = file_get_contents( $picture['tmp_name'] );
+		$str2 = base64_encode( $str1 );
+		
+		$data = $d.$str2;
+		
+		if( $str1 != '' )
+		{
+			echo json_encode(array("error"=>0,'txt'=>$data));
+		}
+		else
+		{
+			echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
+		}
+	}
+}
+function TOText()
+{
+	$str1 = base64_encode( $_POST['t'] );
+	
+	$d = 'data:text/plain,';
+	
+	$data = $d.$str1;
+	
+	if( $str1 != '' )
+	{
+		echo json_encode(array("error"=>0,'txt'=>$data));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
+	}
+}
+function TOCSS_BA()
+{
+	$str1 = base64_encode( trim( $_POST['t'] ) );
+	
+	$d = 'data:text/css;base64,';
+	
+	$data = $d.$str1;
+	
+	if( $str1 != '' )
+	{
+		echo json_encode(array("error"=>0,'txt'=>$data));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
+	}
+}
+function TOJAVASCRIPT_BA()
+{
+	$str1 = base64_encode( trim( $_POST['t'] ) );
+	
+	$d = 'data:text/javascript;base64,';
+	
+	$data = $d.$str1;
+	
+	if( $str1 != '' )
+	{
+		echo json_encode(array("error"=>0,'txt'=>$data));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
 	}
 }
