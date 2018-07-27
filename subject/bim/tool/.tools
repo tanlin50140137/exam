@@ -11,18 +11,8 @@
 <body>
 <div style="width:800px;margin:150px auto;">
 	<!-- 
-		data:,文本数据
-		data:text/plain,文本数据
-		data:text/html,HTML代码
-		data:text/html;base64,base64编码的HTML代码
-		data:text/css,CSS代码
-		data:text/css;base64,base64编码的CSS代码
-		data:text/JavaScript,Javascript代码
-		data:text/javascript;base64,base64编码的Javascript代码
-		data:image/gif;base64,base64编码的gif图片数据
-		data:image/png;base64,base64编码的png图片数据
-		data:image/jpeg;base64,base64编码的jpeg图片数据
-		data:image/x-icon;base64,base64编码的icon图片数据 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
 	-->
 	<h1 style="margin-bottom:10px;">TOIMG：<input type="file" id="covers" name="file" onchange="previewImage(this);"/></h1>
 	<div style="display:none;" id="dis_div"><img src="#" id="img_url" width="100"/></div>
@@ -180,5 +170,9 @@ function previewImage(file){
 	}    
 }
 </script>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 </body>
 </html>

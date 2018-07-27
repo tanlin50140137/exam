@@ -1,4 +1,11 @@
 <?php
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 header('content-type:text/html;charset=utf-8');
 function db()
 {
@@ -63,6 +70,13 @@ function subString($string,$len)
 	}
 	return $string;
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function set_ini_error($flag)
 {
 	if($flag['development'] == "ON")
@@ -113,6 +127,13 @@ function get_version()
 		return '';
 	}
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function vcurl($url, $post = '', $cookie = '', $cookiejar = '', $referer = '') {
 	$tmpInfo = '';
 	$cookiepath = getcwd () . '. / ' . $cookiejar;
@@ -207,6 +228,13 @@ function substr_tel($tel)
 	$str2 = substr($tel,-3);
 	return $str1.'***'.$str2;
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function GetFilePath()
 {
 	$spot = SPOT;
@@ -273,3 +301,10 @@ function base_url_name( $string )
 	
 	return $s;
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */

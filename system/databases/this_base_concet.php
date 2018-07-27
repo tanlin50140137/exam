@@ -1,11 +1,18 @@
 <?php
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 class This_base_concet
 {
 	private $link;
 	public function __construct()
 	{
-		$this->link = mysql_connect(SERVER,USERNAME,PASSWORD) or exit('数据库连接错误');
-		mysql_select_db(BASENAME) or exit('没有找到指定的数据库名称');
+		$this->link = mysql_connect(SERVERS,USERNAMES,PASSWORDS) or exit('数据库连接错误');
+		mysql_select_db(BASENAMES) or exit('没有找到指定的数据库名称');
 		mysql_query('set names utf8');
 	}
 	/**
@@ -86,3 +93,10 @@ class This_base_concet
 		$this->close();
 	}
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */

@@ -9,6 +9,10 @@
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 </head>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 <body class="gradient">
 <div class="hhh_boxs">
 	<div class="hhh_boxsins">会员登录器</div>
@@ -18,5 +22,9 @@
 		<div class="user_zh"> &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;&nbsp;<input type="button" value="登录" onclick="Logins(this);" class="btn_login" set-url="<?php echo apth_url('index.php');?>"/></div>
 	</div>
 </div>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 </body>
 </html>

@@ -10,6 +10,10 @@
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/js/logins.js');?>"></script>
 </head>
 <body>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 <ul class="menu_list">
 	<li><a href="<?php echo apth_url('index.php/adminfrom');?>" target="_parent">后台首页</a></li>
 	<li><a href="<?php echo apth_url('index.php/getkey');?>" target="show_winds">分类管理</a></li>
@@ -21,5 +25,9 @@
 	<li><a href="<?php echo apth_url('index.php/gethelp');?>" target="show_winds">资源管理</a></li>
 	<?php } ?>
 </ul>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 </body>
 </html>

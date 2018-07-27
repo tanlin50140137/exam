@@ -1,4 +1,11 @@
 <?php
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 define("IDOFS", "序号");
 define("TYPEOFS", "题型");
 define("DRYS", "提干");
@@ -74,3 +81,10 @@ define("QITATISHIZH_CN_5", "个月前");
 define("QITATISHIZH_CN_6", "年前");
 define("MODILEERRORZH_CN_1", "模板不正确 “此模板应为添加导入模板” 不可用");
 define("MODILEERRORZH_CN_2", "模板不正确 “此模板应为修改导入模板” 不可用");
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */

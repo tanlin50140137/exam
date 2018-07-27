@@ -1,3 +1,10 @@
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 *{margin: 0;padding: 0;list-style: none;word-wrap:break-word; }
 
 body, h1, h2, h3, h4, h5, h6, hr, p, blockquote,dl, dt, dd, ul, ol, li,pre,form, fieldset, legend, button, input, textarea,th, td, b{ 
@@ -44,7 +51,13 @@ html{height:92%;}
     color:#00ff66;
 }
 .user_zh .tishiinfo{display:block;position:absolute;top:0;right:0;width:5.6rem;color:#770404;}
-/*后台框架*/
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 .admin_box{
 	border:1px solid #383535;
 	background:#383535;
@@ -94,7 +107,13 @@ html{height:92%;}
 
 .select_opid{border: 1px solid #dacece;height:1.5rem;padding:0 0.5rem;border-radius:0.4rem;}
 
-/*添加分类*/
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 
 .addfl{margin-top:20px;display:none;}
 .addfl p{height:40px;line-height:40px;}
@@ -140,3 +159,10 @@ html{height:92%;}
 
 .div_text{width:90%;margin-top:1rem;padding:0.8rem 0.4rem;border:1px solid #ded5d5;font-size:0.9rem;color:#4a4c4c;outline:none;resize:none;}
 .div_text2{width:98%;height:500px;margin-top:1rem;padding:0.8rem 0.4rem;border:1px solid #ded5d5;font-size:0.9rem;color:#4a4c4c;outline:none;resize:none;color:#5229d2;}
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */

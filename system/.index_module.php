@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ */
 header('content-type:text/html;charset=utf-8');
 function index()
 {
@@ -105,6 +110,13 @@ function GetZiShenNums($pid)
 	}
 	return $count;
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function getkey()
 {	
 	include( getThemeDir3() );
@@ -343,6 +355,13 @@ function get_power2($int)
 	}
 	return $str;
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function e_xamqm()
 {
 	$power = GetUserp();
@@ -598,6 +617,13 @@ function show_classify()
 	
 	require( base_url_name( SHOWSHOWCLASSIFY ) );
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function classify_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
@@ -833,6 +859,13 @@ function batch_modification()
 	
 	require( base_url_name( SHOWBATCHMODIF ) );
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function batch_deleting()
 {
 	include( getThemeDir3() );
@@ -1103,6 +1136,13 @@ function DifferentiatedType()
 		BatchExport();
 	}
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function BatchExport()
 {	
 	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
@@ -1310,6 +1350,13 @@ function delete_tiku()
 		echo json_encode(array("error"=>1,'txt'=>DELETEONOK));
 	}
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function update_tiku()
 {
 	$id = $_POST['id']==null?null:htmlspecialchars($_POST['id'],ENT_QUOTES);
@@ -1536,6 +1583,13 @@ function import_sends()
 	
 	header('location:'.apth_url('?act=gettiku'));	
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function GetFourTypes($str)
 {
 	$strArr = array(DANXUANTI_1=>1,DANXUANTI_2=>2,DANXUANTI_3=>3,DANXUANTI_4=>4);
@@ -1801,6 +1855,13 @@ function update_dtsend()
 		echo '<script>alert("'.PERLISTINPUTTILE_5.'");location.href="'.apth_url('?act=create_dts').'";</script>';
 	}
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function create_dtsend()
 {	
 	$file = $_FILES['file'];
@@ -2134,6 +2195,13 @@ function form_resets2()
 		echo json_encode(array('error'=>'1','txt'=>QUDATEONOK));
 	}
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function form_resets()
 {
 	$data['users'] = htmlspecialchars($_POST['u'],ENT_QUOTES);
@@ -2388,6 +2456,13 @@ function getFilesType( $filename )
 	}
 	return $TypeName;
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function ReadingZIP( $filename )
 {
 	$fs = iconv('utf-8','gbk', $filename);
@@ -2504,3 +2579,10 @@ function TOJAVASCRIPT_BA()
 		echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
 	}
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */

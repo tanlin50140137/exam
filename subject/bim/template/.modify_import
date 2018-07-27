@@ -10,6 +10,10 @@
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/layer/layer.js');?>"></script>
 </head>
 <body>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 <div class="key_box">
 	<h1>
 	<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
@@ -30,6 +34,10 @@
 		<div style="margin-top:10px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="执行" class="sbm_fl" onclick="add_classify();"/></div>
 	</form>
 </div>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 <script>
 function cearter_key()
 {
@@ -49,5 +57,9 @@ function Diachronic(){
 	window.history.go(-1);
 }
 </script>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 </body>
 </html>

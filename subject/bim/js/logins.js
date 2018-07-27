@@ -1,6 +1,9 @@
 /**
- * @TanLin
- * @logins-vi2017-7-3
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
  */
 var strArr = new Array();
 	strArr[0] = '*请输入帐号*';
@@ -51,6 +54,13 @@ function Logins(m){
 		}	
 	});
 }
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 $(function(){
 	$(document).keyup(function (e) {
 	    if ( e.keyCode == 13 ) {
@@ -108,6 +118,13 @@ $(function(){
 		}
 	});
 });
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */
 function reset_s(m)
 {
 	var u = $("[name='users']").val();
@@ -186,3 +203,10 @@ $(function(){
 		}
 	});
 });
+/**
+ * 
+ * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+ * 
+ * @abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+ * 
+ */

@@ -12,6 +12,10 @@
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/dtree/dtree.js');?>"></script>
 </head>
 <body>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 <div class="key_box">
 	<h1>
 		<a href="javascript:void(0);" onclick="Diachronic();">&lt;&lt;返回</a>
@@ -107,6 +111,10 @@
 	</table>
 </form>	
 </div>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/ueditor/ueditor.config.js');?>"></script>
 <script type="text/javascript" src="<?php echo apth_url('subject/bim/ueditor/ueditor.all.js');?>"></script>
 <script>
@@ -175,5 +183,9 @@ function previewImage(file){
 	}    
 }
 </script>
+	<!-- 
+		@author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
+  		@abstract 自主开发框架，本框架已经实现代码低冗余、高性能、高可用性，逻辑强、高稳定。一次开发，稳定无问题，维护成本低。
+	-->
 </body>
 </html>
