@@ -34,7 +34,7 @@ function GetUserp()
 }
 function adminfrom()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 		
 	$usersname = GetUsersName();
 	
@@ -45,19 +45,20 @@ function adminfrom()
 	}
 	
 	$row = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();		
-	require getThemeDir2(__FUNCTION__);
+
+	require( base_url_name( SHOWADMINFROM_1 ) );
 }
 function menu()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWMENU_1 ) );
 }
 function adminindex()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$wxfl = GetFenLai2_index(0);
 	
@@ -74,7 +75,8 @@ function adminindex()
 	
 	$totalpu = db()->select('*')->from(PRE.'admin')->where(array('power'=>0))->get()->array_nums();
 	$totalbu = db()->select('*')->from(PRE.'admin')->where(array('power'=>1))->get()->array_nums();
-	require getThemeDir2(__FUNCTION__);
+	
+	require( base_url_name( SHOWADMININDEX_1 ) );
 }
 function GetAllPfl()
 {
@@ -105,7 +107,7 @@ function GetZiShenNums($pid)
 }
 function getkey()
 {	
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
@@ -126,7 +128,7 @@ function getkey()
 	}
 	$flag = GetFilePath2();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETKEY_1 ) );
 }
 function GetFenLai($pid,$multiplier=0)
 {
@@ -285,7 +287,7 @@ function SetShwoTotal()
 }
 function geturl()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
@@ -307,7 +309,7 @@ function geturl()
 	$sql .= ' order by publitime desc limit '.$offset.','.$TotalShow.' ';	
 	$rows = db()->query($sql)->array_rows();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETURL_1 ) );
 }
 function get_power($int)
 {
@@ -348,7 +350,7 @@ function e_xamqm()
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
 	
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$sql = ' select a.id,a.pid,a.title,a.sort,a.tariff,a.roomsets,a.descri,a.rule1,a.rule2,a.publitime,a.state,b.title as ify from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id ';
 	if( $id != '' )
@@ -372,7 +374,7 @@ function e_xamqm()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWEXAMQM_1 ) );
 }
 function e_zfms($int)
 {
@@ -402,7 +404,7 @@ function e_exam($int)
 }
 function getpay()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
@@ -434,11 +436,11 @@ function getpay()
 	
 	$flRows1 = GetFenLai3(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETPAY_1 ) );
 }
 function notice_list()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
@@ -470,11 +472,11 @@ function notice_list()
 	
 	$flRows1 = db()->select('*')->from(PRE.'createroom')->get()->array_rows();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWNOTICES_1 ) );
 }
 function notice_update()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -484,11 +486,11 @@ function notice_update()
 	
 	$row = db()->select('id,pid,title,content,static_n,publitime,state')->from(PRE.'notice')->where(array('id'=>$id))->get()->array_row();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWNOTICEU_1 ) );
 }
 function gethelp()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
@@ -529,31 +531,31 @@ function gethelp()
 		}	
 	}
 		
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETHELP_1 ) );
 }
 function getkey_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$flRows1 = GetFenLai(0,2);
 	
 	$row = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('id'=>$id))->get()->array_row();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETKEYU_1 ) );
 }
 function addusers()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWADDUSERS_1 ) );
 }
 function geturl_update()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$power = GetUserp();
 	
@@ -561,21 +563,21 @@ function geturl_update()
 	
 	$row = db()->select('*')->from(PRE.'admin')->where(array('id'=>$id))->get()->array_row();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETURLU_1 ) );
 }
 function file_classify()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$flRows1 = GetFenLai3(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWFILECLASSIFY ) );
 }
 function show_classify()
 {
 	$power = GetUserp();
 	
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -594,37 +596,37 @@ function show_classify()
 	}
 	$flag = GetFilePath2();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWSHOWCLASSIFY ) );
 }
 function classify_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$flRows1 = GetFenLai3(0,2);
 	
 	$row = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'fileclass')->where(array('id'=>$id))->get()->array_row();	
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWIFYUPD ) );
 }
 function create_dts()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$flRows1 = GetFenLai3(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWCREATEDTS ) );
 }
 function announcements()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$sql = 'select a.id,a.title as kc,b.pid,b.title from '.PRE.'createroom as a,'.PRE.'classify as b where a.pid=b.id';	
 	$flRows = db()->query($sql)->array_rows();
 	$flRows1 = UpwardsLookup2($flRows);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWANNCEMTS ) );
 }
 function UpwardsLookup2($flRows1)
 {
@@ -669,27 +671,27 @@ function conent_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 
-	include getThemeDir3();
+	include( getThemeDir3() );
 
 	$flRows1 = GetFenLai3(0,2);
 
 	$row = db()->select('*')->from(PRE.'createdts')->where(array('id'=>$id))->get()->array_row();
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWCONENTUPD ) );
 }
 function create_room()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWCREATEROOM ) );
 }
 function e_xamqm_update()
 {
 	$id = htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$row = db()->select('id,pid,title,sort,tariff,descri,roomsets,solve,typeofs,rule1,rule2,publitime,state')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
 
@@ -705,7 +707,7 @@ function e_xamqm_update()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWEXAMQMUPD ) );
 }
 function mb_unserialize($serial_str) 
 {
@@ -715,7 +717,7 @@ function mb_unserialize($serial_str)
 }
 function gettiku()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	$s = $_GET['s']==null?null:htmlspecialchars($_GET['s'],ENT_QUOTES);
@@ -749,25 +751,25 @@ function gettiku()
 	$sql .= ' order by a.id desc limit '.$offset.','.$TotalShow.' ';
 	$rows = db()->query($sql)->array_rows();
 		
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETTIKU ) );
 }
 function import_tiku()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWIMPORTTIKU ) );
 }
 function modify_import()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWMODIFYIMPORT ) );
 }
 function gettiku_update()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$id = $_GET['id']==null?null:htmlspecialchars($_GET['id'],ENT_QUOTES);
 	
@@ -775,11 +777,11 @@ function gettiku_update()
 	
 	$flRows1 = GetFenLai(0,2);
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWGETTIKUUPDDATE ) );
 }
 function batch_modification()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$exportflag = htmlspecialchars($_GET['exportflag'],ENT_QUOTES);
 	
@@ -829,11 +831,11 @@ function batch_modification()
 		
 	}	
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWBATCHMODIF ) );
 }
 function batch_deleting()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$exportflag = htmlspecialchars($_GET['exportflag'],ENT_QUOTES);
 	
@@ -883,11 +885,11 @@ function batch_deleting()
 		
 	}
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWBATCHDELETE ) );
 }
 function iframe_bianji()
 {
-	include getThemeDir3();
+	include( getThemeDir3() );
 	
 	$path2 = urldecode($_GET['path']);
 	$filename = $_GET['path']==null?ALL_ROOTS:$path2; 
@@ -908,17 +910,17 @@ function iframe_bianji()
 		$strs = file_get_contents($is_files);	
 	}
 	
-	require getThemeDir2(__FUNCTION__);
+	require( base_url_name( SHOWIFRAMEBIANJI ) );
 }
 function adduserspic()
 {
-	include getThemeDir3();	
-	require getThemeDir2(__FUNCTION__);
+	include( getThemeDir3() );	
+	require( base_url_name( SHOWADDUSERSPIC ) );
 }
 function tools()
 {
-	include getThemeDir3();	
-	require getThemeDir2(__FUNCTION__,'tool');
+	include( getThemeDir3() );
+	require( base_url_name( SHOWTOOLS ) );
 }
 function CreateDirectory()
 {
@@ -1180,9 +1182,9 @@ function BatchExport()
 }
 function BatchExport2()
 {
-	require base_url('system/Classes/PHPExcel.php');
-	require base_url('system/Classes/PHPExcel/IOFactory.php');
-	require base_url('system/Classes/PHPExcel/Reader/Excel5.php');
+	require( base_url('system/Classes/PHPExcel.php') );
+	require( base_url('system/Classes/PHPExcel/IOFactory.php') );
+	require( base_url('system/Classes/PHPExcel/Reader/Excel5.php') );
 	
 	$haystack = array(OFFICEXLS,OFFICEXLSX,OFFICECSV);	
 	$ext = $haystack[$_GET['ext']];
@@ -1381,9 +1383,9 @@ function ImportExecution()
 		move_uploaded_file($file['tmp_name'], $destination);
 	}
 	
-	require base_url('system/Classes/PHPExcel.php');
-	require base_url('system/Classes/PHPExcel/IOFactory.php');
-	require base_url('system/Classes/PHPExcel/Reader/Excel5.php');
+	require( base_url('system/Classes/PHPExcel.php') );
+	require( base_url('system/Classes/PHPExcel/IOFactory.php') );
+	require( base_url('system/Classes/PHPExcel/Reader/Excel5.php') );
 	
 	$filename = $destination;
 		
@@ -1462,9 +1464,9 @@ function import_sends()
 		move_uploaded_file($file['tmp_name'], $destination);
 	}
 	
-	require base_url('system/Classes/PHPExcel.php');
-	require base_url('system/Classes/PHPExcel/IOFactory.php');
-	require base_url('system/Classes/PHPExcel/Reader/Excel5.php');
+	require( base_url('system/Classes/PHPExcel.php') );
+	require( base_url('system/Classes/PHPExcel/IOFactory.php') );
+	require( base_url('system/Classes/PHPExcel/Reader/Excel5.php') );
 	
 	$filename = $destination;
 		
