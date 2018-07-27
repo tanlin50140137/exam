@@ -89,6 +89,7 @@
 				</div>	 
 			</div>	
 		</div>	
+		<input type="hidden" name="reluser" value="<?php echo $usersname;?>"/>
 		<p>考场状态： <label><input type="radio" name="state" value="0" checked="checked"/>显示</label> &nbsp; &nbsp; <label><input type="radio" name="state" value="1"/>隐藏</label></p>
 		<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="创建" class="sbm_fl" onclick="add_classify();"/></div>
 	</form>

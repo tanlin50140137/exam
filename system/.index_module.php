@@ -709,6 +709,8 @@ function create_room()
 {
 	include( getThemeDir3() );
 	
+	$usersname = GetUsersName();
+	
 	$flRows1 = GetFenLai(0,2);
 	
 	require( base_url_name( SHOWCREATEROOM ) );
@@ -1731,6 +1733,7 @@ function add_room()
 	{
 		echo json_encode(array("error"=>1,'txt'=>PERLISTFENLAI_1));exit;
 	}	
+	$data['reluser'] = $_POST['reluser']==''?'':$_POST['reluser'];
 	$data['solve'] = $_POST['solve'];
 	$data['descri'] = $_POST['descri']==''?'':$_POST['descri'];
 	$data['state'] = $_POST['state'];

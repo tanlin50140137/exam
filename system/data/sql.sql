@@ -140,6 +140,7 @@ drop table if exists htx_createroom;
 create table htx_createroom(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
 	pid int(10) unsigned not null default 0 comment '关联分类ID',
+	reluser varchar(255) not null default '' comment '关联用户ID',
 	title varchar(255) not null default '' comment '考场名称',
 	solve tinyint(10) unsigned not null default 0 comment '揽题方式,0=只揽所选分类,1=包括所有子分类',
 	sort varchar(255) not null default '' comment '考场排序',
@@ -152,6 +153,7 @@ create table htx_createroom(
 	publitime int(11) unsigned not null default 0 comment '考场创间时间',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',
 	key key_pid(pid),
+	key key_reluser(reluser),
 	key key_title(title),
 	key key_sort(sort)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';
