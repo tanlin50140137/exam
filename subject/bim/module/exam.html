@@ -3,15 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <title>测试考试模板</title>
-<script src="../js/jquery-1.11.2.js"></script>
+<script src="../js/jquery-1.11.2.min.js"></script>
 <script src="js/ex_am.js"></script>
 </head>
 <body>
-<div id="exam" style="margin:auto;width:1200px;">
 
-</div>
+<!-- 访问http://127.0.0.1/exam/subject/bim/module/exam.html -->
+
+<div id="exam" style="margin:auto;width:1200px;"></div>
+
 <script>
-exam.InfoBar('#exam');
+exam.InfoBar('#exam',{},function(data){
+	console.log(data);
+});
 </script>
+
 </body>
 </html>

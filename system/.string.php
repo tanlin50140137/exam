@@ -81,6 +81,8 @@ define("QITATISHIZH_CN_5", "个月前");
 define("QITATISHIZH_CN_6", "年前");
 define("MODILEERRORZH_CN_1", "模板不正确 “此模板应为添加导入模板” 不可用");
 define("MODILEERRORZH_CN_2", "模板不正确 “此模板应为修改导入模板” 不可用");
+define("SHOWINFO_ON_1", "获取失败");
+define("KCONETINFO_ON_1", "操作空内容");
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

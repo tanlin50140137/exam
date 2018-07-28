@@ -2528,7 +2528,7 @@ function TOIMG()
 		}
 		else
 		{
-			echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
+			echo json_encode(array("error"=>1,'txt'=>KCONETINFO_ON_1));
 		}
 	}
 }
@@ -2545,7 +2545,7 @@ function TOText()
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
+		echo json_encode(array("error"=>1,'txt'=>KCONETINFO_ON_1));
 	}
 }
 function TOCSS_BA()
@@ -2562,7 +2562,7 @@ function TOCSS_BA()
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
+		echo json_encode(array("error"=>1,'txt'=>KCONETINFO_ON_1));
 	}
 }
 function TOJAVASCRIPT_BA()
@@ -2579,7 +2579,53 @@ function TOJAVASCRIPT_BA()
 	}
 	else
 	{
-		echo json_encode(array("error"=>1,'txt'=>'操作空内容'));
+		echo json_encode(array("error"=>1,'txt'=>KCONETINFO_ON_1));
+	}
+}
+function GetInfoBar()
+{
+	$limit = $_POST['limit']==null?5:$_POST['limit'];
+	$contlen = $_POST['len']==null?200:$_POST['len'];
+	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
+	$target = $_POST['target']==null?'_self':$_POST['target'];
+	
+	$mem = new Memcache();
+	$mem->connect("127.0.0.1", 11211);
+	
+	$sql  = 'select id,pid,title,content,static_n,publitime,state from '.PRE.'notice where state=0 order by id desc ';
+	if( $limit != null )
+	{
+		$sql .= ' limit 0,'.$limit.' ';
+	}
+		
+	$key = md5( $sql );		
+	if( !$mem->get( $key ) )
+	{
+		$data = db()->query($sql)->array_rows();
+		$mem->set($key, $data, 0, 30);   	
+    	$rows = $mem->get( $key );
+	}
+	else	
+	{
+		$rows = $mem->get( $key );
+	}
+		
+	if( !empty( $rows ) )
+	{
+		foreach( $rows as $k => $v )
+		{
+			$str = strip_tags( $v['content'] );
+			if( mb_strlen($str,'utf-8') > $contlen )
+			{
+				$content = mb_substr($str, 0, $contlen,'utf-8').'......';
+			}			
+			$html .= '<li class="exam_boxsli0"><p class="exam_boxsp0"><a href="'.$url.'" target="'.$target.'" style="color:#3e3c3c;text-decoration:none;">'.$v['title'].'</a></p><p class="exam_boxsp1"><a href="'.$url.'" target="'.$target.'" style="color:#888888;text-decoration:none;">'.$content.'</a></p></li>';
+		}
+		echo json_encode(array("error"=>0,'txt'=>$html));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWINFO_ON_1));
 	}
 }
 /**
