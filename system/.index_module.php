@@ -2601,7 +2601,7 @@ function GetInfoBar()
 	$key = md5( $sql );		
 	if( !$mem->get( $key ) )
 	{
-		$data = db()->query($sql)->array_rows();
+		$data = db()->query( $sql )->array_rows();
 		$mem->set($key, $data, 0, 30);   	
     	$rows = $mem->get( $key );
 	}
@@ -2615,6 +2615,7 @@ function GetInfoBar()
 		foreach( $rows as $k => $v )
 		{
 			$str = strip_tags( $v['content'] );
+			$content = $str;
 			if( mb_strlen($str,'utf-8') > $contlen )
 			{
 				$content = mb_substr($str, 0, $contlen,'utf-8').'......';
@@ -2624,6 +2625,41 @@ function GetInfoBar()
 		echo json_encode(array("error"=>0,'txt'=>$html));
 	}
 	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWINFO_ON_1));
+	}
+}
+function GetFamily()
+{
+	$limit = $_POST['limit']==null?5:$_POST['limit'];
+	$contlen = $_POST['len']==null?200:$_POST['len'];
+	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
+	$target = $_POST['target']==null?'_self':$_POST['target'];
+	
+	$sql = 'select id,pid,title,sort,descri,publitime,state from '.PRE.'classify where pid=0 and state=0 order by sort desc';
+	if( $limit != null )
+	{
+		$sql .= ' limit 0,'.$limit.' ';
+	}
+	
+	$rows = db()->query( $sql )->array_rows();
+	
+	if( !empty( $rows ) )
+	{
+		foreach( $rows as $k => $v )
+		{
+			$content = $v['title'];
+			if( mb_strlen($v['title'],'utf-8') > $contlen )
+			{
+				$content = mb_substr($v['title'], 0, $contlen,'utf-8').'......';
+			}	
+			$html .= '<li class="exam_lif0list"><a href="'.($_POST['url']!=null?$url.'&id='.$v['id']:$url).'" target="'.$target.'">'.$content.'</a></li>';
+		}
+		$html .= '<div style="clear:both;"></div>';
+		
+		echo json_encode(array("error"=>0,'txt'=>$html));
+	}
+	else 
 	{
 		echo json_encode(array("error"=>1,'txt'=>SHOWINFO_ON_1));
 	}

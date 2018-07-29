@@ -15,7 +15,9 @@
 
 <script>
 exam.InfoBar('#exam1');
-exam.family('#exam2',{title:'考试科目-分类',w:'100%',li:'31%'});
+exam.family('#exam2',{w:'100%',li:'31%'},function(data){
+	console.log(data);
+});
 </script>
 
 </body>

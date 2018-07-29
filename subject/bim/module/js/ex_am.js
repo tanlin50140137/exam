@@ -117,7 +117,7 @@ function ExamObj(){
      * limit,获取数量
      * len,描述截取数量
      * 
-     * func = 回调方法,function(){ ..... }
+     * func = 回调方法,function(data){ ..... }
      * */
     exam.InfoBar=function(hobj,Sett,func)
     {   	  	
@@ -141,8 +141,7 @@ function ExamObj(){
     	return true;
     }
     
-    /*##################################################################################
-     * */
+    /*##################################################################################*/
     
     exam.CreateHTML2=function()
     { 
@@ -154,27 +153,53 @@ function ExamObj(){
 	    		tFlag = this.setting2.title;
 	    	}
     	}
-    	    	
+    	var limit='',len='',url='',target='';
+    	if( this.setting2 != undefined )
+    	{
+    		limit = this.setting2.limit;
+    		len = this.setting2.len;
+    		url = this.setting2.url;
+    		target = this.setting2.target;
+    	} 	
+    	   	
     	var iconimg1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABTElEQVQ4T91TsXHCQBDc+8GQPlSAZ5BSqwRKoARSS4GhA3VgO5BI1YFVgkqQU4kZXIH41Lbmz3Oy8cgPDMT+cP9+/253j3RSLYloCfcwDH8MOpyGbQaCPiphzmicVuU+9AP3Uoj7mIn8zK2RtzRO62IfevMjgk09VxYdbhUKc+8VxwR18T8IqpLfb+ZmfWv6M06SOrZEpWCKOWgiL+7f68edplGbk06qgECxaxMxisMjIWP6FvT3iM3gmHS6XRD4wVWYgLIJvfUBlx8xau8AmoLtq4n8rrvzLkgOSBkTzvKuS0JGTLmMpWAXYGWaaLa6aKOMIYFxdZKgKdD0IoGESALliijtj5M6v4oAlqcno3wdwSBT/Bk3of9nNzobh60s05ld6Ik4SbZPFnZnIv9ZWv/JwAszryUHJ9eZwG/9X3VarwhYgNEFTjIgVn4BdOjyftNipIwAAAAASUVORK5CYII=';
     	var divf0 = $('<div class="exam_boxsdif0"></div>');		
     	var divf1 = $('<div class="exam_boxsdif1"><img src="'+iconimg1+'" width="21" height="21" align="absmiddle"/>'+(typeof tFlag=='boolean'?'考试科目':this.setting2.title)+'</div>');
     	var ulf0 = $('<ul class="exam_ulf0list"></ul>');
-    	var lif0  = '<li class="exam_lif0list"><a href="#" target="_blank">正式考场</a></li>';
-    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">免费考场</a></li>';
-    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">造价师资格考试</a></li>';
-    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">律师资格考试</a></li>';
-    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">医生执业资格考试</a></li>';
-    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">技工取只资格考试类</a></li>';
-    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">驾校C1科目考试</a></li>';
-    	var liclear = $('<div style="clear:both;"></div>');
+    	   	
+    	$.post(this.hosturl,{'act':'GetFamily','limit':limit,'len':len,'url':url,'target':target},function(data){
+    		var objs = eval("("+data+")");
+    		if( objs.error == 0 )
+    		{
+    			ulf0.append( objs.txt );
+    			
+    			if( exam.func2 != undefined )
+    	    	{
+    				var data = objs.txt;
+    				exam.func2( data );
+    	    	}
+    			
+    			exam.CreateCss2();
+    		}	
+    		else
+    		{
+    			ulf0.append( objs.txt );
+    			
+    			if( exam.func2 != undefined )
+    	    	{
+    				var data = objs.txt;
+    				exam.func2( data );
+    	    	}
+    			
+    			exam.CreateCss2();
+    		}	
+    	});
     	
     	if( tFlag )
         {
     		divf0.append( divf1 ); 
         }    		
-    	divf0.append( ulf0 ); 
-    	ulf0.append( lif0 );
-    	ulf0.append( liclear );
+    	divf0.append( ulf0 );    	
     	
     	return divf0;   
     }
@@ -207,6 +232,24 @@ function ExamObj(){
         	$(this).css({"color":"#3e3c3c","background":"#FFFFFF"});
         });
     }
+    /*
+     * hobj = #id 或 .class
+     * 
+     * Sett = 设置参数,{li:'31%',w:'100%',h:'100%',bgc:'#FFFFFF'.....}
+     * 设置参数说明:
+     * w,宽
+     * h,高
+     * li,li框的宽度,默认'33%'
+     * bgc,标题背景
+     * color,标题字体颜色
+     * url,链接
+     * target,打开方式
+     * limit,获取数量
+     * len,描述截取数量
+     * 
+     * func = 回调方法,function(data){ ..... }
+     * 
+     * */
     exam.family=function(hobj,Sett,func)
     { 	
     	this.htmlobj2 = hobj;
