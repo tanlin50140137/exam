@@ -12,6 +12,9 @@ function ExamObj(){
     exam.htmlobj = '';
     exam.setting = '';
     exam.func = '';
+    exam.htmlobj2 = '';
+    exam.setting2 = '';
+    exam.func2 = '';
     
     exam.CreateHTML1=function()
     { 	
@@ -23,6 +26,7 @@ function ExamObj(){
 	    		tFlag = this.setting.title;
 	    	}
     	}
+    	   	
     	var limit='',len='',url='',target='';
     	if( this.setting != undefined )
     	{
@@ -40,22 +44,26 @@ function ExamObj(){
     		if( objs.error == 0 )
     		{
     			ul0.append( objs.txt );
-    			exam.CreateCss1();
+    			
     			if( exam.func != undefined )
     	    	{
     				var data = objs.txt;
     				exam.func( data );
     	    	}
+    			
+    			exam.CreateCss1();
     		}	
     		else
     		{
     			ul0.append( objs.txt );
-    			exam.CreateCss1();
+    			
     			if( exam.func != undefined )
     	    	{
     				var data = objs.txt;
     				exam.func( data );
     	    	}
+    			
+    			exam.CreateCss1();
     		}	
     	});   	
     	if( tFlag )
@@ -87,14 +95,35 @@ function ExamObj(){
         $('.exam_boxsli0').css({"margin":"0","padding":"0","border-bottom":"1px solid #d8cdcd","list-style-type":"none","margin-bottom":"0.8rem"});
         var li_len0 = $('.exam_boxsli0').length-1;
         $('.exam_boxsli0:eq('+li_len0+')').css({"border":"none"});       
-        $('.exam_boxsp0').css({"margin":"0","padding":"0","line-height":"2rem","font-family":"Microsoft YaHei","color":"#414a4a"});
-        $('.exam_boxsp1').css({"margin":"0","padding":"0","margin-top":"0.1rem","font-family":"Microsoft YaHei","padding-bottom":"1rem","color":"#756f6d","overflow":"hidden"});
+        $('.exam_boxsp0').css({"margin":"0","padding":"0","line-height":"1.2rem","font-family":"Microsoft YaHei","color":"#414a4a","word-wrap":"break-word","margin-bottom":"0.4rem"});
+        $('.exam_boxsp1').css({"margin":"0","padding":"0","margin-top":"0.1rem","font-family":"Microsoft YaHei","padding-bottom":"1rem","color":"#756f6d","overflow":"hidden","word-wrap":"break-word"});
+        $('.exam_boxsp0 a').hover(function(){
+        	$(this).css({"color":"red"});
+        },function(){
+        	$(this).css({"color":"#3e3c3c"});
+        });
     }   
+    /*
+     * hobj = #id 或 .class
+     * 
+     * Sett = 设置参数,{w:'100%',h:'100%',bgc:'#FFFFFF'.....}
+     * 设置参数说明:
+     * w,宽
+     * h,高
+     * bgc,标题背景
+     * color,标题字体颜色
+     * url,链接
+     * target,打开方式
+     * limit,获取数量
+     * len,描述截取数量
+     * 
+     * func = 回调方法,function(){ ..... }
+     * */
     exam.InfoBar=function(hobj,Sett,func)
     {   	  	
     	this.htmlobj = hobj;
-    	this.setting = Sett;
-    	exam.func = func;
+    	this.setting = (Sett==undefined)?{}:Sett;
+    	exam.func = (func==undefined)?function(){}:func;
     	
     	var html = this.CreateHTML1();   	
     	   
@@ -110,6 +139,86 @@ function ExamObj(){
     	　　return false;
     	}　　
     	return true;
+    }
+    
+    /*##################################################################################
+     * */
+    
+    exam.CreateHTML2=function()
+    { 
+    	var tFlag = true;
+    	if( this.setting2 != undefined )
+    	{
+	    	if( this.setting2.title != undefined )
+	    	{
+	    		tFlag = this.setting2.title;
+	    	}
+    	}
+    	    	
+    	var iconimg1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABTElEQVQ4T91TsXHCQBDc+8GQPlSAZ5BSqwRKoARSS4GhA3VgO5BI1YFVgkqQU4kZXIH41Lbmz3Oy8cgPDMT+cP9+/253j3RSLYloCfcwDH8MOpyGbQaCPiphzmicVuU+9AP3Uoj7mIn8zK2RtzRO62IfevMjgk09VxYdbhUKc+8VxwR18T8IqpLfb+ZmfWv6M06SOrZEpWCKOWgiL+7f68edplGbk06qgECxaxMxisMjIWP6FvT3iM3gmHS6XRD4wVWYgLIJvfUBlx8xau8AmoLtq4n8rrvzLkgOSBkTzvKuS0JGTLmMpWAXYGWaaLa6aKOMIYFxdZKgKdD0IoGESALliijtj5M6v4oAlqcno3wdwSBT/Bk3of9nNzobh60s05ld6Ik4SbZPFnZnIv9ZWv/JwAszryUHJ9eZwG/9X3VarwhYgNEFTjIgVn4BdOjyftNipIwAAAAASUVORK5CYII=';
+    	var divf0 = $('<div class="exam_boxsdif0"></div>');		
+    	var divf1 = $('<div class="exam_boxsdif1"><img src="'+iconimg1+'" width="21" height="21" align="absmiddle"/>'+(typeof tFlag=='boolean'?'考试科目':this.setting2.title)+'</div>');
+    	var ulf0 = $('<ul class="exam_ulf0list"></ul>');
+    	var lif0  = '<li class="exam_lif0list"><a href="#" target="_blank">正式考场</a></li>';
+    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">免费考场</a></li>';
+    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">造价师资格考试</a></li>';
+    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">律师资格考试</a></li>';
+    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">医生执业资格考试</a></li>';
+    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">技工取只资格考试类</a></li>';
+    		lif0 += '<li class="exam_lif0list"><a href="#" target="_blank">驾校C1科目考试</a></li>';
+    	var liclear = $('<div style="clear:both;"></div>');
+    	
+    	if( tFlag )
+        {
+    		divf0.append( divf1 ); 
+        }    		
+    	divf0.append( ulf0 ); 
+    	ulf0.append( lif0 );
+    	ulf0.append( liclear );
+    	
+    	return divf0;   
+    }
+    exam.CreateCss2=function()
+    { 
+    	if( this.setting2 != undefined )
+    	{
+    		var width = exam.isEmptyObject(this.setting2.w)?'100%':this.setting2.w;
+    		var height = exam.isEmptyObject(this.setting2.h)?'100%':this.setting2.h;
+    		var bgcs = exam.isEmptyObject(this.setting2.bgc)?'#fbf6f4':this.setting2.bgc;
+    		var colors = exam.isEmptyObject(this.setting2.color)?'#666666':this.setting2.color;
+    		var li = exam.isEmptyObject(this.setting2.li)?'30%':this.setting2.li;
+    	}
+    	else
+    	{
+    		var width = '100%';
+    		var height = '100%';
+    		var bgcs = '#fbf6f4';
+    		var colors = '#666666';
+    		var li = '30%';
+    	}
+    	$('.exam_boxsdif0').css({"margin":"0","padding":"0","border":"1px solid #d8cdcd","width":width,"height":height,"overflow":"hidden"}); 
+        $('.exam_boxsdif1').css({"margin":"0","padding":"0","border-bottom":"1px solid #d8cdcd","height":"3.3rem","line-height":"3.3rem","padding":"0 1.8rem","font-family":"Microsoft YaHei","background":bgcs,"color":colors});
+        $('.exam_ulf0list').css({"margin":"0","padding":"0","padding":"0.8rem 1.8rem"});
+        $('.exam_lif0list').css({"border":"1px solid #d6c2c2","margin":"0","padding":"0","list-style-type":"none","float":"left","height":"2rem","width":li,"margin-right":"0.5rem","padding":"0.5rem","margin-bottom":"0.5rem","line-height":"2rem","text-align":"center","overflow":"hidden","border-radius":"0.2rem"});
+        $('.exam_lif0list a').css({"text-decoration":"none","color":"#3e3c3c","font-family":"Microsoft YaHei","display":"block"});
+        $('.exam_lif0list a').hover(function(){
+        	$(this).css({"color":"red","background":"beige"});
+        },function(){
+        	$(this).css({"color":"#3e3c3c","background":"#FFFFFF"});
+        });
+    }
+    exam.family=function(hobj,Sett,func)
+    { 	
+    	this.htmlobj2 = hobj;
+    	this.setting2 = (Sett==undefined)?{}:Sett;
+    	exam.func2 = (func==undefined)?function(){}:func;
+    	
+    	var html = this.CreateHTML2();   	
+ 	   
+    	$( this.htmlobj2 ).empty();
+    	$( this.htmlobj2 ).append( html );
+    	
+    	exam.CreateCss2();
     }
     
     return exam;  

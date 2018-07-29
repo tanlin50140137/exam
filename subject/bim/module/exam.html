@@ -10,12 +10,12 @@
 
 <!-- 访问http://127.0.0.1/exam/subject/bim/module/exam.html -->
 
-<div id="exam" style="margin:auto;width:1200px;"></div>
+<div id="exam1" style="margin:auto;width:1200px;"></div>
+<div id="exam2" style="margin:auto;width:1200px;"></div>
 
 <script>
-exam.InfoBar('#exam',{},function(data){
-	console.log(data);
-});
+exam.InfoBar('#exam1');
+exam.family('#exam2',{title:'考试科目-分类',w:'100%',li:'31%'});
 </script>
 
 </body>
