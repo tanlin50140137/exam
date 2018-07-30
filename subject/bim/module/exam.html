@@ -9,13 +9,17 @@
 <body>
 
 <!-- 访问http://127.0.0.1/exam/subject/bim/module/exam.html -->
-
-<div id="exam1" style="margin:auto;width:1200px;"></div>
-<div id="exam2" style="margin:auto;width:1200px;"></div>
+<div style="margin:auto;width:1200px;height:600px;">
+	<div id="exam1" style="width:830px;float:left;"></div>
+	<div id="exam2" style="width:350px;float:right;"></div>
+	<div style="clear:both;"></div>
+	<div id="exam3" style="margin-top:20px;"></div>
+</div>
 
 <script>
-exam.InfoBar('#exam1');
-exam.family('#exam2',{w:'100%',li:'31%'},function(data){
+exam.InfoBar('#exam1',{w:'100%',h:'600px',li:'31%',len:130});
+exam.family('#exam2',{w:'100%',h:'600px',li:'41%'},function(data){});
+exam.news('#exam3',{len:60,url:'http://127.0.0.1/exam/index.php/conents',tw:'200px',th:'60px',target:'_blank'},function(data){
 	console.log(data);
 });
 </script>

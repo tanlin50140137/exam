@@ -124,13 +124,13 @@ create table htx_createdts(
 drop table if exists htx_notice;
 create table htx_notice(
 	id int(10) unsigned not null auto_increment primary key comment '主键',
-	pid int(10) unsigned not null default 0 comment '考场ID',
+	centreno varchar(255) not null default '' comment '考场编号',
 	title varchar(255) not null default '' comment '正标题',	
 	content MediumText not null comment '内容,大文本',
 	static_n varchar(255) not null default '' comment '静态名称',
 	publitime int(11) unsigned not null default 0 comment '公告时间',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=发布,1=草稿箱',
-	key key_pid(pid),
+	key key_centreno(centreno),
 	key key_title(title),
 	key key_publitime(publitime),
 	key key_state(state)
@@ -142,6 +142,7 @@ create table htx_createroom(
 	pid int(10) unsigned not null default 0 comment '关联分类ID',
 	reluser varchar(255) not null default '' comment '关联用户ID',
 	title varchar(255) not null default '' comment '考场名称',
+	centreno varchar(255) not null default '' comment '考场编号',
 	solve tinyint(10) unsigned not null default 0 comment '揽题方式,0=只揽所选分类,1=包括所有子分类',
 	sort varchar(255) not null default '' comment '考场排序',
 	tariff tinyint(10) unsigned not null default 0 comment '资费模式,0=免费,1=收费',

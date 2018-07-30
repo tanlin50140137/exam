@@ -40,16 +40,11 @@
 			<td class="key_tablebox_height key_tab_w"><p>考 场</p></td>
 			<td class="key_tablebox_height2">
 				<p>
-					<select name="ify" class="key_table_ify">
+					<select name="centreno" class="key_table_ify">
 						<option value="0">--请选择考场--</option>
-<?php if(!empty($flRows1)){?>
-			<?php foreach( $flRows1 as $k => $v ){?>	
-						<option value="<?php echo $v['id'];?>">
-							<?php $temp='';foreach($v['ifl'] as $ks=>$vs){?>
-							<?php $temp.=($temp==''?'':'/').$vs;?>
-							<?php }?>
-							<?php echo $v['kc'].' 所属分类（'.$temp.'）';?>
-						</option>
+<?php if(!empty($flRows)){?>
+			<?php foreach( $flRows as $k => $v ){?>	
+					<option value="<?php echo $v['centreno'];?>"><?php echo $v['title'].' ------>考场编号:'.$v['centreno'].'';?></option>
 			<?php }?>
 <?php }?>					
 					</select>
@@ -106,7 +101,7 @@ function frm_send()
 		$("[name='title']").focus();
 		return false;
 	}
-	var ify = $("[name='ify']").val();
+	var ify = $("[name='centreno']").val();
 	if( ify == '0' )
 	{
 		layer.msg('请选择考场');

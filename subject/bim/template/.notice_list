@@ -29,25 +29,25 @@
 <div class="key_tablebox_allins">
 	搜索：
 	<select onchange="search_ify(this);" class="ad_fls2">
-			<option value="0">所有分类</option>
+			<option value="0">所有编号</option>
 <?php if(!empty($flRows1)) { ?>
 	<?php foreach( $flRows1 as $k => $v ) { ?>
-		<?php if($id == $v['id']) { ?>	
-			<option value="<?php echo $v['id'];?>" selected="selected"><?php echo $v['title'];?></option>
+		<?php if($id == $v['centreno']) { ?>	
+			<option value="<?php echo $v['centreno'];?>" selected="selected"><?php echo $v['centreno'];?></option>
 		<?php } else { ?>
-			<option value="<?php echo $v['id'];?>"><?php echo $v['title'];?></option>
+			<option value="<?php echo $v['centreno'];?>"><?php echo $v['centreno'];?></option>
 		<?php } ?>	
 	<?php } ?>		
 <?php } ?>
 	</select>
 	&nbsp; &nbsp; &nbsp; &nbsp;
-	<input type="text" id="search" value="<?php echo $s;?>" placeholder="考场名称/公告标题" class="ad_fls"/> <input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();"/>
+	<input type="text" id="search" value="<?php echo urldecode($s);?>" placeholder="公告标题" class="ad_fls"/> <input type="button" value="搜索" class="btn_sreach" onclick="btn_sreach();"/>
 </div>
 <table class="key_tablebox tableBox">
 		<tr>
 			<td>序号</td>
-			<td>分类</td>
-			<td>标题</td>
+			<td>考场编号</td>
+			<td>公告标题</td>
 			<td>公告时间</td>
 			<td>状态</td>
 			<td>操作</td>
@@ -56,7 +56,7 @@
 	<?php foreach( $rows as $k => $v ){?>	
 		<tr>
 			<td><?php echo ($k+1);?></td>
-			<td><?php echo $v['name'];?></td>
+			<td><?php echo $v['centreno'];?></td>
 			<td><?php echo $v['title'];?></td>
 			<td><?php echo date('Y.m.d H:i:s',$v['publitime']);?></td>
 			<td><?php echo GetState3($v['state'],$v['id'],$page);?></td>

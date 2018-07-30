@@ -53,8 +53,8 @@
 <table class="key_tablebox tableBox">
 		<tr>
 			<td>序号</td>
-			<td>分类</td>
-			<td>标题</td>
+			<td>文档分类</td>
+			<td>文档标题</td>
 			<td>创建时间</td>
 			<td>定时发布</td>
 			<td>状态</td>
