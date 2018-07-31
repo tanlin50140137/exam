@@ -950,6 +950,12 @@ function adduserspic()
 	include( getThemeDir3() );	
 	require( base_url_name( SHOWADDUSERSPIC ) );
 }
+function exhibition()
+{
+	include( getThemeDir3() );
+	
+	require( base_url_name( SHOWEXHIBTROOM_1 ) );
+}
 function tools()
 {
 	include( getThemeDir3() );
@@ -2780,13 +2786,26 @@ function GetJSNews()
 	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
 	$target = $_POST['target']==null?'_self':$_POST['target'];
 	
+	$mem = new Memcache();
+	$mem->connect("127.0.0.1", 11211);
+	
 	$sql = 'select id,pid,title,depict,content,tags,covers,static_n,publitime,timing,state from '.PRE.'createdts where FROM_UNIXTIME(timing,"%Y-%m-%d %H:%i:%s")<="'.date('Y-m-d H:i:s').'" and state=0 order by id desc';
 	if( $limit != null )
 	{
 		$sql .= ' limit 0,'.$limit.' ';
 	}
 	
-	$rows = db()->query($sql)->array_rows();
+	$key = md5( $sql );		
+	if( !$mem->get( $key ) )
+	{
+		$data = db()->query($sql)->array_rows();
+		$mem->set($key, $data, 0, 30);   	
+    	$rows = $mem->get( $key );
+	}
+	else	
+	{
+		$rows = $mem->get( $key );
+	}
 	
 	if( !empty( $rows ) )
 	{		
@@ -2840,6 +2859,56 @@ function GetJSNews()
 		}
 		
 		echo json_encode(array("error"=>0,'txt1'=>$html1,'txt2'=>$html2));
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWINFO_ON_1));
+	}
+}
+function GetJSNews2()
+{
+	$limit = $_POST['limit']==null?10:$_POST['limit'];
+	$contlen = $_POST['len']==null?60:$_POST['len'];
+	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
+	$target = $_POST['target']==null?'_self':$_POST['target'];
+	
+	$mem = new Memcache();
+	$mem->connect("127.0.0.1", 11211);
+	
+	$sql = 'select id,pid,title,depict,content,tags,covers,static_n,publitime,timing,state from '.PRE.'createdts where FROM_UNIXTIME(timing,"%Y-%m-%d %H:%i:%s")<="'.date('Y-m-d H:i:s').'" and state=0 order by id desc';
+	if( $limit != null )
+	{
+		$sql .= ' limit 0,'.$limit.' ';
+	}
+	
+	$key = md5( $sql );		
+	if( !$mem->get( $key ) )
+	{
+		$data = db()->query($sql)->array_rows();
+		$mem->set($key, $data, 0, 30);   	
+    	$rows = $mem->get( $key );
+	}
+	else	
+	{
+		$rows = $mem->get( $key );
+	}
+	
+	if( !empty( $rows ) )
+	{		
+		$a1='';$a2='';
+		if( count($rows) > 5 )
+		{
+			$a1=array_slice($rows,0,5);
+			$a2=array_slice($rows,5,5);
+		}
+		else
+		{
+			$a1=$rows;
+		}
+		
+		$defaultImg = 'data:image/png;base64,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';
+			
+		echo json_encode(array("error"=>0,'txt1'=>$a1,'txt2'=>$a2,'defaultImg'=>$defaultImg));
 	}
 	else
 	{
