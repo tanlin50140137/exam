@@ -11,9 +11,11 @@
 <!-- 访问   http://127.0.0.1/exam/index.php/exhibition  -->
 
 <div id="exam" style="width:1200px;margin:auto;"></div>
+<div id="exam2" style="width:1200px;margin:20px auto;"></div>
 
 <script>
-exam.Examination("#exam",{id:'<?php echo $id;?>',url:'http://127.0.0.1/exam/subject/bim/module/exam.html'});
+exam.Examination("#exam",{id:'<?php echo $id;?>',url:'http://127.0.0.1/exam/subject/bim/module/exam.html'},function(data){});
+exam.Hottest('#exam2');
 </script>
 </body>
 </html>

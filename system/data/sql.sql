@@ -152,6 +152,7 @@ create table htx_createroom(
 	rule1 text not null comment '规则1',	
 	rule2 text not null comment '规则2',	
 	publitime int(11) unsigned not null default 0 comment '考场创间时间',
+	counts int(10) unsigned not null default 0 comment '统计数、点击量、浏览量',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',
 	key key_pid(pid),
 	key key_reluser(reluser),

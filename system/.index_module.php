@@ -2994,21 +2994,20 @@ function UpwardsLookup3($pid)
 function UpwardsLookup4($id)
 {
 	static $rows;
+	
 	$ify = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('pid'=>$id))->get()->array_rows();
-	foreach( $ify as $k => $v )
+	if( !empty( $ify ) )
 	{
-		$rows[] = array('id'=>$v['id'],'title'=>$v['title']);
-		UpwardsLookup3($v['id']);
+		foreach( $ify as $k => $v )
+		{
+			$rows[] = array('id'=>$v['id'],'title'=>$v['title']);
+			UpwardsLookup3($v['id']);
+		}
 	}
-	/*
-	$array = '';
-	if( !empty( $rows ) )
-	{
-		$array = array_reverse( $rows );
-	}
-	*/
+
 	return $rows;
 }
+
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
