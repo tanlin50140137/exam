@@ -3,14 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>展示分类模板</title>
-<script src="<?php echo base_url_name( SHOWEXHIBTRJQ_1 );?>"></script>
-<script src="<?php echo base_url_name( SHOWEXHIBTRJS_1 );?>"></script>
+<script src="<?php echo apth_url( base_url_name( SHOWEXHIBTRJQ_1 ) );?>"></script>
+<script src="<?php echo apth_url( base_url_name( SHOWEXHIBTRJS_1 ) );?>"></script>
 </head>
 <body>
+
+<!-- 访问   http://127.0.0.1/exam/index.php/exhibition  -->
+
 <div id="exam" style="width:1200px;margin:auto;"></div>
 
 <script>
-exam.Examination("#exam",{title:'首页 〉哈哈哈哈'});
+exam.Examination("#exam",{title:'首页 〉执业考试类'});
 </script>
 </body>
 </html>

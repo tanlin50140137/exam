@@ -2660,9 +2660,6 @@ function GetInfoBar()
 function GetInfoBar2()
 {
 	$limit = $_POST['limit']==null?5:$_POST['limit'];
-	$contlen = $_POST['len']==null?200:$_POST['len'];
-	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
-	$target = $_POST['target']==null?'_self':$_POST['target'];
 	
 	$mem = new Memcache();
 	$mem->connect("127.0.0.1", 11211);
@@ -2698,7 +2695,7 @@ function GetFamily()
 {
 	$limit = $_POST['limit']==null?5:$_POST['limit'];
 	$contlen = $_POST['len']==null?200:$_POST['len'];
-	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
+	$url = $_POST['url']==null?apth_url('index.php/exhibition/'):$_POST['url'];
 	$target = $_POST['target']==null?'_self':$_POST['target'];
 	
 	$mem = new Memcache();
@@ -2731,7 +2728,7 @@ function GetFamily()
 			{
 				$content = mb_substr($v['title'], 0, $contlen,'utf-8').'......';
 			}	
-			$html .= '<li class="exam_lif0list"><a href="'.($_POST['url']!=null?$url.'&id='.$v['id']:$url).'" target="'.$target.'">'.$content.'</a></li>';
+			$html .= '<li class="exam_lif0list"><a href="'.($_POST['url']==null?$url.$v['id']:$url).'" target="'.$target.'">'.$content.'</a></li>';
 		}
 		$html .= '<div style="clear:both;"></div>';
 		
@@ -2745,9 +2742,6 @@ function GetFamily()
 function GetFamily2()
 {
 	$limit = $_POST['limit']==null?5:$_POST['limit'];
-	$contlen = $_POST['len']==null?200:$_POST['len'];
-	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
-	$target = $_POST['target']==null?'_self':$_POST['target'];
 	
 	$mem = new Memcache();
 	$mem->connect("127.0.0.1", 11211);
@@ -2868,9 +2862,6 @@ function GetJSNews()
 function GetJSNews2()
 {
 	$limit = $_POST['limit']==null?10:$_POST['limit'];
-	$contlen = $_POST['len']==null?60:$_POST['len'];
-	$url = $_POST['url']==null?'javascript:void(0);':$_POST['url'];
-	$target = $_POST['target']==null?'_self':$_POST['target'];
 	
 	$mem = new Memcache();
 	$mem->connect("127.0.0.1", 11211);

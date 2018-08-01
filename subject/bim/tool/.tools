@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url_name( SHOWEXHIBTRLAYER_1 );?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url_name( SHOWEXHIBTRBIMCSS_1 );?>" />
-<script type="text/javascript" src="<?php echo base_url_name( SHOWEXHIBTRJQ_1 );?>"></script>
+<script type="text/javascript" src="<?php echo apth_url( base_url_name( SHOWEXHIBTRJQ_1 ) );?>"></script>
 <script type="text/javascript" src="<?php echo base_url_name( SHOWEXHIBTRLAYERJS_1 );?>"></script>
 <title>工具</title>
 </head>
