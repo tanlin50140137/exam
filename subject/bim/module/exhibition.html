@@ -18,6 +18,19 @@
 exam.Examination("#exam",{id:'<?php echo $id;?>',url:'http://127.0.0.1/exam/subject/bim/module/exam.html'},function(data){});
 exam.Hottest('#exam2',{},function(data){});
 exam.OtherIfic('#exam3',{},function(data){});
+
+function TollBox()
+{
+	exam.TollBox(
+		{
+			//content:'<b>垃圾哈哈哈哈哈哈哈哈哈！！！！！！！！！！</b>'
+		},
+		function(obj){
+			//exam.close(obj);
+		}
+	);
+}
+
 </script>
 </body>
 </html>
