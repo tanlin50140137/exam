@@ -1106,9 +1106,9 @@ function ExamObj()
     	$(".exam_freesionp1").css({"border-bottom":"1px solid #e8e0e0","margin":"0.6rem 0 0 0","padding":"0 0 1rem 0","font-family":"Microsoft YaHei","line-height":"1.6rem","font-size":"14px","color":"#3a3838"});
     	$(".exam_freesionp2").css({"margin":"0","padding":"0","font-family":"Microsoft YaHei","line-height":"4rem","color":"#3a3838","height":"3rem","font-size":"13px"});   	
     	$(".exam_freesionul0").css({"margin":"0.6rem 0 0 0","padding":"0","font-family":"Microsoft YaHei"});
-    	$(".exam_freesionli0").css({"margin":"0","padding":"0","font-family":"Microsoft YaHei","list-style-type":"none","line-height":"2rem","font-size":"13px","color":"#3a3838"});
+    	$(".exam_freesionli0").css({"margin":"0","padding":"0","font-family":"Microsoft YaHei","list-style-type":"none","line-height":"3rem","font-size":"13px","color":"#3a3838"});
     	$(".exam_freesionp3").css({"margin":"1rem 0 0 0","padding":"0","font-family":"Microsoft YaHei","color":"#1425ec"});
-    	$(".exam_freesiondiv3").css({"margin":"2.5rem 0 1rem 0","padding":"1rem 0","text-align":"center","font-family":"Microsoft YaHei"});
+    	$(".exam_freesiondiv3").css({"margin":"1.2rem 0 1rem 0","padding":"1rem 0","text-align":"center","font-family":"Microsoft YaHei"});
     	$(".exam_freesionbtn0").css({"margin":"0 1rem 0 0","padding":"0","border":"1px solid #ded7d7","width":"6rem","height":"2.3rem","border-radius":"0.2rem","font-size":"14px","color":"#3a3838","cursor":"pointer","font-family":"Microsoft YaHei"});
     	$(".exam_freesiondiv4").css({"margin":"0","padding":"0","position":"absolute","top":"1rem","right":"2rem","font-family":"Microsoft YaHei","font-size":"13px","color":"#7d7676"});
     	$(".exam_freesiondiv1 a").hover(function(){
