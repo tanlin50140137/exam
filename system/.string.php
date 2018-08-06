@@ -84,6 +84,14 @@ define("MODILEERRORZH_CN_2", "模板不正确 “此模板应为修改导入模�
 define("SHOWINFO_ON_1", "获取失败");
 define("KCONETINFO_ON_1", "操作空内容");
 define("HOME_PAGE_1", "首页");
+define("YENS_PAGE_1", "元");
+define("YENS_PAGE_2", "原价");
+define("YENS_PAGE_3", "现价");
+define("CLOSES_PAGE_1", "关闭");
+define("FAMODLES_PAGE_1", "收费模式");
+define("SHUTIANYK_PAGE_1", "可用天数");
+define("SHUTIANYK_PAGE_2", "没有启用任何规则 ");
+define("SHUTIANYK_PAGE_3", "请选择 ");
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

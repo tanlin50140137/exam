@@ -46,9 +46,9 @@
 					<span>01</span>.设置名称： <input type="text" name="r_name[]" placeholder="1个月" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; 
 					可用天数 <input type="text" name="r_day[]" placeholder="30" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; 
 					 原价格 <input type="text" name="r_srcpay[]" placeholder="20" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; 
-					 折后价 <input type="text" name="r_fra[]" placeholder="15" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen; &nbsp; &nbsp;  
+					 现价格 <input type="text" name="r_fra[]" placeholder="15" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen; &nbsp; &nbsp;  
 					 <label><input type="radio" name="r_radio1" value="1" class="r_radio"/>显示原价</label> &nbsp;
-					 <label><input type="radio" name="r_radio1" value="2" class="r_radio"/>显示折后价</label> &nbsp;
+					 <label><input type="radio" name="r_radio1" value="2" class="r_radio"/>显示现价</label> &nbsp;
 					 <label><input type="radio" name="r_radio1" value="3" checked="checked" class="r_radio"/>显示所有价格</label> &nbsp; &nbsp; &nbsp; &nbsp;
 					 <label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则</label>
 					 </div>
@@ -230,9 +230,9 @@ function AddRules()
 	html += '<div class="cloxe_xxx"><span>'+setInts(y+1)+'</span>.设置名称： <input type="text" name="r_name[]" placeholder="填写名称" value="" class="r_setvals" style="width:5rem;padding:0 0.2rem;"/> &nbsp; ';
 	html += '可用天数 <input type="text" name="r_day[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> 天 &nbsp; ';
 	html += '原价格 <input type="text" name="r_srcpay[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen;&nbsp; ';
-	html += ' 折后价 <input type="text" name="r_fra[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen; &nbsp; &nbsp; ';
+	html += ' 现价格 <input type="text" name="r_fra[]" placeholder="0" value="" class="r_setvals" style="width:2rem;padding:0 0.2rem;"/> &yen; &nbsp; &nbsp; ';
 	html += '<label><input type="radio" name="r_radio'+(y+1)+'" value="1" class="r_radio"/>显示原价</label> &nbsp; ';
-	html += '<label><input type="radio" name="r_radio'+(y+1)+'" value="2" class="r_radio"/>显示折后价</label> &nbsp; ';
+	html += '<label><input type="radio" name="r_radio'+(y+1)+'" value="2" class="r_radio"/>显示现价</label> &nbsp; ';
 	html += '<label><input type="radio" name="r_radio'+(y+1)+'" value="3" checked="checked" class="r_radio"/>显示所有价格</label> &nbsp; &nbsp; &nbsp; &nbsp; ';
 	html += '<label><input type="checkbox" name="r_on[]" value="on" class="r_setons" />选用此规则</label> &nbsp;  &nbsp; </div>';
 	$(".add_rules:eq(0)").append(html);	
