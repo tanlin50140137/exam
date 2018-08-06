@@ -86,6 +86,7 @@ define("KCONETINFO_ON_1", "操作空内容");
 define("HOME_PAGE_1", "首页");
 define("YENS_PAGE_1", "元");
 define("YENS_PAGE_2", "原价");
+define("YENS_PAGE_4", "天");
 define("YENS_PAGE_3", "现价");
 define("CLOSES_PAGE_1", "关闭");
 define("FAMODLES_PAGE_1", "收费模式");

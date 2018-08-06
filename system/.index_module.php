@@ -2953,7 +2953,7 @@ function GetExamination()
 				}
 				else 
 				{
-					$li1 .='<li class="exam_minationli0"><a href="#" target="'.$target.'">'.$mishu.'</a><p><img src="'.$examImg3.'" width="100" height="35" align="absmiddle"/><img src="'.$examImg4.'" width="40" height="35" align="absmiddle"/></p></li>';
+					$li1 .='<li class="exam_minationli0"><a href="'.apth_url('index.php/free_sion/'.$v['id']).'" target="'.$target.'">'.$mishu.'</a><p><img src="'.$examImg3.'" width="100" height="35" align="absmiddle"/><img src="'.$examImg4.'" width="40" height="35" align="absmiddle"/></p></li>';
 				}				
 			}
 				$li1 .= '<div style="clear:both;"></div>';
@@ -3065,7 +3065,7 @@ function GetHottest()
 				}
 				else 
 				{
-					$li0 .= '<li class="exam_hottestli0"><a href="#" target="'.$target.'">'.$mishu.'</a><p class="exam_hottestlip0"><img src="'.$hotImg2.'" width="100" height="35" align="absmiddle"/><img src="'.$hotImg4.'" width="40" height="35" align="absmiddle"/></p></li>';
+					$li0 .= '<li class="exam_hottestli0"><a href="'.apth_url('index.php/free_sion/'.$v['id']).'" target="'.$target.'">'.$mishu.'</a><p class="exam_hottestlip0"><img src="'.$hotImg2.'" width="100" height="35" align="absmiddle"/><img src="'.$hotImg4.'" width="40" height="35" align="absmiddle"/></p></li>';
 				}
 			}
 		}
@@ -3196,7 +3196,7 @@ function tollbox_ps()
 		{
 			if( $rule1['r_on'][$k] == 'on' ) 
 			{
-				$html .= '<li style="margin:0;padding:0;list-style-type:none;line-height:2.5rem;padding:0 0.5rem;font-family:Microsoft Yahei,monospace;font-size:15px;color:#676464;cursor:pointer;"><label onclick="exam.LabelRadio(this);" ><input type="radio" name="vip" value="'.$row['id'].'-'.$k.'"/><span class="tollbox_all">'.$v.' '.SHUTIANYK_PAGE_1.$rule1['r_day'][$k].YENS_PAGE_1.'  ';
+				$html .= '<li style="margin:0;padding:0;list-style-type:none;line-height:2.5rem;padding:0 0.5rem;font-family:Microsoft Yahei,monospace;font-size:15px;color:#676464;cursor:pointer;"><label onclick="exam.LabelRadio(this);" ><input type="radio" name="vip" value="'.$row['id'].'-'.$k.'"/><span class="tollbox_all">'.$v.' '.SHUTIANYK_PAGE_1.$rule1['r_day'][$k].YENS_PAGE_4.'  ';
 				if( $rule1['r_radio'.($k+1)] == 3 )
 				{
 					$html .= ' <s>'.YENS_PAGE_2.'&yen;'.$rule1['r_srcpay'][$k].YENS_PAGE_1.'</s> ';				
@@ -3290,6 +3290,34 @@ function payments()
 	$pay = $_SESSION['exam_pays'];
 	
 	print_r( $pay );
+}
+function free_sion()
+{	
+	include( getThemeDir3() );
+
+	$flagId = htmlspecialchars(GetIndexValue(1),ENT_QUOTES);
+	
+	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('id'=>$flagId))->get()->array_row();
+	
+	if( !empty( $row ) )
+	{
+		$ify = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('id'=>$row['pid']))->get()->array_row();
+	}
+	if( !empty( $ify ) )
+	{
+		$ifyArr = UpwardsLookup3( $ify['pid'] );
+		if( !empty( $ifyArr ) )
+		{
+			foreach( $ifyArr as $k => $v )
+			{
+				$html .= ($html==null?'<a href="'.$url.'">'.HOME_PAGE_1.'</a> &gt; ':' &gt; ').'<a href="'.apth_url('index.php/exhibition/'.$v['id']).'">'.$v['title'].'</a>';
+			}
+		}
+	}
+			
+	$bread = $html==null?'<a href="'.apth_url().'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
+		
+	require( base_url_name( SHOWFREETEMPLATES_1 ) );
 }
 /**
  * 

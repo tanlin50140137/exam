@@ -47,6 +47,7 @@ define('SHOWEXHIBTRLAYER_1', 'data:text/css,Li4vc3ViamVjdC9iaW0vbGF5ZXIvdGhlbWUv
 define('SHOWEXHIBTRBIMCSS_1', 'data:text/css,Li4vc3ViamVjdC9iaW0vY3NzL2JpbS1jc3MuY3Nz');
 define('SHOWEXHIBTRLAYERJS_1', 'data:text/css,Li4vc3ViamVjdC9iaW0vbGF5ZXIvbGF5ZXIuanM=');
 define('SHOWEXHIBTRLOGINS_1', 'data:text/css,Li4vc3ViamVjdC9iaW0vanMvbG9naW5zLmpz');
+define('SHOWFREETEMPLATES_1', 'data:text/css,c3ViamVjdC9iaW0vbW9kdWxlL2ZyZWVfdGVtcGxhdGUuaHRtbA==');
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
