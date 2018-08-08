@@ -1005,14 +1005,75 @@ function ExamObj()
     
     /*########################################################################################*/
     
-    exam.give_up=function(t,obj1,obj2,id)
+    exam.Setcookie=function(name, value)
+    { 
+        var expdate = new Date(); 
+        expdate.setTime( expdate.getTime() + (60*60*2) ); 
+        document.cookie = name+"="+value+";expires="+expdate.toGMTString()+";path=/";
+    }
+    exam.getCookie=function(c_name)
     {
+    	if (document.cookie.length>0)
+      	{
+     		c_start=document.cookie.indexOf(c_name + "=");
+      		if (c_start!=-1)
+        	{ 
+    		    c_start=c_start + c_name.length+1; 
+    		    c_end=document.cookie.indexOf(";",c_start);
+    		    if (c_end==-1) c_end=document.cookie.length;
+    		    return unescape(document.cookie.substring(c_start,c_end));
+    	    } 
+       }
+    	return "";
+    }
+    
+    exam.NextQuestion=function(t,obj1,obj2,id,n)
+    {
+    	if( exam.Answer == 1 )
+    	{	
+	    	var num = parseInt( $('.'+n).find('span').html() );
+	      	
+	    	var shuiji = {};
+				shuiji[1] = 30
+				shuiji[2] = 30
+				shuiji[3] = 30
+			
+			var selImg = 'data:image/png;base64,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';
+				
+			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':num},function(data){
+					
+					var obj = eval( "("+data+")" );
+					
+					$('.exam_freesiondiv2').empty();
+					
+					if( obj.error == 0 )
+					{	
+						$('.exam_freesiondiv2').append( obj.txt );
+					}
+					else
+					{
+						$('.exam_freesiondiv2').append( obj.txt );
+					}	
+					exam.CreateCss7();
+					exam.Answer = 0;
+					$( '.'+obj2 ).html('<img src="'+selImg+'" width="20" height="20" align="absmiddle"/> <font color="#00ce6d">请选择答案</font>');
+			});
+    	}	
+    	else
+    	{
+    		$(".ExambtnNext1").focus();
+    	}	
+    }
+    exam.give_up=function(t,obj1,obj2,id,n)
+    {
+    	var num = parseInt( $('.'+n).find('span').html() );
+    	
     	if( exam.Answer != 1 )
     	{
     		$.ajax({
 	    		url:this.hosturl,
 	    		type:'post',
-	    		data:'act=give_up&id='+id,
+	    		data:'act=give_up&id='+id+'&n='+num,
 	    		success:function(data){
 	    			var obj = eval("("+data+")");
 	    			if( obj.error == 0 )
@@ -1024,11 +1085,16 @@ function ExamObj()
 	    				$( '.'+obj2 ).html(obj.txt);
 	    			}	
 	    			exam.Answer = 1;
+	    			if( exam.Answer == 1 ){ $(".ExambtnNext").focus(); }
 	    		}
 	    	}); 
     	}
+    	else
+    	{
+    		$(".ExambtnNext").focus();
+    	}	
     }
-    exam.Determine=function(t,obj1,obj2,id)
+    exam.Determine=function(t,obj1,obj2,id,n)
     {
     	if( exam.Answer != 1 )
     	{	
@@ -1055,10 +1121,12 @@ function ExamObj()
 	    		$( '.'+obj2 ).html('<img src="'+errorts+'" width="20" height="20" align="absmiddle"/> <font color="red">'+arr[i]+'</font>');return false;
 	    	}	
 	    	
+	    	var num = parseInt( $('.'+n).find('span').html() );
+	    	
 	    	$.ajax({
 	    		url:this.hosturl,
 	    		type:'post',
-	    		data:'act=EDetermine&id='+id+'&'+$value,
+	    		data:'act=EDetermine&id='+id+'&'+$value+'&n='+num,
 	    		success:function(data){
 	    			var obj = eval("("+data+")");
 	    			if( obj.error == 0 )
@@ -1070,8 +1138,13 @@ function ExamObj()
 	    				$( '.'+obj2 ).html(obj.txt);
 	    			}	
 	    			exam.Answer = 1;
+	    			if( exam.Answer == 1 ){ $(".ExambtnNext").focus(); }
 	    		}
 	    	});   	
+    	}
+    	else
+    	{
+    		$(".ExambtnNext").focus();
     	}
     }
     exam.CreateHTML7=function()
@@ -1085,10 +1158,11 @@ function ExamObj()
 	    	}
     	}
  	   	
-    	var id='';
+    	var id='',tb='';
     	if( this.setting7 != undefined )
     	{
     		id = this.setting7.id;
+    		tb = this.setting7.tb==undefined?'':this.setting7.tb;
     	}
     	   	
     	var div0 = $('<div class="exam_freesiondiv0"></div>');
@@ -1099,9 +1173,9 @@ function ExamObj()
     		shuiji[1] = 30
     		shuiji[2] = 30
     		shuiji[3] = 30
-    	
-    	$.post(this.hosturl,{'act':'FreePractice','page':'1','id':id,'type':exam.type,'shows':shuiji[exam.type]},function(data){
-    			
+    	    	   		
+    	$.post(this.hosturl,{'act':'FreePractice','id':id,'type':exam.type,'shows':shuiji[exam.type],'tb':tb},function(data){
+    		
     			var obj = eval( "("+data+")" );
     			if( obj.error == 0 )
     			{	
@@ -1112,6 +1186,8 @@ function ExamObj()
     				div2.append( obj.txt );
     			}	
     			exam.CreateCss7();
+    			exam.Answer = obj.f;
+    			if( obj.f == 1 ){ $(".ExambtnNext").focus(); }  			
     	});
     	
     	if( tFlag )
