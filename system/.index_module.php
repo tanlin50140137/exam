@@ -3332,6 +3332,7 @@ function free_sion()
 	$bread = $html==null?'<a href="'.apth_url('subject/bim/module/exam.html').'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
 		
 	$num = $_SESSION['CHOOSEANSWER2'];
+	$type = $_SESSION['CHOOSEANSWER3'];
 	
 	require( base_url_name( SHOWFREETEMPLATES_1 ) );
 }
@@ -3413,7 +3414,7 @@ function FreePractice()
 		if( !empty( $rows ) )
 		{
 			$mixin .= '<div class="exam_freesiondiv4"><span>考场编号（'.$row['centreno'].'）</span> &nbsp; <span>'.$row['title'].'</span> &nbsp; <span>'.($row['roomsets']==0?'练习':'正式').'</span> <img src="'.$lxImg.'" width="30" height="30" align="absmiddle"/></div>';
-    		$mixin .= '<p class="exam_freesionp0">题型：'.GetFourTypes2($flagtype).' (共 '.$count.' 题)</p>';
+    		$mixin .= '<p class="exam_freesionp0">题型：<b>'.GetFourTypes2($flagtype).'</b> &nbsp; （ 共 <span class="exam_countall">'.$count.'</span> 题 ）</p>';
     		$mixin .= '<p class="exam_freesionp1"><span>'.$number.'.</span> '.$rows[$tb]['dry'].'</p>';
     		$mixin .= '<p class="exam_freesionp2">请选择答案：</p>';
     		$mixin .= '<form id="exam_freesionform0">';   		
@@ -3447,14 +3448,14 @@ function FreePractice()
 		    	{
 		    		foreach($daanArr as $k => $v )
 		    		{
-		    			$ds = mb_substr($v, 0, 1,'utf-8');
-		    			if( strtolower($ds) == $BBID )
+		    			$ds = strtolower( mb_substr($v, 0, 1,'utf-8') );
+		    			if( strstr($BBID, $ds) )
 		    			{
-		    				$mixin .= '<li class="exam_freesionli0"><label><input type="checkbox" name="rightkey[]" checked="checked" value="'.$ds.'"/>'.$v.'</label></li>';	
+		    				$mixin .= '<li class="exam_freesionli0"><label><input type="checkbox" name="rightkey'.$k.'" checked="checked" value="'.$ds.'"/>'.$v.'</label></li>';	
 		    			}
 		    			else 
 		    			{
-		    				$mixin .= '<li class="exam_freesionli0"><label><input type="checkbox" name="rightkey[]" value="'.$ds.'"/>'.$v.'</label></li>';
+		    				$mixin .= '<li class="exam_freesionli0"><label><input type="checkbox" name="rightkey'.$k.'" value="'.$ds.'"/>'.$v.'</label></li>';
 		    			}
 		    		}
 		    	}
@@ -3488,13 +3489,14 @@ function FreePractice()
 	    	$zqda = strtolower( $rows[$tb]['answers'] );
 	    	if( $BBID != null )
 	    	{
-	    		if( $BBID == $zqda )
+	    		$xxgg = array('×'=>'错误','√'=>'正确');
+	    		if( $BBID == $zqda || $BBID == $xxgg[$zqda] )
 				{
-	    			$mixin .= '<p class="exam_freesionp3">你选择'.strtoupper($BBID).'，答案正确<img src="'.$okImg.'" width="20" height="20" align="absmiddle"/></p>'; 	
+	    			$mixin .= '<p class="exam_freesionp3">你选择（'.strtoupper($BBID).'），答案正确<img src="'.$okImg.'" width="20" height="20" align="absmiddle"/></p>'; 	
 				}
 				else
 				{
-					$mixin .= '<p class="exam_freesionp3"><font color="red">你选择'.strtoupper($BBID).'，答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font></p>'; 
+					$mixin .= '<p class="exam_freesionp3"><font color="red">你选择（'.strtoupper($BBID).'），答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font></p>'; 
 				}
 				$flag = 1;
 	    	}
@@ -3507,15 +3509,14 @@ function FreePractice()
 	    	$mixin .= '<div class="exam_freesiondiv3">';
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0 ExambtnNext1" onclick="exam.Determine(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'exam_freesionp1\')" value="确定"/> ';
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" onclick="exam.give_up(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'exam_freesionp1\');" value="放弃"/> ';
-	    	$mixin .= ' <input type="button" class="exam_freesionbtn0 ExambtnNext" value="下一步" onclick="exam.NextQuestion(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'exam_freesionp1\')"/> ';
-	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="重做"/> ';
+	    	$mixin .= ' <input type="button" class="exam_freesionbtn0 ExambtnNext" value="下一题" onclick="exam.NextQuestion(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'exam_freesionp1\')"/> ';
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="单选题"/> ';
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="多选题"/> ';
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="判断题"/> ';
 	    	$mixin .= '</div>';	    		    	
 		}
 		
-		echo json_encode( array( 'error'=>0,'txt'=>$mixin,'f'=>$flag ) );
+		echo json_encode( array( 'error'=>0,'txt'=>$mixin,'f'=>$flag,'count'=>$count ) );
 	}
 	else
 	{
@@ -3530,24 +3531,28 @@ function EDetermine()
 	$noImg = 'data:image/png;base64,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';
 	
 	$flagId = htmlspecialchars($_POST['id'],ENT_QUOTES);
-	$rightkey = strtolower( $_POST['rightkey'] );
-	$num = $_POST['n'];
+	$rightkey = $_POST['rightkey'];
+	$rightkey2 = strtolower($rightkey);
 	
-	$_SESSION['CHOOSEANSWER'][$flagId] = array('n'=>$num,'k'=>$rightkey,'id'=>$flagId);
+	$num = $_POST['n'];
+	$type = $_POST['type'];
+	
+	$_SESSION['CHOOSEANSWER'][$flagId] = array('n'=>$num,'k'=>$rightkey2,'id'=>$flagId);
 	$_SESSION['CHOOSEANSWER2'] = $num;
+	$_SESSION['CHOOSEANSWER3'] = $type;
 	
 	$row = db()->select('id,pid,typeofs,dry,options,numbers,answers,analysis,years,booknames,subtitles,chapters,hats,publitime,state')->from(PRE.'examination')->where(array('id'=>$flagId))->get()->array_row();
 	if( !empty( $row ) )
 	{
 		$zqda = strtolower( $row['answers'] );
 		
-		if( $rightkey == $zqda )
+		if( $rightkey2 == $zqda )
 		{
-			echo json_encode( array( 'error'=>0,'txt'=>'你选择'.strtoupper($rightkey).'，答案正确<img src="'.$okImg.'" width="20" height="20" align="absmiddle"/> ' ) );
+			echo json_encode( array( 'error'=>0,'txt'=>'你选择'.strtoupper($rightkey2).'，答案正确<img src="'.$okImg.'" width="20" height="20" align="absmiddle"/> ' ) );
 		}
 		else
 		{
-			echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择'.strtoupper($rightkey).'，答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
+			echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择'.strtoupper($rightkey2).'，答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
 		}
 	}
 	else
@@ -3563,6 +3568,7 @@ function give_up()
 	
 	$flagId = htmlspecialchars($_POST['id'],ENT_QUOTES);
 	$num = $_POST['n'];
+	$type = $_POST['type'];
 	
 	$row = db()->select('id,pid,typeofs,dry,options,numbers,answers,analysis,years,booknames,subtitles,chapters,hats,publitime,state')->from(PRE.'examination')->where(array('id'=>$flagId))->get()->array_row();
 	if( !empty( $row ) )
@@ -3571,6 +3577,7 @@ function give_up()
 		
 		$_SESSION['CHOOSEANSWER'][$flagId] = array('n'=>$num,'k'=>'放弃','id'=>$flagId);
 		$_SESSION['CHOOSEANSWER2'] = $num;
+		$_SESSION['CHOOSEANSWER3'] = $type;
 		
 		echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择 (放弃)，答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
 	}
