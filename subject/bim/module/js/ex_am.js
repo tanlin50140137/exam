@@ -6,11 +6,39 @@
  * 
  */
 function ExamObj()
-{
+{	
     var exam  =  new Object();   	
     exam.hosturl = window.location.protocol+'//'+window.location.host+'/exam/index.php';
     exam.Answer = 0;
-    
+       
+    exam.IEVersion=function() {
+        var userAgent = navigator.userAgent;
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;
+        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+        if(isIE) {
+            var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+            reIE.test(userAgent);
+            var fIEVersion = parseFloat(RegExp["$1"]);
+            if(fIEVersion == 7) {
+                return 7;
+            } else if(fIEVersion == 8) {
+                return 8;
+            } else if(fIEVersion == 9) {
+                return 9;
+            } else if(fIEVersion == 10) {
+                return 10;
+            } else {
+                return 6;
+            }   
+        } else if(isEdge) {
+            return 'edge';
+        } else if(isIE11) {
+            return 11; 
+        }else{
+            return -1;
+        }
+    }
     exam.CreateHTML1=function()
     { 	
     	var tFlag = true;
@@ -573,10 +601,10 @@ function ExamObj()
     		
     		if( i >= 0 )
     		{
-    			clearTimes=setTimeout(SetTimes,time);
+    			clearTimes=setTimeout(SetTimes,1000);
     		}
     	}
-    	clearTimes=setTimeout(SetTimes,time);
+    	clearTimes=setTimeout(SetTimes,1000);
     	
     	return exam.tollbox_ins;
     }
@@ -1024,7 +1052,38 @@ function ExamObj()
     	    } 
        }
     	return "";
-    }    
+    } 
+    
+    /*##############################################################################################*/
+    
+    exam.SingleChoiceQuestion=function(t,obj1,obj2,id,n)
+    {		    
+    		exam.type=n;
+	    	var shuiji = {};
+				shuiji[1] = 30
+				shuiji[2] = 30
+				shuiji[3] = 30
+							
+			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':0},function(data){
+
+					var obj = eval( "("+data+")" );
+					
+					$('.exam_freesiondiv2').empty();
+					
+					if( obj.error == 0 )
+					{	
+						$('.exam_freesiondiv2').append( obj.txt );
+					}
+					else
+					{
+						$('.exam_freesiondiv2').append( obj.txt );
+					}	
+					exam.CreateCss7();	
+					
+					exam.Answer = obj.f;
+			});	
+    }
+    
     exam.NextQuestion=function(t,obj1,obj2,id,n)
     {
     	if( exam.Answer == 1 )
@@ -1037,7 +1096,18 @@ function ExamObj()
 	    		exam.type++
 	    		if( exam.type > 3 )
 	    		{
-	    			alert( '答题完毕' );return false;
+	    			$(".ExambtnNext").val('练习完毕,点击查看分析');
+	    			
+	    			
+	    			$('.exam_freesiondiv2').empty();   
+	    			
+	    			var html = '<iframe src="'+this.hosturl+'/exanalysis" width="100%" height="600"></iframe>';
+	    			
+	    			$('.exam_freesiondiv2').append( html );
+	    			
+	    			exam.CreateCss7();	
+	    			
+	    			return false;
 	    		}
 	    	}
 	    	
@@ -1065,10 +1135,11 @@ function ExamObj()
 					exam.Answer = obj.f;
 					
 			});
+			$(".ExambtnNext").css({"border":"1px solid #ded7d7"});	
     	}	
     	else
     	{
-    		$(".ExambtnNext1").focus();
+    		$(".ExambtnNext1").css({"border":"1px solid #0c7fda"});
     	}	
     }
     exam.give_up=function(t,obj1,obj2,id,n)
@@ -1080,7 +1151,7 @@ function ExamObj()
     		num = 0;
     		if( exam.type >= 3 )
     		{
-    			$(".ExambtnNext").val('答题完毕,点击查看分析');
+    			$(".ExambtnNext").val('练习完毕,点击查看分析');
     		}
     	}
     	
@@ -1101,9 +1172,10 @@ function ExamObj()
 	    				$( '.'+obj2 ).html(obj.txt);
 	    			}	
 	    			exam.Answer = 1;
-	    			if( exam.Answer == 1 ){ $(".ExambtnNext").focus(); }
+	    			if( exam.Answer == 1 ){ $(".ExambtnNext").css({"border":"1px solid #0c7fda"}); }
 	    		}
 	    	}); 
+    		$(".ExambtnNext1").css({"border":"1px solid #ded7d7"});
     	}
     	else
     	{
@@ -1111,23 +1183,30 @@ function ExamObj()
 	    	{    		
 	    		if( exam.type >= 3 )
 	    		{
-	    			$(".ExambtnNext").val('答题完毕,点击查看分析');
+	    			$(".ExambtnNext").val('练习完毕,点击查看分析');
 	    		}
 	    	}
-    		$(".ExambtnNext").focus();
+    		$(".ExambtnNext").css({"border":"1px solid #0c7fda"});
     	}	
     }
     exam.Arraysplit=function(value)
     {
-    	var strArr='';
-		var valArr = value.split('&');	    		
-		var len = valArr.length;
-		for(var i=0;i<len;i++)
-		{
-			var valArr2 = valArr[i].split('=');
-			strArr += valArr2[1];
-		}
-		return 'rightkey='+strArr;
+    	if( value != '' )
+    	{	
+	    	var strArr='';
+			var valArr = value.split('&');	    		
+			var len = valArr.length;
+			for(var i=0;i<len;i++)
+			{
+				var valArr2 = valArr[i].split('=');
+				strArr += valArr2[1];
+			}
+			return 'rightkey='+strArr;
+    	}
+    	else
+    	{
+    		return '';
+    	}	
     }
     exam.Determine=function(t,obj1,obj2,id,n)
     {
@@ -1136,12 +1215,12 @@ function ExamObj()
     	if( exam.Answer != 1 )
     	{	
 	    	var value = $( '#'+obj1 ).serialize();	   
-	    		    	
+	    		   	    	
 	    	if( exam.type == 2 )
 	    	{	
 	    		value = exam.Arraysplit(value);
 	    	}
-	    	
+	    		    		    	
 	    	if( value == '' )
 	    	{
 	    		var arr = new Array();
@@ -1169,7 +1248,7 @@ function ExamObj()
 	    		num = 0;	    		
 	    		if( exam.type >= 3 )
 	    		{
-	    			$(".ExambtnNext").val('答题完毕,点击查看分析');
+	    			$(".ExambtnNext").val('练习完毕,点击查看分析');
 	    		}
 	    	}
 	    	
@@ -1188,9 +1267,10 @@ function ExamObj()
 	    				$( '.'+obj2 ).html(obj.txt);
 	    			}	
 	    			exam.Answer = 1;
-	    			if( exam.Answer == 1 ){ $(".ExambtnNext").focus(); }
+	    			if( exam.Answer == 1 ){ $(".ExambtnNext").css({"border":"1px solid #0c7fda"}); }
 	    		}
-	    	});   	
+	    	});	  
+	    	$(".ExambtnNext1").css({"border":"1px solid #ded7d7"});
     	}
     	else
     	{
@@ -1198,10 +1278,10 @@ function ExamObj()
 	    	{    		
 	    		if( exam.type >= 3 )
 	    		{
-	    			$(".ExambtnNext").val('答题完毕,点击查看分析');
+	    			$(".ExambtnNext").val('练习完毕,点击查看分析');
 	    		}
 	    	}
-    		$(".ExambtnNext").focus();
+    		$(".ExambtnNext").css({"border":"1px solid #0c7fda"});
     	}
     }
     exam.CreateHTML7=function()
@@ -1287,7 +1367,7 @@ function ExamObj()
     	$(".exam_freesionli0").css({"margin":"0","padding":"0","font-family":"Microsoft YaHei","list-style-type":"none","line-height":"3rem","font-size":"13px","color":"#3a3838"});
     	$(".exam_freesionp3").css({"margin":"1rem 0 0 0","padding":"0","font-family":"Microsoft YaHei","color":"#1296db"});
     	$(".exam_freesiondiv3").css({"margin":"1.2rem 0 1rem 0","padding":"1rem 0","text-align":"center","font-family":"Microsoft YaHei"});
-    	$(".exam_freesionbtn0").css({"margin":"0 1rem 0 0","padding":"0px 1rem","border":"1px solid #ded7d7","height":"2.3rem","border-radius":"0.2rem","font-size":"14px","color":"#3a3838","cursor":"pointer","font-family":"Microsoft YaHei"});
+    	$(".exam_freesionbtn0").css({"margin":"0 1rem 0 0","padding":"0px 1rem","border":"1px solid #ded7d7","height":"2.3rem","border-radius":"0.2rem","font-size":"14px","color":"#3a3838","cursor":"pointer","font-family":"Microsoft YaHei","outline":"none"});
     	$(".exam_freesiondiv4").css({"margin":"0","padding":"0","position":"absolute","top":"1rem","right":"2rem","font-family":"Microsoft YaHei","font-size":"13px","color":"#7d7676"});
     	$(".exam_freesiondiv1 a").hover(function(){
     		$(this).css({"color":"red","text-decoration":"underline"});
@@ -1309,6 +1389,94 @@ function ExamObj()
     	exam.CreateCss7();
     }
     
+    /*##########################################################################*/
+    
+    exam.Tips=function(Sett,func)
+    {
+    	exam.tb_parameter2 = (Sett==undefined)?{}:Sett;
+    	exam.tb_function2 = (func==undefined)?function(){}:func;
+     	
+    	var title = exam.tb_parameter2.title==undefined?'':exam.tb_parameter2.title; 
+    	
+    	var html = '<div style="background:#333030;border-radius:4px;padding:20px 30px;color:#e4d8d8;font-family:Microsoft YaHei;">'+(title==''?'玩命提示......':title)+'</div>';
+    	
+        var content = exam.tb_parameter2.content==undefined?html:exam.tb_parameter2.content;  	   	
+    	var bgc = exam.tb_parameter2.bgc==undefined?'#fdfbfb':exam.tb_parameter2.bgc;
+    	var sha = exam.tb_parameter2.sha==undefined?'#000000':exam.tb_parameter2.sha;
+    	var rmsha = exam.tb_parameter2.rmsha==undefined?false:exam.tb_parameter2.rmsha;
+    	var border = exam.tb_parameter2.border==undefined?'#ece5e5':exam.tb_parameter2.border;
+    	var radius = exam.tb_parameter2.radius==undefined?'0.2rem':exam.tb_parameter2.radius;
+    	var z_index = exam.tb_parameter2.z_index==undefined?'99999999':exam.tb_parameter2.z_index;
+    	var time = exam.tb_parameter2.time==undefined?'5000':exam.tb_parameter2.time;
+    	var opacity = exam.tb_parameter2.opacity==undefined?'0.2':exam.tb_parameter2.opacity;
+    	var clearTimes = '';
+    	
+    	$("html,body").css({"height":"100%"});
+    	
+    	var body = $('body');
+    	var div0 = $('<div class="tollbox_sugarcane2" style="margin:0;padding:0;position:fixed;top:0;left:0;width:'+$('body').width()+'px;height:'+$('body').height()+'px;background:'+sha+';filter:alpha(opacity='+(opacity*100)+');opacity:'+opacity+';z-index:'+(z_index-2000)+'"></div><div class="tollbox_ins2" style="border:1px solid '+border+';border-radius:'+radius+';margin:0;padding:0;position:absolute;background:'+bgc+';z-index:'+z_index+';">'+content+'</div>');
+    	
+    	if( $(".tollbox_ins2").length == 0 )
+    	{	
+    		body.append( div0 );
+    	}
+    	
+    	var w = ( $(window).width() - $(".tollbox_ins2").width() ) / 2;
+    	var h = ( $(window).height() - $(".tollbox_ins2").height() ) / 2;    	
+    	$(".tollbox_ins2").css({"left":w+"px"});
+    	$(".tollbox_ins2").css({"top":h+"px"});
+    	   	
+    	exam.tollbox_sugarcane = $(".tollbox_sugarcane2");  
+    	exam.tollbox_ins = $(".tollbox_ins2"); 
+    	
+    	if( rmsha )
+    	{	    	  	
+	    	$(".tollbox_sugarcane2").click(function(){
+	    		exam.close( exam.tollbox_ins );
+	    	});
+    	}
+    	else
+    	{
+    		exam.tollbox_sugarcane.hide();
+    	}	
+    	   
+    	$(".tollbox_ins2 ul li").hover(function(){
+    		$(this).css({"color":"#1296db"});
+    	},function(){
+    		$(this).css({"color":"#676464"});
+    	});
+
+    	var i = time/1000;   	
+    	function SetTimes2()
+    	{    		
+    		if( i == 0 )
+    		{   			
+    			window.clearInterval( clearTimes );   			    			
+    			if( exam.tb_function2 != undefined )
+        	    {
+    				var obj = $(".tollbox_ins2");
+    				$(obj).hide();
+    				exam.tb_function2(obj);
+        	    }  
+    			
+    		}
+
+    		i--;
+    		
+    		if( i >= 0 )
+    		{
+    			clearTimes=setTimeout(SetTimes2,1000);
+    		}
+    	}
+    	clearTimes=setTimeout(SetTimes2,1000);
+    	
+    	return exam.tollbox_ins;
+    }
+    
+    if( exam.IEVersion() < 9 && exam.IEVersion() != -1 )
+	{
+    	$(function(){ exam.Tips({title:"您的浏览器版本过低，请升级浏览器，获得更好体验！"}); });
+	}
     return exam;  
 }
 /**

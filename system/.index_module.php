@@ -3513,9 +3513,9 @@ function FreePractice()
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0 ExambtnNext1" onclick="exam.Determine(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'exam_freesionp1\')" value="确定"/> ';
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" onclick="exam.give_up(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'exam_freesionp1\');" value="放弃"/> ';
 	    	$mixin .= ' <input type="button" class="exam_freesionbtn0 ExambtnNext" value="下一题" onclick="exam.NextQuestion(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'exam_freesionp1\')"/> ';
-	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="单选题"/> ';
-	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="多选题"/> ';
-	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="判断题"/> ';
+	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="单选题" onclick="exam.SingleChoiceQuestion(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'1\')"/> ';
+	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="多选题" onclick="exam.SingleChoiceQuestion(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'2\')"/> ';
+	    	$mixin .= ' <input type="button" class="exam_freesionbtn0" value="判断题" onclick="exam.SingleChoiceQuestion(this,\'exam_freesionform0\',\'exam_freesionp3\',\''.$rows[$tb]['id'].'\',\'3\')"/> ';
 	    	$mixin .= '</div>';	    		    	
 		}
 		
@@ -3552,11 +3552,11 @@ function EDetermine()
 		
 		if( $rightkey2 == $zqda )
 		{
-			echo json_encode( array( 'error'=>0,'txt'=>'你选择'.strtoupper($rightkey2).'，答案正确<img src="'.$okImg.'" width="20" height="20" align="absmiddle"/> ' ) );
+			echo json_encode( array( 'error'=>0,'txt'=>'你选择（'.strtoupper($rightkey2).'），答案正确<img src="'.$okImg.'" width="20" height="20" align="absmiddle"/> ' ) );
 		}
 		else
 		{
-			echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择'.strtoupper($rightkey2).'，答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
+			echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择（'.strtoupper($rightkey2).'），答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
 		}
 	}
 	else
@@ -3584,12 +3584,20 @@ function give_up()
 		$_SESSION['CHOOSEANSWER2'][$ify] = $num;
 		$_SESSION['CHOOSEANSWER3'][$ify] = $type;
 		
-		echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择 (放弃)，答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
+		echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择 （放弃），答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
 	}
 	else
 	{
 		echo json_encode( array( 'error'=>1,'txt'=>SHOWINFO_ON_1 ) );
 	}
+}
+function exanalysis()
+{
+	include( getThemeDir3() );
+	
+	//print_r($_GET);
+	
+	require( base_url_name( SHOWPHPEXCELS_4 ) );
 }
 /**
  * 

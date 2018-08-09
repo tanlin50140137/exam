@@ -52,6 +52,7 @@ define('SHOWFREETEMPLATES_1', 'data:text/css,c3ViamVjdC9iaW0vbW9kdWxlL2ZyZWVfdGV
 define('SHOWPHPEXCELS_1', 'data:text/css,c3lzdGVtL0NsYXNzZXMvUEhQRXhjZWwucGhw');
 define('SHOWPHPEXCELS_2', 'data:text/css,c3lzdGVtL0NsYXNzZXMvUEhQRXhjZWwvSU9GYWN0b3J5LnBocA==');
 define('SHOWPHPEXCELS_3', 'data:text/css,c3lzdGVtL0NsYXNzZXMvUEhQRXhjZWwvUmVhZGVyL0V4Y2VsNS5waHA=');
+define('SHOWPHPEXCELS_4', 'data:text/css,c3ViamVjdC9iaW0vbW9kdWxlL2V4YW5hbHlzaXMuaHRtbA==');
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
