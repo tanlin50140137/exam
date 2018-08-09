@@ -26,7 +26,7 @@ function GetUsersName()
 	session_start();
 	if( !isset( $_SESSION['usersname'] ) || $_SESSION['usersname']==null )
 	{
-		header('location:'.apth_url(''));exit;
+		echo '<script>open("'.apth_url('').'","_parent");</script>';exit;
 	}		
 	$usersname = $_SESSION['usersname'];
 	return $usersname;
@@ -46,7 +46,7 @@ function adminfrom()
 	$num = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_nums();
 	if( $num == 0 )
 	{
-		header('location:'.apth_url(''));exit;
+		echo '<script>open("'.apth_url('').'","_parent");</script>';exit;
 	}
 	
 	$row = db()->select('*')->from(PRE.'admin')->where(array('users'=>$usersname))->get()->array_row();		
@@ -1315,7 +1315,7 @@ function BatchExport2()
 		$objPHPExcel->getActiveSheet()->setCellValue($code[0].$i, $v['id']);
 		$objPHPExcel->getActiveSheet()->setCellValue($code[1].$i, GetFourTypes2($v['typeofs']));
 		$objPHPExcel->getActiveSheet()->setCellValue($code[2].$i, $v['dry']);
-		$objPHPExcel->getActiveSheet()->setCellValue($code[3].$i, str_replace('-','&', $v['options']));
+		$objPHPExcel->getActiveSheet()->setCellValue($code[3].$i, $v['options']);
 		$objPHPExcel->getActiveSheet()->setCellValue($code[4].$i, $v['numbers']);
 		$objPHPExcel->getActiveSheet()->setCellValue($code[5].$i, $v['answers']);
 		$objPHPExcel->getActiveSheet()->setCellValue($code[6].$i, str_replace(array(" ","　","\t","\n","\r",",","\b","\f","\t","\v","\s"),array('','','','','','','','','','',''),$v['analysis']));
@@ -1467,7 +1467,7 @@ function ImportExecution()
 		$data['typeofs'] = GetFourTypes(trim($objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue()));	
 		$data['dry'] = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());
 		$options = trim($objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue());		
-		$data['options'] = str_replace(array('&'),array('-'), trim($options));
+		$data['options'] = trim($options);
 		$data['numbers'] = trim($objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue());
 		$data['answers'] = trim($objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue());
 		$data['analysis'] = trim($objPHPExcel->getActiveSheet()->getCell("G".$j)->getValue());
@@ -1550,7 +1550,7 @@ function import_sends()
 		$options = trim($objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue());	
 		if( $options != '' )
 		{
-			$data['options'] = str_replace(array('&'),array('-'), trim($options));
+			$data['options'] = trim($options);
 		}
 		else 
 		{
@@ -3331,8 +3331,8 @@ function free_sion()
 			
 	$bread = $html==null?'<a href="'.apth_url('subject/bim/module/exam.html').'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
 		
-	$num = $_SESSION['CHOOSEANSWER2'];
-	$type = $_SESSION['CHOOSEANSWER3'];
+	$num = $_SESSION['CHOOSEANSWER2'][$flagId];
+	$type = $_SESSION['CHOOSEANSWER3'][$flagId];
 	
 	require( base_url_name( SHOWFREETEMPLATES_1 ) );
 }
@@ -3342,6 +3342,8 @@ function FreePractice()
 	
 	$flagtype = htmlspecialchars($_POST['type'],ENT_QUOTES);
 	$flagId = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	$_SESSION['CHOOSEANSWER3'][$flagId] = $flagtype;
 	
 	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('id'=>$flagId))->get()->array_row();
 	
@@ -3404,7 +3406,8 @@ function FreePractice()
 		
 		$tb = $_POST['tb']==null?'0':$_POST['tb'];
 		
-		$BBID = $_SESSION['CHOOSEANSWER'][$rows[$tb]['id']]['k'];
+		$_SESSION['CHOOSEANSWER2'][$flagId] = $tb;
+		$BBID = $_SESSION['CHOOSEANSWER'][$flagId][$rows[$tb]['id']]['k'];
 		
 		$number = $tb==0?'1':$tb+1;
 		
@@ -3420,7 +3423,7 @@ function FreePractice()
     		$mixin .= '<form id="exam_freesionform0">';   		
 	    	if( $flagtype == 1 )
 	    	{    	
-	    		$daanArr = explode('-', $rows[$tb]['options']);
+	    		$daanArr = explode('&', $rows[$tb]['options']);
 	    		
 		    	$mixin .= '<ul class="exam_freesionul0">';
 		    	if( !empty( $daanArr ) )
@@ -3442,7 +3445,7 @@ function FreePractice()
 	    	}
 	    	elseif( $flagtype == 2 )
 	    	{
-	    		$daanArr = explode('-', $rows[$tb]['options']);
+	    		$daanArr = explode('&', $rows[$tb]['options']);
 	    		$mixin .= '<ul class="exam_freesionul0">';
 	    		if( !empty( $daanArr ) )
 		    	{
@@ -3463,7 +3466,7 @@ function FreePractice()
 	    	}
 	    	elseif( $flagtype == 3 )
 	    	{
-	    		$daanArr = explode('-', $rows[$tb]['options']);
+	    		$daanArr = explode('&', $rows[$tb]['options']);
 	    		$mixin .= '<ul class="exam_freesionul0">';
 	    		if( !empty( $daanArr ) )
 		    	{
@@ -3536,10 +3539,11 @@ function EDetermine()
 	
 	$num = $_POST['n'];
 	$type = $_POST['type'];
+	$ify = $_POST['ify'];
 	
-	$_SESSION['CHOOSEANSWER'][$flagId] = array('n'=>$num,'k'=>$rightkey2,'id'=>$flagId);
-	$_SESSION['CHOOSEANSWER2'] = $num;
-	$_SESSION['CHOOSEANSWER3'] = $type;
+	$_SESSION['CHOOSEANSWER'][$ify][$flagId] = array('n'=>$num,'k'=>$rightkey2,'id'=>$flagId);
+	$_SESSION['CHOOSEANSWER2'][$ify] = $num;
+	$_SESSION['CHOOSEANSWER3'][$ify] = $type;
 	
 	$row = db()->select('id,pid,typeofs,dry,options,numbers,answers,analysis,years,booknames,subtitles,chapters,hats,publitime,state')->from(PRE.'examination')->where(array('id'=>$flagId))->get()->array_row();
 	if( !empty( $row ) )
@@ -3569,15 +3573,16 @@ function give_up()
 	$flagId = htmlspecialchars($_POST['id'],ENT_QUOTES);
 	$num = $_POST['n'];
 	$type = $_POST['type'];
+	$ify = $_POST['ify'];
 	
 	$row = db()->select('id,pid,typeofs,dry,options,numbers,answers,analysis,years,booknames,subtitles,chapters,hats,publitime,state')->from(PRE.'examination')->where(array('id'=>$flagId))->get()->array_row();
 	if( !empty( $row ) )
 	{
 		$zqda = strtolower( $row['answers'] );
 		
-		$_SESSION['CHOOSEANSWER'][$flagId] = array('n'=>$num,'k'=>'放弃','id'=>$flagId);
-		$_SESSION['CHOOSEANSWER2'] = $num;
-		$_SESSION['CHOOSEANSWER3'] = $type;
+		$_SESSION['CHOOSEANSWER'][$ify][$flagId] = array('n'=>$num,'k'=>'放弃','id'=>$flagId);
+		$_SESSION['CHOOSEANSWER2'][$ify] = $num;
+		$_SESSION['CHOOSEANSWER3'][$ify] = $type;
 		
 		echo json_encode( array( 'error'=>0,'txt'=>'<font color="red">你选择 (放弃)，答案错误<img src="'.$noImg.'" width="20" height="20" align="absmiddle"/>，<font color="#1296db">正确答案是：'.strtoupper($zqda).'</font></font> ' ) );
 	}

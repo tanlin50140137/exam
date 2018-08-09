@@ -1037,7 +1037,7 @@ function ExamObj()
 	    		exam.type++
 	    		if( exam.type > 3 )
 	    		{
-	    			exam.type = 1;
+	    			alert( '答题完毕' );return false;
 	    		}
 	    	}
 	    	
@@ -1045,9 +1045,7 @@ function ExamObj()
 				shuiji[1] = 30
 				shuiji[2] = 30
 				shuiji[3] = 30
-			
-			/*var selImg = 'data:image/png;base64,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';*/
-				
+							
 			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':num},function(data){
 
 					var obj = eval( "("+data+")" );
@@ -1066,7 +1064,6 @@ function ExamObj()
 					
 					exam.Answer = obj.f;
 					
-					/*$( '.'+obj2 ).html('<img src="'+selImg+'" width="20" height="20" align="absmiddle"/> <font color="#00ce6d">请选择答案</font>');*/				
 			});
     	}	
     	else
@@ -1081,10 +1078,9 @@ function ExamObj()
     	if( num == $(".exam_countall").html() )
     	{
     		num = 0;
-    		exam.type++
-    		if( exam.type > 3 )
+    		if( exam.type >= 3 )
     		{
-    			exam.type = 1;
+    			$(".ExambtnNext").val('答题完毕,点击查看分析');
     		}
     	}
     	
@@ -1093,7 +1089,7 @@ function ExamObj()
     		$.ajax({
 	    		url:this.hosturl,
 	    		type:'post',
-	    		data:'act=give_up&id='+id+'&n='+num+'&type='+exam.type,
+	    		data:'act=give_up&id='+id+'&n='+num+'&type='+exam.type+'&ify='+exam.ifyId,
 	    		success:function(data){
 	    			var obj = eval("("+data+")");
 	    			if( obj.error == 0 )
@@ -1111,6 +1107,13 @@ function ExamObj()
     	}
     	else
     	{
+    		if( num == $(".exam_countall").html() )
+	    	{    		
+	    		if( exam.type >= 3 )
+	    		{
+	    			$(".ExambtnNext").val('答题完毕,点击查看分析');
+	    		}
+	    	}
     		$(".ExambtnNext").focus();
     	}	
     }
@@ -1128,6 +1131,8 @@ function ExamObj()
     }
     exam.Determine=function(t,obj1,obj2,id,n)
     {
+    	var num = parseInt( $('.'+n).find('span').html() );
+    	
     	if( exam.Answer != 1 )
     	{	
 	    	var value = $( '#'+obj1 ).serialize();	   
@@ -1158,23 +1163,20 @@ function ExamObj()
 				
 	    		$( '.'+obj2 ).html('<img src="'+errorts+'" width="20" height="20" align="absmiddle"/> <font color="red">'+arr[i]+'</font>');return false;
 	    	}	
-	    	
-	    	var num = parseInt( $('.'+n).find('span').html() );
-	    	
+	    		    	
 	    	if( num == $(".exam_countall").html() )
 	    	{
-	    		num = 0;
-	    		exam.type++
-	    		if( exam.type > 3 )
+	    		num = 0;	    		
+	    		if( exam.type >= 3 )
 	    		{
-	    			exam.type = 1;
-	    		}	
+	    			$(".ExambtnNext").val('答题完毕,点击查看分析');
+	    		}
 	    	}
 	    	
 	    	$.ajax({
 	    		url:this.hosturl,
 	    		type:'post',
-	    		data:'act=EDetermine&id='+id+'&'+value+'&n='+num+'&type='+exam.type,
+	    		data:'act=EDetermine&id='+id+'&'+value+'&n='+num+'&type='+exam.type+'&ify='+exam.ifyId,
 	    		success:function(data){	    			
 	    			var obj = eval("("+data+")");
 	    			if( obj.error == 0 )
@@ -1192,6 +1194,13 @@ function ExamObj()
     	}
     	else
     	{
+    		if( num == $(".exam_countall").html() )
+	    	{    		
+	    		if( exam.type >= 3 )
+	    		{
+	    			$(".ExambtnNext").val('答题完毕,点击查看分析');
+	    		}
+	    	}
     		$(".ExambtnNext").focus();
     	}
     }
@@ -1206,21 +1215,15 @@ function ExamObj()
 	    	}
     	}
  	   	
-    	var id='',tb='';
     	if( this.setting7 != undefined )
     	{
-    		id = this.setting7.id;
+    		exam.ifyId = this.setting7.id;
     		exam.tb = this.setting7.tb==undefined?'':this.setting7.tb;
     		exam.type = this.setting7.type==''?1:this.setting7.type;
     		
     		if( exam.tb == $(".exam_countall").html() )
 	    	{
     			exam.tb = 0;
-    			exam.type++
-	    		if( exam.type > 3 )
-	    		{
-	    			exam.type = 1;
-	    		}
 	    	}
     	}
     	
@@ -1233,7 +1236,7 @@ function ExamObj()
     		shuiji[2] = 30
     		shuiji[3] = 30
     	    	   		
-    	$.post(this.hosturl,{'act':'FreePractice','id':id,'type':exam.type,'shows':shuiji[exam.type],'tb':exam.tb},function(data){
+    	$.post(this.hosturl,{'act':'FreePractice','id':exam.ifyId,'type':exam.type,'shows':shuiji[exam.type],'tb':exam.tb},function(data){
     		
     			var obj = eval( "("+data+")" );
     			if( obj.error == 0 )
@@ -1284,7 +1287,7 @@ function ExamObj()
     	$(".exam_freesionli0").css({"margin":"0","padding":"0","font-family":"Microsoft YaHei","list-style-type":"none","line-height":"3rem","font-size":"13px","color":"#3a3838"});
     	$(".exam_freesionp3").css({"margin":"1rem 0 0 0","padding":"0","font-family":"Microsoft YaHei","color":"#1296db"});
     	$(".exam_freesiondiv3").css({"margin":"1.2rem 0 1rem 0","padding":"1rem 0","text-align":"center","font-family":"Microsoft YaHei"});
-    	$(".exam_freesionbtn0").css({"margin":"0 1rem 0 0","padding":"0","border":"1px solid #ded7d7","width":"6rem","height":"2.3rem","border-radius":"0.2rem","font-size":"14px","color":"#3a3838","cursor":"pointer","font-family":"Microsoft YaHei"});
+    	$(".exam_freesionbtn0").css({"margin":"0 1rem 0 0","padding":"0px 1rem","border":"1px solid #ded7d7","height":"2.3rem","border-radius":"0.2rem","font-size":"14px","color":"#3a3838","cursor":"pointer","font-family":"Microsoft YaHei"});
     	$(".exam_freesiondiv4").css({"margin":"0","padding":"0","position":"absolute","top":"1rem","right":"2rem","font-family":"Microsoft YaHei","font-size":"13px","color":"#7d7676"});
     	$(".exam_freesiondiv1 a").hover(function(){
     		$(this).css({"color":"red","text-decoration":"underline"});
