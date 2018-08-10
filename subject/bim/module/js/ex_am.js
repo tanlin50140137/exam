@@ -1090,6 +1090,11 @@ function ExamObj()
     	{	
 	    	var num = parseInt( $('.'+n).find('span').html() );
 	      	
+	    	var shuiji = {};
+				shuiji[1] = 30
+				shuiji[2] = 30
+				shuiji[3] = 30
+	    					
 	    	if( num == $(".exam_countall").html() )
 	    	{
 	    		num = 0;
@@ -1100,8 +1105,8 @@ function ExamObj()
 	    			
 	    			
 	    			$('.exam_freesiondiv2').empty();   
-	    			
-	    			var html = '<iframe src="'+this.hosturl+'/exanalysis" width="100%" height="790" frameborder="0"></iframe>';
+		    			
+	    			var html = '<iframe src="'+this.hosturl+'/exanalysis/'+this.setting7.id+'/'+(exam.type-1)+'/'+shuiji[exam.type-1]+'" width="100%" height="790" frameborder="0"></iframe>';
 	    			
 	    			$('.exam_freesiondiv2').append( html );
 	    			
@@ -1110,12 +1115,7 @@ function ExamObj()
 	    			return false;
 	    		}
 	    	}
-	    	
-	    	var shuiji = {};
-				shuiji[1] = 30
-				shuiji[2] = 30
-				shuiji[3] = 30
-							
+	    								
 			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':num},function(data){
 
 					var obj = eval( "("+data+")" );

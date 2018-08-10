@@ -3591,11 +3591,55 @@ function give_up()
 		echo json_encode( array( 'error'=>1,'txt'=>SHOWINFO_ON_1 ) );
 	}
 }
+function ComprehensiveAnswer($id,$type)
+{
+	session_start();
+	$xb = md5($id.$type);
+	$rows = $_SESSION[$xb][$type];
+	$an = $_SESSION['CHOOSEANSWER'][$id];
+	
+	if( !empty( $rows ) )
+	{
+		$z=0;$c=0;
+		foreach( $rows as $k => $v )
+		{
+			$a = strtolower($v['answers']);
+			$b = $an[$v['id']]['k'];
+			
+			if( $a == $b )
+			{
+				$z += 1;
+			}
+			else
+			{
+				$c += 1;
+			}
+		}
+	}
+	
+	return array('z'=>$z,'c'=>$c);
+}
 function exanalysis()
 {
+	session_start();
+	
 	include( getThemeDir3() );
 	
-	//print_r($_GET);
+	$flagId = GetIndexValue(1);
+	$flagtype = GetIndexValue(2);
+
+	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('id'=>$flagId))->get()->array_row();
+	
+	$xb = md5($flagId.$flagtype);
+		
+	$rows = $_SESSION[$xb][$flagtype];
+	$count = count( $rows );	
+	
+	$tb = $count-1;
+
+	$daxiang = ComprehensiveAnswer($flagId,1);
+	$doxiang = ComprehensiveAnswer($flagId,2);
+	$paxiang = ComprehensiveAnswer($flagId,3);
 	
 	require( base_url_name( SHOWPHPEXCELS_4 ) );
 }
