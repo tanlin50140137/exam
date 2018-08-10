@@ -1101,7 +1101,7 @@ function ExamObj()
 	    			
 	    			$('.exam_freesiondiv2').empty();   
 	    			
-	    			var html = '<iframe src="'+this.hosturl+'/exanalysis" width="100%" height="600"></iframe>';
+	    			var html = '<iframe src="'+this.hosturl+'/exanalysis" width="100%" height="790" frameborder="0"></iframe>';
 	    			
 	    			$('.exam_freesiondiv2').append( html );
 	    			
