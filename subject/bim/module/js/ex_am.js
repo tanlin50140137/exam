@@ -1059,7 +1059,7 @@ function ExamObj()
     {
     	$.post(this.hosturl,{'act':'SetEndTime','id':this.setting7.id},function(data){});
     }
-    exam.SingleChoiceQuestion=function(t,obj1,obj2,id,n)
+    exam.SingleChoiceQuestion=function(n,m)
     {		    
     		exam.type=n;
 	    	var shuiji = {};
@@ -1067,7 +1067,7 @@ function ExamObj()
 				shuiji[2] = 30
 				shuiji[3] = 30
 							
-			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':0},function(data){
+			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':m,'bel':exam.bel},function(data){
 
 					var obj = eval( "("+data+")" );
 					
@@ -1097,19 +1097,16 @@ function ExamObj()
 				shuiji[1] = 30
 				shuiji[2] = 30
 				shuiji[3] = 30
-	    					
+	    						
 	    	if( num == $(".exam_countall").html() )
 	    	{
 	    		num = 0;
 	    		exam.type++
 	    		if( exam.type > 3 )
-	    		{
-	    			$(".ExambtnNext").val('练习完毕,点击查看分析');
-	    			
-	    			
+	    		{    			
 	    			$('.exam_freesiondiv2').empty();   
 		    			
-	    			var html = '<iframe src="'+this.hosturl+'/exanalysis/'+this.setting7.id+'/'+(exam.type-1)+'/'+shuiji[exam.type-1]+'" width="100%" height="790" frameborder="0"></iframe>';
+	    			var html = '<iframe src="'+this.hosturl+'/exanalysis/'+this.setting7.id+'/'+(exam.type-1)+'/'+shuiji[exam.type-1]+'/'+exam.bel+'" width="100%" height="790" frameborder="0"></iframe>';
 	    			
 	    			$('.exam_freesiondiv2').append( html );
 	    			
@@ -1119,7 +1116,7 @@ function ExamObj()
 	    		}
 	    	}
 	    								
-			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':num},function(data){
+			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':num,'bel':exam.bel},function(data){
 
 					var obj = eval( "("+data+")" );
 					
@@ -1164,7 +1161,7 @@ function ExamObj()
     		$.ajax({
 	    		url:this.hosturl,
 	    		type:'post',
-	    		data:'act=give_up&id='+id+'&n='+num+'&type='+exam.type+'&ify='+exam.ifyId,
+	    		data:'act=give_up&id='+id+'&n='+num+'&type='+exam.type+'&ify='+exam.ifyId+'&bel='+exam.bel,
 	    		success:function(data){
 	    			var obj = eval("("+data+")");
 	    			if( obj.error == 0 )
@@ -1260,7 +1257,7 @@ function ExamObj()
 	    	$.ajax({
 	    		url:this.hosturl,
 	    		type:'post',
-	    		data:'act=EDetermine&id='+id+'&'+value+'&n='+num+'&type='+exam.type+'&ify='+exam.ifyId,
+	    		data:'act=EDetermine&id='+id+'&'+value+'&n='+num+'&type='+exam.type+'&ify='+exam.ifyId+'&bel='+exam.bel,
 	    		success:function(data){	    			
 	    			var obj = eval("("+data+")");
 	    			if( obj.error == 0 )
@@ -1305,6 +1302,7 @@ function ExamObj()
     		exam.ifyId = this.setting7.id;
     		exam.tb = this.setting7.tb==undefined?'':this.setting7.tb;
     		exam.type = this.setting7.type==''?1:this.setting7.type;
+    		exam.bel = this.setting7.type==''?'':this.setting7.bel;
     		
     		if( exam.tb == $(".exam_countall").html() )
 	    	{
@@ -1321,7 +1319,7 @@ function ExamObj()
     		shuiji[2] = 30
     		shuiji[3] = 30
     	    	   		
-    	$.post(this.hosturl,{'act':'FreePractice','id':exam.ifyId,'type':exam.type,'shows':shuiji[exam.type],'tb':exam.tb},function(data){
+    	$.post(this.hosturl,{'act':'FreePractice','id':exam.ifyId,'type':exam.type,'shows':shuiji[exam.type],'tb':exam.tb,'bel':exam.bel},function(data){
     		
     			var obj = eval( "("+data+")" );
     			if( obj.error == 0 )

@@ -74,8 +74,11 @@ define("ERRORTISHIZH_CN_1", "加载失败：主题首页不存在 或 未启用�
 define("ERRORTISHIZH_CN_2", "网站已经关闭，无法访问");
 define("ERRORTISHIZH_CN_3", "加载失败：模块不存在!");
 define("QITATISHIZH_CN_1", "秒前");
+define("QITATISHIZH_CN_1_1", "秒");
 define("QITATISHIZH_CN_2", "分钟前");
+define("QITATISHIZH_CN_2_2", "分");
 define("QITATISHIZH_CN_3", "小时前");
+define("QITATISHIZH_CN_3_1", "小时");
 define("QITATISHIZH_CN_4", "天前");
 define("QITATISHIZH_CN_5", "个月前");
 define("QITATISHIZH_CN_6", "年前");
@@ -93,6 +96,23 @@ define("FAMODLES_PAGE_1", "收费模式");
 define("SHUTIANYK_PAGE_1", "可用天数");
 define("SHUTIANYK_PAGE_2", "没有启用任何规则 ");
 define("SHUTIANYK_PAGE_3", "请选择 ");
+define("SHOWCENTRENO_1", "考场编号");
+define("SHOWCENTRENO_2", "练习");
+define("SHOWCENTRENO_3", "正式");
+define("SHOWCENTRENO_4", "共");
+define("SHOWCENTRENO_5", "题");
+define("SHOWCENTRENO_6", "请选择答案");
+define("SHOWCENTRENO_7", "错误");
+define("SHOWCENTRENO_8", "正确");
+define("SHOWCENTRENO_9", "你选择");
+define("SHOWCENTRENO_10", "答案正确");
+define("SHOWCENTRENO_11", "正确答案是");
+define("SHOWCENTRENO_12", "确定");
+define("SHOWCENTRENO_13", "放弃");
+define("SHOWCENTRENO_14", "下一题");
+define("SHOWCENTRENO_15", "答案错误");
+define("SHOWCENTRENO_16", "放弃");
+define("SHOWCENTRENO_17", "练习完毕,点击查看分析");
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

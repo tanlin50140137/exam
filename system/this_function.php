@@ -303,7 +303,7 @@ function base_url_name( $string )
 }
 function TimeConversion($time)
 {
-	$tArr = array('秒','分','小时');
+	$tArr = array(QITATISHIZH_CN_1_1,QITATISHIZH_CN_2_2,QITATISHIZH_CN_3_1);
 	
 	$h = 0;
 	while ( $time >= 3600 )

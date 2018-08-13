@@ -20,6 +20,7 @@ define("APTH_URL", 'http://127.0.0.1/exam');
 define("DIR_URL", $_SERVER['DOCUMENT_ROOT'].str_replace($sys_protocal.$_SERVER['HTTP_HOST'], '', APTH_URL));
 date_default_timezone_set('PRC');
 set_ini_error('ON');
+ini_set('session.gc_maxlifetime', 3600*4);
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
