@@ -3334,6 +3334,11 @@ function free_sion()
 	$num = $_SESSION['CHOOSEANSWER2'][$flagId];
 	$type = $_SESSION['CHOOSEANSWER3'][$flagId];
 	
+	if( !isset( $_SESSION['GETSTARTANDENDS'][$flagId]['start'] ) )
+	{
+		$_SESSION['GETSTARTANDENDS'][$flagId]['start'] = time();
+	}
+	
 	require( base_url_name( SHOWFREETEMPLATES_1 ) );
 }
 function FreePractice()
@@ -3617,7 +3622,7 @@ function ComprehensiveAnswer($id,$type)
 		}
 	}
 	
-	return array('z'=>$z,'c'=>$c);
+	return array('z'=>$z,'c'=>$c,'count'=>count($rows));
 }
 function exanalysis()
 {
@@ -3641,7 +3646,46 @@ function exanalysis()
 	$doxiang = ComprehensiveAnswer($flagId,2);
 	$paxiang = ComprehensiveAnswer($flagId,3);
 	
+	$allcount = $daxiang['count']+$doxiang['count']+$paxiang['count'];	
+	$rate = round((($daxiang['z']+$doxiang['z']+$paxiang['z'])/$allcount)*100,2);
+	$error = round((($daxiang['c']+$doxiang['c']+$paxiang['c'])/$allcount)*100,2);
+	
+	$diff = $_SESSION['GETSTARTANDENDS'][$flagId]['diff'];	
+	$TimeOf = TimeConversion( $diff );
+	$Average = TimeConversion( $diff/$allcount );
+	$master = Proficiency($rate,$error,$Average,$allcount,$diff);
+	
 	require( base_url_name( SHOWPHPEXCELS_4 ) );
+}
+function SetEndTime()
+{
+	session_start();
+	
+	$flagId = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	
+	if( !isset( $_SESSION['GETSTARTANDENDS'][$flagId]['end'] ) )
+	{
+		$_SESSION['GETSTARTANDENDS'][$flagId]['end'] = time();
+	}
+	
+	$start = $_SESSION['GETSTARTANDENDS'][$flagId]['start'];
+	$end = $_SESSION['GETSTARTANDENDS'][$flagId]['end'];
+	
+	$_SESSION['GETSTARTANDENDS'][$flagId]['diff'] = $end-$start;	
+}
+function Proficiency($r,$e,$v,$a,$d)
+{
+	$l = $r+$v;
+	$b = $a+$d;
+	
+	if( ($r-$e) >= 0 )
+	{
+		return 100 - round(($l/$b)*100,2).'%';
+	}
+	elseif( ($r-$e) < 0 )
+	{
+		return 100-(100-round(($l/$b)*100,2)).'%';
+	}	
 }
 /**
  * 

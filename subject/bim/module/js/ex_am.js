@@ -1055,7 +1055,10 @@ function ExamObj()
     } 
     
     /*##############################################################################################*/
-    
+    exam.SetEndTime=function()
+    {
+    	$.post(this.hosturl,{'act':'SetEndTime','id':this.setting7.id},function(data){});
+    }
     exam.SingleChoiceQuestion=function(t,obj1,obj2,id,n)
     {		    
     		exam.type=n;
@@ -1152,6 +1155,7 @@ function ExamObj()
     		if( exam.type >= 3 )
     		{
     			$(".ExambtnNext").val('练习完毕,点击查看分析');
+    			this.SetEndTime();
     		}
     	}
     	
@@ -1182,8 +1186,8 @@ function ExamObj()
     		if( num == $(".exam_countall").html() )
 	    	{    		
 	    		if( exam.type >= 3 )
-	    		{
-	    			$(".ExambtnNext").val('练习完毕,点击查看分析');
+	    		{	    			
+	    			$(".ExambtnNext").val('练习完毕,点击查看分析');	    			
 	    		}
 	    	}
     		$(".ExambtnNext").css({"border":"1px solid #0c7fda"});
@@ -1249,6 +1253,7 @@ function ExamObj()
 	    		if( exam.type >= 3 )
 	    		{
 	    			$(".ExambtnNext").val('练习完毕,点击查看分析');
+	    			this.SetEndTime();
 	    		}
 	    	}
 	    	

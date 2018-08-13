@@ -301,6 +301,39 @@ function base_url_name( $string )
 	
 	return $s;
 }
+function TimeConversion($time)
+{
+	$tArr = array('秒','分','小时');
+	
+	$h = 0;
+	while ( $time >= 3600 )
+	{
+		$time -= 3600;
+		$h++;
+	}
+	$i = 0;
+	while ( $time >= 60 )
+	{
+		$time -= 60;
+		$i++;
+	}
+	$s = $time;
+	
+	if( $h != 0 )
+	{
+		$ts = $h.$tArr[2].$i.$tArr[1].round($s,2).$tArr[0];
+	}
+	elseif( $i !=0 )
+	{
+		$ts = $i.$tArr[1].round($s,2).$tArr[0];
+	}
+	else
+	{
+		$ts = round($s,2).$tArr[0];
+	}	
+	
+	return $ts;
+}
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
