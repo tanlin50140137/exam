@@ -3658,7 +3658,7 @@ function exanalysis()
 	
 	$flagId = GetIndexValue(1);
 	$flagtype = GetIndexValue(2);
-	$bel = GetIndexValue(3);
+	$bel = GetIndexValue(4);
 
 	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('id'=>$flagId))->get()->array_row();
 	
@@ -3677,7 +3677,7 @@ function exanalysis()
 	$rate = round((($daxiang['z']+$doxiang['z']+$paxiang['z'])/$allcount)*100,2);
 	$error = round((($daxiang['c']+$doxiang['c']+$paxiang['c'])/$allcount)*100,2);
 	
-	$diff = $_SESSION['GETSTARTANDENDS'][$flagId]['diff'];	
+	$diff = $_SESSION['GETSTARTANDENDS'][$flagId][$bel]['diff'];	
 	$TimeOf = TimeConversion( $diff );
 	$Average = TimeConversion( $diff/$allcount );
 	$master = Proficiency($rate,$error,$Average,$allcount,$diff);	
@@ -3690,16 +3690,17 @@ function SetEndTime()
 	session_start();
 	
 	$flagId = htmlspecialchars($_POST['id'],ENT_QUOTES);
+	$bel = $_POST['bel'];
 	
-	if( !isset( $_SESSION['GETSTARTANDENDS'][$flagId]['end'] ) )
+	if( !isset( $_SESSION['GETSTARTANDENDS'][$flagId][$bel]['end'] ) )
 	{
-		$_SESSION['GETSTARTANDENDS'][$flagId]['end'] = time();
+		$_SESSION['GETSTARTANDENDS'][$flagId][$bel]['end'] = time();
 	}
 	
-	$start = $_SESSION['GETSTARTANDENDS'][$flagId]['start'];
-	$end = $_SESSION['GETSTARTANDENDS'][$flagId]['end'];
+	$start = $_SESSION['GETSTARTANDENDS'][$flagId][$bel]['start'];
+	$end = $_SESSION['GETSTARTANDENDS'][$flagId][$bel]['end'];
 	
-	$_SESSION['GETSTARTANDENDS'][$flagId]['diff'] = $end-$start;	
+	$_SESSION['GETSTARTANDENDS'][$flagId][$bel]['diff'] = $end-$start;	
 }
 function Proficiency($r,$e,$v,$a,$d)
 {
@@ -3732,29 +3733,30 @@ function re_doing()
 	session_start();
 	
 	$flagId = $_POST['id'];
+	$bel = $_POST['bel'];
 	
 	$xb1 = md5($flagId.'1');	
 	$xb2 = md5($flagId.'2');
 	$xb3 = md5($flagId.'3');
 	
-	$_SESSION[$xb1][1] = null;
-	unset($_SESSION[$xb1][1]);
-	$_SESSION[$xb2][2] = null;
-	unset($_SESSION[$xb2][2]);
-	$_SESSION[$xb3][3] = null;	
-	unset($_SESSION[$xb3][3]);
-	$_SESSION['CHOOSEANSWER'][$flagId] = null;
-	unset($_SESSION['CHOOSEANSWER'][$flagId]);
-	$_SESSION['GETSTARTANDENDS'][$flagId]['start'] = null;
-	unset($_SESSION['GETSTARTANDENDS'][$flagId]['start']);
-	$_SESSION['GETSTARTANDENDS'][$flagId]['end'] = null;
-	unset($_SESSION['GETSTARTANDENDS'][$flagId]['end']);	
-	$_SESSION['CHOOSEANSWER2'][$flagId] = null;
-	unset($_SESSION['CHOOSEANSWER2'][$flagId]);
-	$_SESSION['CHOOSEANSWER3'][$flagId] = null;
-	unset($_SESSION['CHOOSEANSWER3'][$flagId]);
-	$_SESSION['GETSTARTANDENDS'][$flagId]['diff'] = null;
-	unset($_SESSION['GETSTARTANDENDS'][$flagId]['diff']);
+	$_SESSION[$xb1][1][$bel] = null;
+	unset($_SESSION[$xb1][1][$bel]);
+	$_SESSION[$xb2][2][$bel] = null;
+	unset($_SESSION[$xb2][2][$bel]);
+	$_SESSION[$xb3][3][$bel] = null;	
+	unset($_SESSION[$xb3][3][$bel]);
+	$_SESSION['CHOOSEANSWER'][$flagId][$bel] = null;
+	unset($_SESSION['CHOOSEANSWER'][$flagId][$bel]);
+	$_SESSION['GETSTARTANDENDS'][$flagId][$bel]['start'] = null;
+	unset($_SESSION['GETSTARTANDENDS'][$flagId][$bel]['start']);
+	$_SESSION['GETSTARTANDENDS'][$flagId][$bel]['end'] = null;
+	unset($_SESSION['GETSTARTANDENDS'][$flagId][$bel]['end']);	
+	$_SESSION['CHOOSEANSWER2'][$flagId][$bel] = null;
+	unset($_SESSION['CHOOSEANSWER2'][$flagId][$bel]);
+	$_SESSION['CHOOSEANSWER3'][$flagId][$bel] = null;
+	unset($_SESSION['CHOOSEANSWER3'][$flagId][$bel]);
+	$_SESSION['GETSTARTANDENDS'][$flagId][$bel]['diff'] = null;
+	unset($_SESSION['GETSTARTANDENDS'][$flagId][$bel]['diff']);
 	
 	echo 'success';
 }

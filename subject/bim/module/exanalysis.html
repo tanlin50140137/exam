@@ -163,13 +163,13 @@ $(function(){
 			}else if( index == 1 ){
 				parent.exam.SingleChoiceQuestion(1,0);
 			}else if( index == 2 ){
-				$.post('<?php echo apth_url("index.php");?>',{'act':'re_doing','id':'<?php echo $flagId;?>','type':'<?php echo $flagtype;?>'},function(d){
+				$.post('<?php echo apth_url("index.php");?>',{'act':'re_doing','id':'<?php echo $flagId;?>','type':'<?php echo $flagtype;?>','bel':'<?php echo $bel;?>'},function(d){
 					if(d=='success'){
-						open('<?php echo apth_url("index.php/free_sion/".$flagId);?>','_parent');
+						open('<?php echo apth_url("index.php/free_sion/".$flagId."/".$bel);?>','_parent');
 					}
 				});
 			}else if( index == 3 ){
-				alert('退出');
+				open('<?php echo apth_url("subject/bim/module/exam.html");?>','_parent');
 			}			
 		});
 	});

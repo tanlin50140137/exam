@@ -1057,7 +1057,7 @@ function ExamObj()
     /*##############################################################################################*/
     exam.SetEndTime=function()
     {
-    	$.post(this.hosturl,{'act':'SetEndTime','id':this.setting7.id},function(data){});
+    	$.post(this.hosturl,{'act':'SetEndTime','id':this.setting7.id,'bel':exam.bel},function(data){});
     }
     exam.SingleChoiceQuestion=function(n,m)
     {		    
@@ -1302,13 +1302,13 @@ function ExamObj()
     		exam.ifyId = this.setting7.id;
     		exam.tb = this.setting7.tb==undefined?'':this.setting7.tb;
     		exam.type = this.setting7.type==''?1:this.setting7.type;
-    		exam.bel = this.setting7.type==''?'':this.setting7.bel;
+    		exam.bel = this.setting7.bel==''?'':this.setting7.bel;
     		
     		if( exam.tb == $(".exam_countall").html() )
 	    	{
     			exam.tb = 0;
 	    	}
-    	}
+    	}   	
     	
     	var div0 = $('<div class="exam_freesiondiv0"></div>');
     	var div1 = $('<div class="exam_freesiondiv1">'+(typeof tFlag=='boolean'?'首页 &gt; 分类':this.setting7.title)+'</div>');  
@@ -1383,7 +1383,7 @@ function ExamObj()
     	this.htmlobj7 = hobj;
     	this.setting7 = (Sett==undefined)?{}:Sett;
     	exam.func7 = (func==undefined)?function(){}:func;
-    	
+    	   	
     	var html = this.CreateHTML7();   	
  	   
     	$( this.htmlobj7 ).empty();
