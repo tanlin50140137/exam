@@ -3776,6 +3776,14 @@ function re_doing()
 	
 	echo 'success';
 }
+function InstallEnable()
+{
+	include( getThemeDir3() );
+	
+	$sys = str_replace('\\', '/', dirname(__FILE__));
+	
+	require( base_url_name( SHOWPHPEXCELS_5 ) );
+}
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

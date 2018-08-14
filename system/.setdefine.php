@@ -48,11 +48,11 @@ define('SHOWEXHIBTRBIMCSS_1', 'data:text/css,Li4vc3ViamVjdC9iaW0vY3NzL2JpbS1jc3M
 define('SHOWEXHIBTRLAYERJS_1', 'data:text/css,Li4vc3ViamVjdC9iaW0vbGF5ZXIvbGF5ZXIuanM=');
 define('SHOWEXHIBTRLOGINS_1', 'data:text/css,Li4vc3ViamVjdC9iaW0vanMvbG9naW5zLmpz');
 define('SHOWFREETEMPLATES_1', 'data:text/css,c3ViamVjdC9iaW0vbW9kdWxlL2ZyZWVfdGVtcGxhdGUuaHRtbA==');
-
 define('SHOWPHPEXCELS_1', 'data:text/css,c3lzdGVtL0NsYXNzZXMvUEhQRXhjZWwucGhw');
 define('SHOWPHPEXCELS_2', 'data:text/css,c3lzdGVtL0NsYXNzZXMvUEhQRXhjZWwvSU9GYWN0b3J5LnBocA==');
 define('SHOWPHPEXCELS_3', 'data:text/css,c3lzdGVtL0NsYXNzZXMvUEhQRXhjZWwvUmVhZGVyL0V4Y2VsNS5waHA=');
 define('SHOWPHPEXCELS_4', 'data:text/css,c3ViamVjdC9iaW0vbW9kdWxlL2V4YW5hbHlzaXMuaHRtbA==');
+define('SHOWPHPEXCELS_5', 'data:text/css,c3ViamVjdC9iaW0vbW9kdWxlL2luc2VuYWJsZS5odG1s');
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
