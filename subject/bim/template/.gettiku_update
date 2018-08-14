@@ -35,10 +35,10 @@
 		</select>
 		</p>
 		<p>题型：
-		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==0?'checked="checked"':'';?> value="0">单选题</label> &nbsp; &nbsp; 
-		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==1?'checked="checked"':'';?> value="1">多选题</label> &nbsp; &nbsp; 
-		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==2?'checked="checked"':'';?> value="2">判断题</label> &nbsp; &nbsp; 
-		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==3?'checked="checked"':'';?> value="3">问答题</label></p>
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==1?'checked="checked"':'';?> value="1">单选题</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==2?'checked="checked"':'';?> value="2">多选题</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==3?'checked="checked"':'';?> value="3">判断题</label> &nbsp; &nbsp; 
+		<label><input type="radio" name="typeofs" <?php echo $row['typeofs']==4?'checked="checked"':'';?> value="4">问答题</label></p>
 		<p>题干： 
 		<textarea name="dry" style="width:45rem;"><?php echo $row['dry'];?></textarea>
 		</p>

@@ -3410,17 +3410,17 @@ function FreePractice()
 			$sql .= ' order by rand()*10000000 limit '.$offset.','.$TotalShow.' ';			
 		}
 
-		$xb = md5($flagId.$flagtype);
-		
-		if( !isset( $_SESSION[$xb][$flagtype][$bel] ) )
+		$xb = md5($flagId.$flagtype.$solve);
+				
+		if( !isset( $_SESSION[$xb][$flagtype][$bel] ) || empty($_SESSION[$xb][$flagtype][$bel]) )
 		{
 			$row2 = db()->query($sql)->array_rows();
-			$_SESSION[$xb][$flagtype][$bel] = $row2;
+			$_SESSION[$xb][$flagtype][$bel] = $row2;			
 		}
 		
 		$rows = $_SESSION[$xb][$flagtype][$bel];
 		$count = count( $rows );
-		
+				
 		$tb = $_POST['tb']==null?'0':$_POST['tb'];
 		
 		$_SESSION['CHOOSEANSWER2'][$flagId][$bel] = $tb;
@@ -3547,8 +3547,14 @@ function FreePractice()
 	    		    		    	
 	    	$mixin .= '</div>';	    		    	
 		}
-		
-		echo json_encode( array( 'error'=>0,'txt'=>$mixin,'f'=>$flag,'count'=>$count ) );
+		if( $mixin != '' )
+		{
+			echo json_encode( array( 'error'=>0,'txt'=>$mixin,'f'=>$flag,'count'=>$count ) );
+		}
+		else
+		{
+			echo json_encode( array( 'error'=>1,'txt'=>'<div style="margin:50px;text-align:center;color:#a2a1a0;font-family:Microsoft YaHei;">未查找到任何题目，或者没有导入；或者设置扩大揽题方式</div>') );
+		}
 	}
 	else
 	{
@@ -3625,7 +3631,10 @@ function give_up()
 function ComprehensiveAnswer($id,$type,$bel)
 {
 	session_start();
-	$xb = md5($id.$type);
+	
+	$row = db()->select('solve')->from(PRE.'createroom')->where(array('id'=>$id))->get()->array_row();
+	
+	$xb = md5($id.$type.$row['solve']);
 	$rows = $_SESSION[$xb][$type][$bel];	
 	$an = $_SESSION['CHOOSEANSWER'][$id][$bel];
 	
@@ -3662,7 +3671,12 @@ function exanalysis()
 
 	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('id'=>$flagId))->get()->array_row();
 	
-	$xb = md5($flagId.$flagtype);
+	if( empty($row) )
+	{
+		header('location:'.apth_url('subject/bim/module/exam.html'));exit;
+	}
+	
+	$xb = md5($flagId.$flagtype.$row['solve']);
 		
 	$rows = $_SESSION[$xb][$flagtype][$bel];
 	$count = count( $rows );	
@@ -3735,9 +3749,11 @@ function re_doing()
 	$flagId = $_POST['id'];
 	$bel = $_POST['bel'];
 	
-	$xb1 = md5($flagId.'1');	
-	$xb2 = md5($flagId.'2');
-	$xb3 = md5($flagId.'3');
+	$row = db()->select('solve')->from(PRE.'createroom')->where(array('id'=>$flagId))->get()->array_row();
+	
+	$xb1 = md5($flagId.'1'.$row['solve']);	
+	$xb2 = md5($flagId.'2'.$row['solve']);
+	$xb3 = md5($flagId.'3'.$row['solve']);
 	
 	$_SESSION[$xb1][1][$bel] = null;
 	unset($_SESSION[$xb1][1][$bel]);

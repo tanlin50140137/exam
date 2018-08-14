@@ -1320,8 +1320,9 @@ function ExamObj()
     		shuiji[3] = 30
     	    	   		
     	$.post(this.hosturl,{'act':'FreePractice','id':exam.ifyId,'type':exam.type,'shows':shuiji[exam.type],'tb':exam.tb,'bel':exam.bel},function(data){
-    		
+   		
     			var obj = eval( "("+data+")" );
+    			   			
     			if( obj.error == 0 )
     			{	
     				div2.append( obj.txt );
