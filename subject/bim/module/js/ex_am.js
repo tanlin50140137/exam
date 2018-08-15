@@ -939,7 +939,7 @@ function ExamObj()
     	{
     		if( exam.setting4.id != undefined ) id = exam.setting4.id;	
     	}      
-	    $.post(this.hosturl,{'act':'GetOtherIfic','len':len,'target':target,'limit':limit,'id':id},function(data){
+	    $.post(this.hosturl,{'act':'GetOtherIfic','len':len,'target':target,'limit':limit,'id':id},function(data){	    		    	
 	    	 	var obj = eval("("+data+")");
 	    	 	if( obj.error == 0 )
 	    	 	{
@@ -1063,9 +1063,9 @@ function ExamObj()
     {		    
     		exam.type=n;
 	    	var shuiji = {};
-				shuiji[1] = 30
-				shuiji[2] = 30
-				shuiji[3] = 30
+				shuiji[1] = 30;
+				shuiji[2] = 30;
+				shuiji[3] = 30;
 							
 			$.post(this.hosturl,{'act':'FreePractice','id':this.setting7.id,'type':exam.type,'shows':shuiji[exam.type],'tb':m,'bel':exam.bel},function(data){
 
@@ -1320,7 +1320,7 @@ function ExamObj()
     		shuiji[3] = 30
     	    	   		
     	$.post(this.hosturl,{'act':'FreePractice','id':exam.ifyId,'type':exam.type,'shows':shuiji[exam.type],'tb':exam.tb,'bel':exam.bel},function(data){
-   		
+   		   		
     			var obj = eval( "("+data+")" );
     			   			
     			if( obj.error == 0 )
@@ -1487,11 +1487,6 @@ function ExamObj()
     {
     	var vals = $(this.htmlobj8).serialize();
     		
-    	if( $("[name='hosturl']").val() == '' ){
-    		alert('请设置安装路径');
-    		$("[name='hosturl']").focus();
-    		return false;
-    	}	
     	if( exam.power == 0 ){
     		alert(exam.dir+' 权限不足，需要读写权限，值>=0775');
     		$(".exam_insenablediv2").focus();
@@ -1508,7 +1503,7 @@ function ExamObj()
     		return false;
     	}   	
     	if( $("[name='sign']").val() == '' ){
-    		alert('logon name 不能留空');
+    		alert('Sign in 不能留空');
     		$("[name='sign']").focus();
     		return false;
     	}
@@ -1532,7 +1527,12 @@ function ExamObj()
     		type:'post',
     		data:'act=OnSubmitSend&'+vals,
     		success:function(d){
-    			console.log(d);
+    			var obj = eval("("+d+")");
+    			if( obj.error == 0 ){
+    				location.href=obj.txt;
+    			}else{
+    				alert(obj.txt);
+    			}
     		}
     	});
     }
@@ -1565,11 +1565,8 @@ function ExamObj()
     	
     	var div0 = $('<div class="exam_insenablediv0"></div>');
     	var div1 = $('<div class="exam_insenablediv1"><img src="'+suImg+'" width="25" height="25" align="absmiddle"/>EXAM v1.0 - <img src="'+picImg+'" width="26" height="26" align="absmiddle"/>TanLin <span>Install step</span></div>');
-    	
-    	var div4 = $('<div class="exam_insenablediv4"><img src="'+urlImg+'" width="21" height="21" align="absmiddle"/>设置安装路径</div>');
-    	var div5 = $('<div class="exam_insenablediv5"><input type="text" name="hosturl" value="'+window.location.protocol+'//'+window.location.host+'"/> &nbsp; <span style="font-size:12px;">默认指向根目录，如果要安装在其它目录请定义路径（如：http://www.xxx.com/二级目录/三级目录/......）</span></div>');
-    	
-    	var div2 = $('<div class="exam_insenablediv2"><img src="'+prImg+'" width="21" height="21" align="absmiddle"/>目录权限</div>');
+   	
+    	var div2 = $('<div class="exam_insenablediv2"><img src="'+prImg+'" width="21" height="21" align="absmiddle"/>检测目录权限</div>');
     	var div3 = $('<div class="exam_insenablediv3"><img src="'+dirImg+'" width="21" height="21" align="absmiddle"/>'+exam.dir+'<span>'+exam.perms+' &nbsp;  &nbsp;  &nbsp;'+(exam.power=='0'?'<img src="'+noImg+'" width="19" height="19" align="absmiddle"/>权限不足':'<img src="'+okImg+'" width="18" height="18" align="absmiddle"/>')+'</span></div>');
     	
     	var div6 = $('<div class="exam_insenablediv6"><img src="'+dbImg+'" width="21" height="21" align="absmiddle"/>MYSQL数据库设置</div>');
@@ -1588,7 +1585,7 @@ function ExamObj()
     		li0 += '</ul>';
     		
     		li0 += '<ul class="exam_insenableul0">';
-    		li0 += '<li class="exam_insenableli0 exam_insenableins1">logon name：</li>';
+    		li0 += '<li class="exam_insenableli0 exam_insenableins1">Sign in：</li>';
     		li0 += '<li class="exam_insenableli0 exam_insenableins2"><input type="text" class="exam_insenableinps" name="sign" value="root"/> &nbsp; <font style="color:#e83232;">*</font></li>'; 		
     		li0 += '<li style="clear:both;margin:0;padding:0;list-style-type:none;"></li>';
     		li0 += '</ul>';
@@ -1619,7 +1616,7 @@ function ExamObj()
     		
     		li0 += '<ul class="exam_insenableul0">';
     		li0 += '<li class="exam_insenableli0 exam_insenableins1">Coding format：</li>';
-    		li0 += '<li class="exam_insenableli0 exam_insenableins2" style="line-height: 2.9rem;"><label><input type="radio" name="coding" checked="checked" value="utf-8"/>UTF-8</label> &nbsp; <label><input type="radio" name="coding" value="gbk"/>GBK</label></li>'; 				
+    		li0 += '<li class="exam_insenableli0 exam_insenableins2" style="line-height: 2.9rem;"><label><input type="radio" name="coding" checked="checked" value="utf8"/>UTF-8</label> &nbsp; <label><input type="radio" name="coding" value="gbk"/>GBK</label></li>'; 				
     		li0 += '<li style="clear:both;margin:0;padding:0;list-style-type:none;"></li>';
     		li0 += '</ul>';
     	
@@ -1641,9 +1638,6 @@ function ExamObj()
 		var div10 = $('<div class="exam_insenablediv10"><input type="button" value="提交" onclick="exam.OnSubmitSend();"/></div>');		
     		
     	div0.append(div1);
-    	
-    	div0.append(div4);
-    	div0.append(div5);
     	
     	div0.append(div2);
     	div0.append(div3);
@@ -1683,14 +1677,9 @@ function ExamObj()
     	$(".exam_insenablediv1").css({"border-bottom":"1px solid #eae7e7","margin":"0","padding":"2rem","font-family":"Microsoft YaHei","font-size":"2rem","color":"#1296db","background":"#f3f4f7"});
     	$(".exam_insenablediv1 span").css({"float":"right","font-size":"1.5rem"});
     	$(".exam_insenablediv2").css({"border-bottom":"1px solid #eae7e7","margin":"1.6rem 1.6rem 0 1.6rem","padding":"1rem 0","color":"#695f5f","font-family":"Microsoft YaHei"});
-    	$(".exam_insenablediv4").css({"border-bottom":"1px solid #eae7e7","margin":"1.6rem 1.6rem 0 1.6rem","padding":"1rem 0","color":"#695f5f","font-family":"Microsoft YaHei"});
-    	$(".exam_insenablediv3").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#655e5e","font-family":"Microsoft YaHei"});
-    	$(".exam_insenablediv5").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#9c9898","font-family":"Microsoft YaHei"});
-    	$(".exam_insenablediv5 input").css({"border":"1px solid #eae7e7","width":"32rem","border-radius":"0.3rem","outline":"none","color":"#352a2a","padding":"8px 10px","font-family":"Microsoft YaHei"});
-    	
+    	$(".exam_insenablediv3").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#655e5e","font-family":"Microsoft YaHei"});    	
     	$(".exam_insenablediv6").css({"border-bottom":"1px solid #e57cb0","margin":"1.6rem 1.6rem 0 1.6rem","padding":"1rem 0","color":"#e57cb0","font-family":"Microsoft YaHei"});
-    	$(".exam_insenablediv7").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#655e5e","font-family":"Microsoft YaHei"});
-    	
+    	$(".exam_insenablediv7").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#655e5e","font-family":"Microsoft YaHei"});   	
     	if( power == '0' )
     	{	
     		$(".exam_insenablediv3 span").css({"float":"right","font-family":"Microsoft YaHei","color":"red"});
@@ -1698,13 +1687,11 @@ function ExamObj()
     	else
     	{	
     		$(".exam_insenablediv3 span").css({"float":"right","font-family":"Microsoft YaHei","color":"#38c10c"});
-    	}
-    	
+    	}   	
     	$(".exam_insenableul0").css({"margin":"0","padding":"0"});
     	$(".exam_insenableli0").css({"margin":"0","padding":"0","list-style-type":"none","float":"left","padding":"10px 0"});
     	$(".exam_insenableins1").css({"width":"240px","padding":"20px 10px","text-align":"right","color":"#bbb5b5"});
-    	$(".exam_insenableinps").css({"border":"1px solid #eae7e7","width":"32rem","border-radius":"0.3rem","outline":"none","color":"#5d5555","padding":"8px 10px","font-family":"Microsoft YaHei","font-size":"17px"});
-    	
+    	$(".exam_insenableinps").css({"border":"1px solid #eae7e7","width":"32rem","border-radius":"0.3rem","outline":"none","color":"#5d5555","padding":"8px 10px","font-family":"Microsoft YaHei","font-size":"17px"});    	
     	$(".exam_insenablediv8").css({"border-bottom":"1px solid #eae7e7","margin":"1.6rem 1.6rem 0 1.6rem","padding":"1rem 0","color":"#695f5f","font-family":"Microsoft YaHei"});
     	$(".exam_insenablediv9").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#695f5f","font-family":"Microsoft YaHei"});
     	$(".exam_insenablediv10").css({"margin":"0","padding":"0 20px 40px 20px","text-align":"center"});

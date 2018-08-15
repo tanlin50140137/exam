@@ -115,6 +115,9 @@ define("SHOWCENTRENO_16", "放弃");
 define("SHOWCENTRENO_17", "练习完毕,点击查看分析");
 define("SHOWINSTALLENABLE_1", "安装启用程序");
 define("SHOWINSTALLENABLE_2", "文件或目录不存在");
+define("SHOWCENTRENO_18", "数据库连接错误");
+define("SHOWCENTRENO_19", "语法错误");
+define("SHOWCENTRENO_20", "创建数据库失败");
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

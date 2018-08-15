@@ -2992,13 +2992,18 @@ function GetExamination()
 function UpwardsLookup3($pid)
 {
 	static $rows;
-	$ify = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('id'=>$pid))->get()->array_rows();
-	foreach( $ify as $k => $v )
+	if( $pid !== null )
 	{
-		$rows[] = array('id'=>$v['id'],'title'=>$v['title']);
-		UpwardsLookup3($v['pid']);
+		$ify = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('id'=>$pid))->get()->array_rows();
 	}
-	
+	if( !empty( $ify ) )
+	{
+		foreach( $ify as $k => $v )
+		{
+			$rows[] = array('id'=>$v['id'],'title'=>$v['title']);
+			UpwardsLookup3($v['pid']);
+		}
+	}
 	$array = '';
 	if( !empty( $rows ) )
 	{
@@ -3146,7 +3151,10 @@ function GetOtherIfic()
 	if( $id != null )
 	{
 		$toprows = UpwardsLookup3( $id );
-		$topId = $toprows[0]['id'];
+		if( !empty( $toprows ) )
+		{	
+			$topId = $toprows[0]['id'];
+		}
 	}
 	
 	$mem = new Memcache();
@@ -3159,9 +3167,10 @@ function GetOtherIfic()
 	}
 	
 	$key = md5( $sql );		
+	
 	if( !$mem->get( $key ) )
-	{
-		$data = db()->query($sql)->array_rows();
+	{		
+		$data = db()->query($sql)->array_rows();		
 		$mem->set($key, $data, 0, 30);   	
     	$rows = $mem->get( $key );
 	}
@@ -3365,12 +3374,12 @@ function FreePractice()
 	$_SESSION['CHOOSEANSWER3'][$flagId][$bel] = $flagtype;
 	
 	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('id'=>$flagId))->get()->array_row();
-	
+		
 	if( !empty( $row ) )
 	{
 		$solve = $row['solve'];
 		$id = $row['pid'];
-		
+				
 		switch ( $solve )
 		{
 			case 0:
@@ -3381,18 +3390,22 @@ function FreePractice()
 			break;
 			case 1:
 				if( $row['roomsets'] == 0 )
-				{
-					$All = UpwardsLookup5($id);
-					$tmp = '';
+				{					
+					$All = UpwardsLookup5($id);					
+					
 					if( !empty( $All ) )
 					{
 					 	foreach( $All as $k => $v )
 					 	{
 					 		$tmp .= ($tmp==''?'':',').$v['id'];
-					 	}
-					 	
-					 	$sql = 'select id,pid,typeofs,dry,options,numbers,answers,analysis,years,booknames,subtitles,chapters,hats,publitime,state from '.PRE.'examination where typeofs='.$flagtype.' and pid in('.$tmp.') ';					 	
+					 	}							 					 	
 					}
+					else
+					{
+						$tmp = $id;
+					}
+					
+					$sql = 'select id,pid,typeofs,dry,options,numbers,answers,analysis,years,booknames,subtitles,chapters,hats,publitime,state from '.PRE.'examination where typeofs='.$flagtype.' and pid in('.$tmp.') ';	
 				}
 			break;
 		}
@@ -3409,7 +3422,7 @@ function FreePractice()
 		{
 			$sql .= ' order by rand()*10000000 limit '.$offset.','.$TotalShow.' ';			
 		}
-
+		
 		$xb = md5($flagId.$flagtype.$solve);
 				
 		if( !isset( $_SESSION[$xb][$flagtype][$bel] ) || empty($_SESSION[$xb][$flagtype][$bel]) )
@@ -3777,8 +3790,9 @@ function re_doing()
 	echo 'success';
 }
 function InstallEnable()
-{
-	include( getThemeDir3() );
+{	
+	$bools = is_file(dirname(__FILE__).'/config/config.php');
+	if( $bools ) header( 'location:'.apth_url() );
 	
 	$ps = intval(perms_all(dirname(__FILE__),1));
 	$psFlag = 0;
@@ -3790,110 +3804,86 @@ function InstallEnable()
 	require( base_url_name( SHOWPHPEXCELS_5 ) );
 }
 function OnSubmitSend()
-{
-	/*
-	 * Array
-	(
-	    [act] => OnSubmitSend
-	    [hosturl] => http://127.0.0.1
-	    [hostid] => localhost
-	    [basname] => data
-	    [password] => 123456
-	    [prefix] => exam_
-	    [engine] => MyISAM
-	    [start] => 1
-	    [admin] => sdfsdf
-	    [pwd] => 1111111111111
-	)
-	 * */
-	$dvsdconfig  = "<?php \n\n define(\"SERVERS\", \"{$_POST['hostid']}\");\n\n ";
-	$dvsdconfig += "define(\"USERNAMES\", \"{$_POST['hostid']}\");\n\n ";
-	$dvsdconfig += "define(\"PASSWORDS\", \"{$_POST['password']}\");\n\n ";
-	$dvsdconfig += "define(\"BASENAMES\", \"{$_POST['basname']}\");\n\n ";
-	$dvsdconfig += "define(\"BASS\", \"mysql\");\n\n ";
-	$dvsdconfig += "define(\"PRE\", \"{$_POST['prefix']}\");\n\n ";
-	
+{			
 	if( $_POST['start'] == 1 )
-    {#mysql驱动
-	    $link = @mysql_connect($_POST['hostid'],$_POST['sign'],$_POST['password']) or exit('错误 '.mysql_errno().'-'.mysql_error().' 数据库连接错误');
-	    if( mysql_select_db($_POST['basname']) == false )
+    {
+	    $link = @mysql_connect(strtolower(trim($_POST['hostid'])),strtolower(trim($_POST['sign'])),trim($_POST['password'])) or exit(SHOWCENTRENO_7.mysql_errno().'-'.mysql_error().' '.SHOWCENTRENO_18);	    
+	    if( mysql_select_db(strtolower(trim($_POST['basname']))) == false )
 	    {
-	    	mysql_query("create database if not exists ".$_POST['basname']." default character set '".$_POST['coding']."';");
-	    	mysql_select_db($_POST['basname']);
+	    	mysql_query(create_db($_POST));
+	    	mysql_select_db(strtolower(trim($_POST['basname'])));
 	    }    
 	    mysql_query('set names utf8');
-	    #创建数据表
-	    $tableArr =  table_data($data);
+
+	    $tableArr =  table_data($_POST);
 	    if(!empty($tableArr))
 	    {
 		    foreach($tableArr as $k=>$v)
 		    {
-		    	$int = mysql_query($v) or exit('sql语法错误 '.mysql_errno()."  <br/>\n\n  ".mysql_error()." <br/>\n\n ".$v);
+		    	$int = mysql_query($v) or exit(SHOWCENTRENO_19.mysql_errno()."  <br/>\n\n  ".mysql_error()." <br/>\n\n ".$v);
 		    }
 	    }
 	    else 
 	    {
-	    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+	    	echo json_encode(array('error'=>'1','txt'=>SHOWCENTRENO_20));exit;
 	    }	
 		mysql_close($link);
 	    if($int)
 		{
-			#创建配置文件
-	   		file_put_contents('../system/config/config.php', $dvsdconfig);
-	    
-			echo '<script>location.href="index.php?act=step4";</script>';
+	   		file_put_contents(DIR_URL.'/system/config/config.php', system_config($_POST));
+	    	file_put_contents(DIR_URL.'/system/'.SPOT.'dvsd.php', system_config($_POST));
+			echo json_encode(array('error'=>'0','txt'=>apth_url()));
 		}
 	}
 	elseif( $_POST['start'] == 3 )
-	{#mysqli驱动
-		$mysqli = @new mysqli($data['host'],$data['username'],$data['password']);
+	{
+		$mysqli = @new mysqli(strtolower(trim($_POST['hostid'])),strtolower(trim($_POST['sign'])),trim($_POST['password']));
 
-		$dbint = $mysqli->select_db($data['dbname']);
+		$dbint = $mysqli->select_db(strtolower(trim($_POST['basname'])));
 		if( $dbint == false )
 		{
-			$mysqli->query(create_db($data));
+			$mysqli->query(create_db($_POST));
 			
-			$mysqli->select_db($data['dbname']);
+			$mysqli->select_db(strtolower(trim($_POST['basname'])));
 		}
 		
 		$result = $mysqli->query("set names utf8");
-		#创建数据表
-	    $tableArr =  table_data($data);
+
+	    $tableArr =  table_data($_POST);
 		if(!empty($tableArr))
 	    {
 		    foreach($tableArr as $k=>$v)
 		    {
-		    	$int = $mysqli->query($v) or exit('sql语法错误 '.mysqli_errno()."  <br/>\n\n  ".mysqli_error()." <br/>\n\n ".$v);
+		    	$int = $mysqli->query($v) or exit(SHOWCENTRENO_19.mysqli_errno()."  <br/>\n\n  ".mysqli_error()." <br/>\n\n ".$v);
 		    }
 	    }
 	    else 
 	    {
-	    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+	    	echo json_encode(array('error'=>'1','txt'=>SHOWCENTRENO_20));exit;
 	    }	
 		$mysqli->close();
 		if($int)
 		{
-			#创建配置文件
-	   		file_put_contents('../system/config/config.php', $str_data);
-	    
-			echo '<script>location.href="index.php?act=step4";</script>';
+	   		file_put_contents(DIR_URL.'/system/config/config.php', system_config($_POST));
+	    	file_put_contents(DIR_URL.'/system/'.SPOT.'dvsd.php', system_config($_POST));
+			echo json_encode(array('error'=>'0','txt'=>apth_url()));
 		}
 	}
 	elseif( $_POST['start'] == 2 )
-	{#PDO驱动
-		$dbms=$data['mysql'];     //数据库类型
-		$host=$data['host']; //数据库主机名
-		$dbName=$data['dbname'];    //使用的数据库
-		$user=$data['username'];      //数据库连接用户名
-		$pass=$data['password'];          //对应的密码
+	{
+		$dbms='mysql'; 
+		$host=strtolower(trim($_POST['hostid'])); 
+		$dbName=strtolower(trim($_POST['basname']));
+		$user=strtolower(trim($_POST['sign']));
+		$pass=trim($_POST['password']); 
 		$dsn1="$dbms:host=$host;dbname=$dbName";
 		$dsn2="$dbms:host=$host;";
 		try 
-		{#有库
-		    $dbh = new PDO($dsn1, $user, $pass); //初始化一个PDO对象	    
+		{
+		    $dbh = new PDO($dsn1, $user, $pass);    
 		    $dbh->exec("set names utf8");
-		    #创建数据表
-	   		$tableArr =  table_data($data);
+
+	   		$tableArr =  table_data($_POST);
 		    if(!empty($tableArr))
 		    {
 			    foreach($tableArr as $k=>$v)
@@ -3903,22 +3893,22 @@ function OnSubmitSend()
 		    }
 		    else 
 		    {
-		    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+		    	echo json_encode(array('error'=>'1','txt'=>SHOWCENTRENO_20));exit;
 		    }
-			#创建配置文件
-		   	file_put_contents('../system/config/config.php', $str_data);
-		    
-			echo '<script>location.href="index.php?act=step4";</script>';  
+
+		   	file_put_contents(DIR_URL.'/system/config/config.php', system_config($_POST));
+		    file_put_contents(DIR_URL.'/system/'.SPOT.'dvsd.php', system_config($_POST));
+			echo json_encode(array('error'=>'0','txt'=>apth_url()));
 		} 
 		catch (PDOException $e) 
-		{#无库			
-			$dbh = new PDO($dsn2, $user, $pass); //初始化一个PDO对象		
-			$dbin = $dbh->exec(create_db($data));
+		{			
+			$dbh = new PDO($dsn2, $user, $pass);
+			$dbin = $dbh->exec(create_db($_POST));
 	
-			$dbh2 = new PDO($dsn1, $user, $pass); //初始化一个PDO对象
+			$dbh2 = new PDO($dsn1, $user, $pass);
 			$dbh2->exec("set names utf8");
-			#创建数据表
-	    	$tableArr =  table_data($data);
+
+	    	$tableArr =  table_data($_POST);
 			if(!empty($tableArr))
 		    {
 			    foreach($tableArr as $k=>$v)
@@ -3928,16 +3918,54 @@ function OnSubmitSend()
 		    }
 		    else 
 		    {
-		    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+		    	echo json_encode(array('error'=>'1','txt'=>SHOWCENTRENO_20));exit;
 		    }
 
-			#创建配置文件
-		   	file_put_contents('../system/config/config.php', $str_data);
-		    
-			echo '<script>location.href="index.php?act=step4";</script>';
+		   	file_put_contents(DIR_URL.'/system/config/config.php', system_config($_POST));
+		    file_put_contents(DIR_URL.'/system/'.SPOT.'dvsd.php', system_config($_POST));
+			echo json_encode(array('error'=>'0','txt'=>apth_url()));
 		}
 	}
+}
+function system_config($data)
+{	
+	$string = '<?php'."\n\n";
+	$string .= 'define("SERVERS", "'.strtolower(trim($_POST['hostid'])).'");'."\n\n";
+	$string .= 'define("USERNAMES", "'.strtolower(trim($_POST['sign'])).'");'."\n\n";
+	$string .= 'define("PASSWORDS", "'.trim($_POST['password']).'");'."\n\n";
+	$string .= 'define("BASENAMES", "'.strtolower(trim($_POST['basname'])).'");'."\n\n";
+	$string .= 'define("BASS", "mysql");'."\n\n";
+	$string .= 'define("PRE", "'.strtolower(trim($_POST['prefix'])).'");';
+	
+	return $string;
+}
+function create_db($data)
+{
+	return "create database if not exists ".strtolower(trim($_POST['basname']))." default character set '".trim($data['coding'])."';";
+}
+function table_data($data)
+{
+	$prefix = strtolower(trim($data['prefix']));
+	$engine = trim($data['engine']);
+	$coding = trim($data['coding']);	
+	$admin = trim($data['admin']);
+	$pwd = mb_substr(md5(md5(base64_decode(trim($data['pwd'])))),0,10,'utf-8');
+	
+	$apthInstall = DIR_URL.'/system/data/'.SPOT.'install';
 
+	if( is_file( $apthInstall ) )
+	{
+		$subject = file_get_contents( $apthInstall );
+		$string = str_replace(array('%1001%','%1002%','%1003%','%100T1%','%100T2%','%100T3%'),array($prefix,$engine,$coding,$admin,$pwd,time()), $subject);
+		
+		$a = explode('#775#', $string);
+		
+		return $a;
+	}
+	else
+	{
+		return null;
+	}
 }
 /**
  * 

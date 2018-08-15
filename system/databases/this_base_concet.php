@@ -22,7 +22,7 @@ class This_base_concet
 	 * @return 查=resource
 	 */
 	public function query($sql)
-	{
+	{		
 		$resource = mysql_query($this->get_sql($sql)) or exit('sql语法错误 '.mysql_errno()."  <br/>\n\n  ".mysql_error()." <br/>\n\n ".$sql);
 		return $resource;
 	}
