@@ -7,9 +7,9 @@
 <script src="<?php echo apth_url( base_url_name( SHOWEXHIBTRJS_1 ) );?>"></script>
 </head>
 <body style="margin:0;padding:0;height:100%;">
-<div id="exm" style="width:1200px;margin:auto;"></div>
+<form id="exm" style="width:1200px;margin:auto;"></form>
 <script>
-exam.InstallEnable('#exm',{'dir':'<?php echo $sys;?>','power':'0'});
+exam.InstallEnable('#exm',{'dir':'<?php echo $sys;?>','power':'<?php echo $psFlag;?>','perms':'<?php echo $strps;?>'});
 </script>
 </body>
 </html>

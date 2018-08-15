@@ -3780,9 +3780,164 @@ function InstallEnable()
 {
 	include( getThemeDir3() );
 	
+	$ps = intval(perms_all(dirname(__FILE__),1));
+	$psFlag = 0;
+	if( $ps >= 775 ) $psFlag = 1;
+	
+	$strps = perms_all(dirname(__FILE__));
 	$sys = str_replace('\\', '/', dirname(__FILE__));
 	
 	require( base_url_name( SHOWPHPEXCELS_5 ) );
+}
+function OnSubmitSend()
+{
+	/*
+	 * Array
+	(
+	    [act] => OnSubmitSend
+	    [hosturl] => http://127.0.0.1
+	    [hostid] => localhost
+	    [basname] => data
+	    [password] => 123456
+	    [prefix] => exam_
+	    [engine] => MyISAM
+	    [start] => 1
+	    [admin] => sdfsdf
+	    [pwd] => 1111111111111
+	)
+	 * */
+	$dvsdconfig  = "<?php \n\n define(\"SERVERS\", \"{$_POST['hostid']}\");\n\n ";
+	$dvsdconfig += "define(\"USERNAMES\", \"{$_POST['hostid']}\");\n\n ";
+	$dvsdconfig += "define(\"PASSWORDS\", \"{$_POST['password']}\");\n\n ";
+	$dvsdconfig += "define(\"BASENAMES\", \"{$_POST['basname']}\");\n\n ";
+	$dvsdconfig += "define(\"BASS\", \"mysql\");\n\n ";
+	$dvsdconfig += "define(\"PRE\", \"{$_POST['prefix']}\");\n\n ";
+	
+	if( $_POST['start'] == 1 )
+    {#mysql驱动
+	    $link = @mysql_connect($_POST['hostid'],$_POST['sign'],$_POST['password']) or exit('错误 '.mysql_errno().'-'.mysql_error().' 数据库连接错误');
+	    if( mysql_select_db($_POST['basname']) == false )
+	    {
+	    	mysql_query("create database if not exists ".$_POST['basname']." default character set '".$_POST['coding']."';");
+	    	mysql_select_db($_POST['basname']);
+	    }    
+	    mysql_query('set names utf8');
+	    #创建数据表
+	    $tableArr =  table_data($data);
+	    if(!empty($tableArr))
+	    {
+		    foreach($tableArr as $k=>$v)
+		    {
+		    	$int = mysql_query($v) or exit('sql语法错误 '.mysql_errno()."  <br/>\n\n  ".mysql_error()." <br/>\n\n ".$v);
+		    }
+	    }
+	    else 
+	    {
+	    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+	    }	
+		mysql_close($link);
+	    if($int)
+		{
+			#创建配置文件
+	   		file_put_contents('../system/config/config.php', $dvsdconfig);
+	    
+			echo '<script>location.href="index.php?act=step4";</script>';
+		}
+	}
+	elseif( $_POST['start'] == 3 )
+	{#mysqli驱动
+		$mysqli = @new mysqli($data['host'],$data['username'],$data['password']);
+
+		$dbint = $mysqli->select_db($data['dbname']);
+		if( $dbint == false )
+		{
+			$mysqli->query(create_db($data));
+			
+			$mysqli->select_db($data['dbname']);
+		}
+		
+		$result = $mysqli->query("set names utf8");
+		#创建数据表
+	    $tableArr =  table_data($data);
+		if(!empty($tableArr))
+	    {
+		    foreach($tableArr as $k=>$v)
+		    {
+		    	$int = $mysqli->query($v) or exit('sql语法错误 '.mysqli_errno()."  <br/>\n\n  ".mysqli_error()." <br/>\n\n ".$v);
+		    }
+	    }
+	    else 
+	    {
+	    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+	    }	
+		$mysqli->close();
+		if($int)
+		{
+			#创建配置文件
+	   		file_put_contents('../system/config/config.php', $str_data);
+	    
+			echo '<script>location.href="index.php?act=step4";</script>';
+		}
+	}
+	elseif( $_POST['start'] == 2 )
+	{#PDO驱动
+		$dbms=$data['mysql'];     //数据库类型
+		$host=$data['host']; //数据库主机名
+		$dbName=$data['dbname'];    //使用的数据库
+		$user=$data['username'];      //数据库连接用户名
+		$pass=$data['password'];          //对应的密码
+		$dsn1="$dbms:host=$host;dbname=$dbName";
+		$dsn2="$dbms:host=$host;";
+		try 
+		{#有库
+		    $dbh = new PDO($dsn1, $user, $pass); //初始化一个PDO对象	    
+		    $dbh->exec("set names utf8");
+		    #创建数据表
+	   		$tableArr =  table_data($data);
+		    if(!empty($tableArr))
+		    {
+			    foreach($tableArr as $k=>$v)
+			    {
+			    	$dbh->exec($v);
+			    }
+		    }
+		    else 
+		    {
+		    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+		    }
+			#创建配置文件
+		   	file_put_contents('../system/config/config.php', $str_data);
+		    
+			echo '<script>location.href="index.php?act=step4";</script>';  
+		} 
+		catch (PDOException $e) 
+		{#无库			
+			$dbh = new PDO($dsn2, $user, $pass); //初始化一个PDO对象		
+			$dbin = $dbh->exec(create_db($data));
+	
+			$dbh2 = new PDO($dsn1, $user, $pass); //初始化一个PDO对象
+			$dbh2->exec("set names utf8");
+			#创建数据表
+	    	$tableArr =  table_data($data);
+			if(!empty($tableArr))
+		    {
+			    foreach($tableArr as $k=>$v)
+			    {
+			    	$dbh2->exec($v);
+			    }
+		    }
+		    else 
+		    {
+		    	echo '创建数据库失败，原因：install/next/　目录下无法找到　mapping.sql 文件。请登录官方网站，重新下载程序包后重试！！！';exit;
+		    }
+
+			#创建配置文件
+		   	file_put_contents('../system/config/config.php', $str_data);
+		    
+			echo '<script>location.href="index.php?act=step4";</script>';
+		}
+	}
+
 }
 /**
  * 
