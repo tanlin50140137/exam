@@ -35,7 +35,7 @@
 	</div>
 	<div class="fenlaitongji_in" set-url="<?php echo apth_url('');?>">
 		<script type="text/javascript">
-			var a = new dTree('a');
+			var a = new dTree('a','<?php echo apth_url('');?>');
 			a.add(0,-1,'<b style="font-weight:bold;">查看每个分类下考题总数</b>');
 	<?php if(!empty($wxfl)){?>	
 		<?php foreach($wxfl as $k=>$v){?>

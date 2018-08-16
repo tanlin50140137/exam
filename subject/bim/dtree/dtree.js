@@ -27,7 +27,7 @@ function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
 	this._p;
 };
 // Tree object
-function dTree(objName) {
+function dTree(objName,url) {	this.setUrl = url;
 	this.config = {
 		target					: null,
 		folderLinks			: true,
@@ -40,20 +40,20 @@ function dTree(objName) {
 		inOrder					: false
 	}
 	this.icon = {
-		root				: 'http://127.0.0.1/exam/subject/bim/dtree/img/base.gif',
-		folder			: 'http://127.0.0.1/exam/subject/bim/dtree/img/folder.gif',
-		folderOpen	: 'http://127.0.0.1/exam/subject/bim/dtree/img/folderopen.gif',
-		node				: 'http://127.0.0.1/exam/subject/bim/dtree/img/page.gif',
-		empty				: 'http://127.0.0.1/exam/subject/bim/dtree/img/empty.gif',
-		line				: 'http://127.0.0.1/exam/subject/bim/dtree/img/line.gif',
-		join				: 'http://127.0.0.1/exam/subject/bim/dtree/img/join.gif',
-		joinBottom	: 'http://127.0.0.1/exam/subject/bim/dtree/img/joinbottom.gif',
-		plus				: 'http://127.0.0.1/exam/subject/bim/dtree/img/plus.gif',
-		plusBottom	: 'http://127.0.0.1/exam/subject/bim/dtree/img/plusbottom.gif',
-		minus				: 'http://127.0.0.1/exam/subject/bim/dtree/img/minus.gif',
-		minusBottom	: 'http://127.0.0.1/exam/subject/bim/dtree/img/minusbottom.gif',
-		nlPlus			: 'http://127.0.0.1/exam/subject/bim/dtree/img/nolines_plus.gif',
-		nlMinus			: 'http://127.0.0.1/exam/subject/bim/dtree/img/nolines_minus.gif'
+		root				: this.setUrl+'/subject/bim/dtree/img/base.gif',
+		folder			: this.setUrl+'/subject/bim/dtree/img/folder.gif',
+		folderOpen	: this.setUrl+'/subject/bim/dtree/img/folderopen.gif',
+		node				: this.setUrl+'/subject/bim/dtree/img/page.gif',
+		empty				: this.setUrl+'/subject/bim/dtree/img/empty.gif',
+		line				: this.setUrl+'/subject/bim/dtree/img/line.gif',
+		join				: this.setUrl+'/subject/bim/dtree/img/join.gif',
+		joinBottom	: this.setUrl+'/subject/bim/dtree/img/joinbottom.gif',
+		plus				: this.setUrl+'/subject/bim/dtree/img/plus.gif',
+		plusBottom	: this.setUrl+'/subject/bim/dtree/img/plusbottom.gif',
+		minus				: this.setUrl+'/subject/bim/dtree/img/minus.gif',
+		minusBottom	: this.setUrl+'/subject/bim/dtree/img/minusbottom.gif',
+		nlPlus			: this.setUrl+'/subject/bim/dtree/img/nolines_plus.gif',
+		nlMinus			: this.setUrl+'/subject/bim/dtree/img/nolines_minus.gif'
 	};
 	this.obj = objName;
 	this.aNodes = [];

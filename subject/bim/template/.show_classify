@@ -109,7 +109,7 @@
 		<a href="javascript:void(0);" onclick="TreeDisplay(this);">列表展示</a>
 	</div>
 	<script type="text/javascript">
-		d = new dTree('d');
+		d = new dTree('d','<?php echo apth_url('');?>');
 		d.add(0,-1,'查看所有考试分类');
 <?php if(!empty($flRows2)){?>	
 	<?php foreach($flRows2 as $k=>$v){?>
