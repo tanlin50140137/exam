@@ -19,6 +19,9 @@
 		<div class="adming_logo"></div>
 	</a>
 	<ul class="right_allboxs">
+		<li class="pic_imgs2" style="width:100px;line-height:2.5rem;color:#FFFFFF">
+			<a href="<?php echo apth_url('subject/bim/module/exam.html');?>" target="_blank">网站首页</a>
+		</li>
 		<li class="pic_imgs">
 			<a href="<?php echo apth_url('index.php/geturl_update&id='.$row['id']);?>" target="show_winds"><img src="<?php echo $row['pic'];?>" alt="<?php echo $usersname;?>"/></a>
 		</li>
