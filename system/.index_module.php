@@ -7,19 +7,15 @@
 header('content-type:text/html;charset=utf-8');
 function index()
 {
-	$int = array( GetIndexValue(1) ,SHOWINDEX_2);
+	include( getThemeDir3() );
 	
-	$s = sh_source( SHOWINDEX_1, BOOLS, $int );
-	
-	print( $s );
+	require( base_url_name( SHOWINDEX_1 ) );
 }
 function reset_u()
 {
-	$int = array( GetIndexValue(1) ,SHOWRESET_2);
+	include( getThemeDir3() );
 	
-	$s = sh_source( SHOWRESET_1, BOOLS, $int );
-	
-	print( $s );
+	require( base_url_name( SHOWRESET_1 ) );
 }
 function GetUsersName()
 {
@@ -3346,12 +3342,12 @@ function free_sion()
 		{
 			foreach( $ifyArr as $k => $v )
 			{
-				$html .= ($html==null?'<a href="'.apth_url('subject/bim/module/exam.html').'">'.HOME_PAGE_1.'</a> &gt; ':' &gt; ').'<a href="'.apth_url('index.php/exhibition/'.$v['id']).'">'.$v['title'].'</a>';
+				$html .= ($html==null?'<a href="'.apth_url('index.php/index_e').'">'.HOME_PAGE_1.'</a> &gt; ':' &gt; ').'<a href="'.apth_url('index.php/exhibition/'.$v['id']).'">'.$v['title'].'</a>';
 			}
 		}
 	}
-			
-	$bread = $html==null?'<a href="'.apth_url('subject/bim/module/exam.html').'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
+
+	$bread = $html==null?'<a href="'.apth_url('index.php/index_e').'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
 		
 	$num = $_SESSION['CHOOSEANSWER2'][$flagId][$bel];
 	$type = $_SESSION['CHOOSEANSWER3'][$flagId][$bel];
@@ -3686,7 +3682,7 @@ function exanalysis()
 	
 	if( empty($row) )
 	{
-		header('location:'.apth_url('subject/bim/module/exam.html'));exit;
+		header('location:'.apth_url('index.php/index_e'));exit;
 	}
 	
 	$xb = md5($flagId.$flagtype.$row['solve']);
@@ -3791,17 +3787,27 @@ function re_doing()
 }
 function InstallEnable()
 {	
-	$bools = is_file(dirname(__FILE__).'/config/config.php');
+	$bools = is_file(dirname(__FILE__).'/config/config.php');	
 	if( $bools ) header( 'location:'.apth_url() );
 	
-	$ps = intval(perms_all(dirname(__FILE__),1));
-	$psFlag = 0;
-	if( $ps >= 775 ) $psFlag = 1;
+	$p1 = dirname(__FILE__);
 	
-	$strps = perms_all(dirname(__FILE__));
-	$sys = str_replace('\\', '/', dirname(__FILE__));
+	$arr[0] = getpermstools($p1);
+	$arr[1] = getpermstools($p1.'/config');
 	
 	require( base_url_name( SHOWPHPEXCELS_5 ) );
+}
+function getpermstools($apth)
+{
+	$ps = intval(perms_all($apth,1));	
+		
+	$psFlag = 0;
+	if( $ps >= 777 ) $psFlag = 1;	
+	
+	$strps = perms_all($apth);
+	$sys = str_replace('\\', '/', $apth);
+	
+	return array('dirurl'=>$sys,'perms'=>$psFlag,'strps'=>$strps);
 }
 function OnSubmitSend()
 {			
@@ -3966,6 +3972,12 @@ function table_data($data)
 	{
 		return null;
 	}
+}
+function index_e()
+{
+	include( getThemeDir3() );
+		
+	require( base_url_name( SHOWPHPEXCELS_6 ) );
 }
 /**
  * 

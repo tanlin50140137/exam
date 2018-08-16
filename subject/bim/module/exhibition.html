@@ -16,6 +16,7 @@
 <div style="border:1px solid #d8cdcd;width:1160px;margin:20px auto;height:60px;line-height:60px;padding:0 20px;font-family:'Microsoft YaHei';color:#3e3c3c;margin-bottom:10px;">友情链接：</div>
 <script>
 
+exam.SetHosturl('<?php echo apth_url("index.php");?>');
 exam.Examination("#exam",{id:'<?php echo $id;?>',url:'http://127.0.0.1/exam/subject/bim/module/exam.html'},function(data){});
 exam.Hottest('#exam2',{},function(data){});
 exam.OtherIfic('#exam3',{},function(data){});

@@ -9,7 +9,8 @@
 <body style="margin:0;padding:0;height:100%;">
 <form id="exm" style="width:1200px;margin:auto;"></form>
 <script>
-exam.InstallEnable('#exm',{'dir':'<?php echo $sys;?>','power':'<?php echo $psFlag;?>','perms':'<?php echo $strps;?>'});
+exam.SetHosturl('<?php echo apth_url("index.php");?>');
+exam.InstallEnable('#exm',{'dir':['<?php echo $arr[0]["dirurl"];?>','<?php echo $arr[1]["dirurl"];?>'],'power':['<?php echo $arr[0]["perms"];?>','<?php echo $arr[1]["perms"];?>'],'perms':['<?php echo $arr[0]["strps"];?>','<?php echo $arr[1]["strps"];?>']});
 </script>
 </body>
 </html>

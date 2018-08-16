@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>测试考试模板</title>
-<script src="../js/jquery-1.11.2.min.js"></script>
-<script src="js/ex_am.js"></script>
+<script src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
+<script src="<?php echo apth_url('subject/bim/module/js/ex_am.js');?>"></script>
 </head>
 <body>
 
@@ -19,9 +19,11 @@
 </div>
 
 <script>
+
+exam.SetHosturl('<?php echo apth_url("index.php");?>');
 exam.InfoBar('#exam1',{w:'100%',h:'564px',li:'31%',len:90});
 exam.family('#exam2',{w:'100%',h:'564px',li:'41%'},function(data){});
-exam.news('#exam3',{title:'考试咨讯',len:60,url:'http://127.0.0.1/exam/index.php/conents',tw:'200px',th:'60px',target:'_blank'},function(data){});
+exam.news('#exam3',{title:'考试咨讯',len:60,url:'<?php echo apth_url("index.php/conents");?>',tw:'200px',th:'60px',target:'_blank'},function(data){});
 </script>
 
 </body>
