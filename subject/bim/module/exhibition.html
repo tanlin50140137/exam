@@ -17,7 +17,7 @@
 <script>
 
 exam.SetHosturl('<?php echo apth_url("index.php");?>');
-exam.Examination("#exam",{id:'<?php echo $id;?>',url:'http://127.0.0.1/exam/subject/bim/module/exam.html'},function(data){});
+exam.Examination("#exam",{id:'<?php echo $id;?>',url:'<?php echo apth_url("index.php/index_e");?>'},function(data){});
 exam.Hottest('#exam2',{},function(data){});
 exam.OtherIfic('#exam3',{},function(data){});
 
