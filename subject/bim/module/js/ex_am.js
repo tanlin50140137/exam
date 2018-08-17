@@ -179,12 +179,12 @@ function ExamObj()
     	var limit='',len='',url='',target='';
     	if( this.setting2 != undefined )
     	{
-    		limit = this.setting2.limit;
-    		len = this.setting2.len;
-    		url = this.setting2.url;
-    		target = this.setting2.target;
+    		limit = this.setting2.limit==undefined?'':this.setting2.limit;
+    		len = this.setting2.len==undefined?'':this.setting2.len;
+    		url = this.setting2.url==undefined?'':this.setting2.url;
+    		target = this.setting2.target==undefined?'':this.setting2.target;
     	} 	
-    	   	
+    	   	   	
     	var iconimg1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABTElEQVQ4T91TsXHCQBDc+8GQPlSAZ5BSqwRKoARSS4GhA3VgO5BI1YFVgkqQU4kZXIH41Lbmz3Oy8cgPDMT+cP9+/253j3RSLYloCfcwDH8MOpyGbQaCPiphzmicVuU+9AP3Uoj7mIn8zK2RtzRO62IfevMjgk09VxYdbhUKc+8VxwR18T8IqpLfb+ZmfWv6M06SOrZEpWCKOWgiL+7f68edplGbk06qgECxaxMxisMjIWP6FvT3iM3gmHS6XRD4wVWYgLIJvfUBlx8xau8AmoLtq4n8rrvzLkgOSBkTzvKuS0JGTLmMpWAXYGWaaLa6aKOMIYFxdZKgKdD0IoGESALliijtj5M6v4oAlqcno3wdwSBT/Bk3of9nNzobh60s05ld6Ik4SbZPFnZnIv9ZWv/JwAszryUHJ9eZwG/9X3VarwhYgNEFTjIgVn4BdOjyftNipIwAAAAASUVORK5CYII=';
     	var divf0 = $('<div class="exam_boxsdif0"></div>');		
     	var divf1 = $('<div class="exam_boxsdif1"><img src="'+iconimg1+'" width="21" height="21" align="absmiddle"/>'+(typeof tFlag=='boolean'?'考试科目':this.setting2.title)+'</div>');
@@ -274,7 +274,7 @@ function ExamObj()
      * 
      * */
     exam.family=function(hobj,Sett,func)
-    { 	
+    { 	   	   	
     	this.htmlobj2 = hobj;
     	this.setting2 = (Sett==undefined)?{}:Sett;
     	exam.func2 = (func==undefined)?function(){}:func;

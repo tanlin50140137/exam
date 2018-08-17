@@ -2690,7 +2690,7 @@ function GetInfoBar2()
 	}
 }
 function GetFamily()
-{
+{	
 	$limit = $_POST['limit']==null?5:$_POST['limit'];
 	$contlen = $_POST['len']==null?200:$_POST['len'];
 	$url = $_POST['url']==null?apth_url('index.php/exhibition/'):$_POST['url'];
@@ -2703,12 +2703,11 @@ function GetFamily()
 	if( $limit != null )
 	{
 		$sql .= ' limit 0,'.$limit.' ';
-	}
-		
+	}	
 	$key = md5( $sql );		
 	if( !$mem->get( $key ) )
 	{
-		$data = db()->query( $sql )->array_rows();
+		$data = db()->query( $sql )->array_rows();		
 		$mem->set($key, $data, 0, 30);   	
     	$rows = $mem->get( $key );
 	}
@@ -2716,7 +2715,7 @@ function GetFamily()
 	{
 		$rows = $mem->get( $key );
 	}
-		
+	
 	if( !empty( $rows ) )
 	{
 		foreach( $rows as $k => $v )
