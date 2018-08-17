@@ -389,6 +389,32 @@ function perms_all($filename,$int=0)
 		return SHOWINSTALLENABLE_2;
 	}
 }
+function SetUserNames()
+{
+	session_start();
+	
+	$username = '';
+	
+	if( isset( $_SESSION['log_on_user'] ) )
+	{
+		$username = $_SESSION['log_on_user'];
+	}
+	elseif( isset($_COOKIE['log_on_user']) )
+	{
+		$username = $_COOKIE['log_on_user'];
+	}
+	
+	if( $username != '' )
+	{
+		$int = db()->select('*')->from(PRE.'recordid')->where(array('username'=>$username))->get()->array_nums();
+		if( $int == 0 )
+		{
+			$data['username'] = $username;
+			$data['sessionid'] = session_id();
+			db()->insert(PRE.'recordid',$data);
+		}
+	}
+}
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

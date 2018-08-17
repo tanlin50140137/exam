@@ -3302,6 +3302,7 @@ function send_pays()
 	{
 		session_start();
 		$_SESSION['exam_pays'] = $pay;
+		$_SESSION['exam_centreno'] = $row['centreno'];
 		
 		echo json_encode(array("error"=>0,'txt'=>$pay));
 	}
@@ -3315,9 +3316,44 @@ function payments()
 {
 	session_start();
 	
-	$pay = $_SESSION['exam_pays'];
+	$t = time();
 	
-	print_r( $pay );
+	$centreno = $_REQUEST['exam_centreno']==null?$_SESSION['exam_centreno']:htmlspecialchars($_REQUEST['exam_centreno'],ENT_QUOTES);
+	
+	$row = db()->select('*')->from(PRE.'paymentform')->where(array('centreno'=>$centreno))->get()->array_row();
+	
+	if( !empty( $row ) )
+	{
+		$data['centreno'] = $row['centreno'];
+		$data['price'] = $row['price'];
+		$data['username'] = $row['username'];
+	}
+	else
+	{
+		$data['centreno'] = $_SESSION['exam_centreno'];
+		$data['price'] = $_SESSION['exam_pays'];
+		
+		if( isset( $_SESSION['log_on_user'] ) )
+		{
+			$data['username'] = $_SESSION['log_on_user'];
+		}
+		elseif( isset($_COOKIE['log_on_user']) )
+		{
+			$data['username'] = $_SESSION['log_on_user'];
+		}
+		else 
+		{
+			echo '<script>alert("'.SHOWCENTRENO_23.'");location.href="'.apth_url('index.php/index_e').'";</script>';exit;
+		}
+	}
+	
+	$data['commodityname'] = SHOWCENTRENO_22;
+	$data['ordernumber'] = $t.mt_rand(100000, 999999);
+	$data['ordertime'] = $t;	
+	$data['paymenttime'] = 0;
+	$data['state'] = 0;
+	
+	print_r( $data );
 }
 function free_sion()
 {		
@@ -3561,7 +3597,7 @@ function FreePractice()
 		}
 		else
 		{
-			echo json_encode( array( 'error'=>1,'txt'=>'<div style="margin:50px;text-align:center;color:#a2a1a0;font-family:Microsoft YaHei;">未查找到任何题目，或者没有导入；或者设置扩大揽题方式</div>') );
+			echo json_encode( array( 'error'=>1,'txt'=>'<div style="margin:50px;text-align:center;color:#a2a1a0;font-family:Microsoft YaHei;">'.SHOWCENTRENO_21.'</div>') );
 		}
 	}
 	else

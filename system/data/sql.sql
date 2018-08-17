@@ -155,6 +155,7 @@ create table htx_createroom(
 	counts int(10) unsigned not null default 0 comment '统计数、点击量、浏览量',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=显示,1=隐藏',
 	key key_pid(pid),
+	key key_centreno(centreno),
 	key key_reluser(reluser),
 	key key_title(title),
 	key key_sort(sort)
@@ -184,4 +185,29 @@ create table htx_examination(
 	key key_booknames(booknames),
 	key key_subtitles(subtitles),
 	key key_typeofs(typeofs)
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#支付表
+drop table if exists htx_paymentform;
+create table htx_paymentform(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	centreno varchar(255) not null default '' comment '考场编号',
+	commodityname varchar(255) not null default '' comment '商品名称',
+	price varchar(255) not null default '' comment '价格',
+	ordernumber varchar(255) not null default '' comment '订单号',
+	ordertime int(11) unsigned not null default 0 comment '下单时间',
+	username varchar(255) not null default '' comment '用户名',
+	paymenttime int(11) unsigned not null default 0 comment '支付时间',
+	state tinyint(10) unsigned not null default 0 comment '状态,0=未支付,1=已支付',
+	key key_centreno(centreno),
+	key key_ordernumber(ordernumber),
+	key key_username(username),
+	key key_state(state)
+)ENGINE=MyISAM DEFAULT CHARSET='utf8';
+#记录
+drop table if exists htx_recordid;
+create table htx_recordid(
+	id int(10) unsigned not null auto_increment primary key comment '主键',
+	username varchar(255) not null default '' comment '用户名',
+	sessionid int(11) unsigned not null default 0 comment 'ID',
+	key key_username(username)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';

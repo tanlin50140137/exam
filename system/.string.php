@@ -118,6 +118,9 @@ define("SHOWINSTALLENABLE_2", "文件或目录不存在");
 define("SHOWCENTRENO_18", "数据库连接错误");
 define("SHOWCENTRENO_19", "语法错误");
 define("SHOWCENTRENO_20", "创建数据库失败");
+define("SHOWCENTRENO_21", "未查找到任何题目，或者没有导入；或者设置扩大揽题方式");
+define("SHOWCENTRENO_22", "火天信考试VIP套餐");
+define("SHOWCENTRENO_23", "未登录用户无法购买");
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727
