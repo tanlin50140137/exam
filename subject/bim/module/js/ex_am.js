@@ -1487,12 +1487,12 @@ function ExamObj()
     exam.OnSubmitSend = function()
     {
     	var vals = $(this.htmlobj8).serialize();
-    		
+    	/*	
     	if( exam.power[0] == 0 ){
     		alert(exam.dir[0]+' 权限不足，需要读写权限，值=0777');
     		$(".exam_insenablediv2").focus();
     		return false;
-    	}
+    	}*/
     	if( exam.power[1] == 0 ){
     		alert(exam.dir[1]+' 权限不足，需要读写权限，值=0777');
     		$(".exam_insenablediv2").focus();
@@ -1573,7 +1573,9 @@ function ExamObj()
     	var div1 = $('<div class="exam_insenablediv1"><img src="'+suImg+'" width="25" height="25" align="absmiddle"/>EXAM v1.0 - <img src="'+picImg+'" width="26" height="26" align="absmiddle"/>TanLin <span>考试系统安装程序（Install step）</span></div>');
    	
     	var div2 = $('<div class="exam_insenablediv2"><img src="'+prImg+'" width="21" height="21" align="absmiddle"/>检测目录权限</div>');
+    	/*
     	var div3 = $('<div class="exam_insenablediv3"><img src="'+dirImg+'" width="21" height="21" align="absmiddle"/>'+exam.dir[0]+'<span>'+exam.perms[0]+' &nbsp;  &nbsp;  &nbsp;'+(exam.power[0]=='0'?'<img src="'+noImg+'" width="19" height="19" align="absmiddle"/>权限不足':'<img src="'+okImg+'" width="18" height="18" align="absmiddle"/>')+'</span></div>');
+    	*/
     	var div3_1 = $('<div class="exam_insenablediv3_1"><img src="'+dirImg+'" width="21" height="21" align="absmiddle"/>'+exam.dir[1]+'<span>'+exam.perms[1]+' &nbsp;  &nbsp;  &nbsp;'+(exam.power[1]=='0'?'<img src="'+noImg+'" width="19" height="19" align="absmiddle"/>权限不足':'<img src="'+okImg+'" width="18" height="18" align="absmiddle"/>')+'</span></div>');
     	
     	var div6 = $('<div class="exam_insenablediv6"><img src="'+dbImg+'" width="21" height="21" align="absmiddle"/>MYSQL数据库设置</div>');
@@ -1647,7 +1649,9 @@ function ExamObj()
     	div0.append(div1);
     	
     	div0.append(div2);
+    	/*
     	div0.append(div3);
+    	*/
     	div0.append(div3_1);
     	
     	div0.append(div6);
@@ -1687,6 +1691,7 @@ function ExamObj()
     	$(".exam_insenablediv3_1").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#655e5e","font-family":"Microsoft YaHei"}); 
     	$(".exam_insenablediv6").css({"border-bottom":"1px solid #e57cb0","margin":"1.6rem 1.6rem 0 1.6rem","padding":"1rem 0","color":"#e57cb0","font-family":"Microsoft YaHei"});
     	$(".exam_insenablediv7").css({"margin":"0 1.6rem","padding":"1rem 0","color":"#655e5e","font-family":"Microsoft YaHei"});   	
+    	/*
     	if( power[0] == '0' )
     	{	
     		$(".exam_insenablediv3 span").css({"float":"right","font-family":"Microsoft YaHei","color":"red"});
@@ -1694,7 +1699,8 @@ function ExamObj()
     	else
     	{	
     		$(".exam_insenablediv3 span").css({"float":"right","font-family":"Microsoft YaHei","color":"#38c10c"});
-    	}  
+    	} 
+    	*/
     	if( power[1] == '0' )
     	{	
     		$(".exam_insenablediv3_1 span").css({"float":"right","font-family":"Microsoft YaHei","color":"red"});
