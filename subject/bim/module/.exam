@@ -8,8 +8,6 @@
 </head>
 <body>
 
-<!-- 访问 http://127.0.0.1/exam/subject/bim/module/exam.html -->
-
 <div style="margin:auto;width:1200px;height:564px;">
 	<div id="exam1" style="width:830px;float:left;"></div>
 	<div id="exam2" style="width:350px;float:right;"></div>
