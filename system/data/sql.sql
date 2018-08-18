@@ -109,7 +109,7 @@ create table htx_createdts(
 	depict text not null comment '描述',	
 	content MediumText not null comment '内容,大文本',
 	tags varchar(255) not null default '' comment '标签',
-	covers varchar(255) not null default '' comment '封面',
+	covers MediumText not null comment '封面',
 	static_n varchar(255) not null default '' comment '静态名称',
 	publitime int(11) unsigned not null default 0 comment '文档创间时间',
 	timing varchar(255) not null default '' comment '定时发布',
