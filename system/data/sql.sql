@@ -194,6 +194,7 @@ create table htx_paymentform(
 	commodityname varchar(255) not null default '' comment '商品名称',
 	price varchar(255) not null default '' comment '价格',
 	ordernumber varchar(255) not null default '' comment '订单号',
+	methods tinyint(10) unsigned not null default 0 comment '支付方式,1=支付宝,2=微信支付',
 	ordertime int(11) unsigned not null default 0 comment '下单时间',
 	username varchar(255) not null default '' comment '用户名',
 	paymenttime int(11) unsigned not null default 0 comment '支付时间',
@@ -202,12 +203,4 @@ create table htx_paymentform(
 	key key_ordernumber(ordernumber),
 	key key_username(username),
 	key key_state(state)
-)ENGINE=MyISAM DEFAULT CHARSET='utf8';
-#记录
-drop table if exists htx_recordid;
-create table htx_recordid(
-	id int(10) unsigned not null auto_increment primary key comment '主键',
-	username varchar(255) not null default '' comment '用户名',
-	sessionid int(11) unsigned not null default 0 comment 'ID',
-	key key_username(username)
 )ENGINE=MyISAM DEFAULT CHARSET='utf8';

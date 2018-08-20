@@ -444,8 +444,8 @@ function ExamObj()
     exam.sendpays=function(str)
     {
     	var d = $('#'+str).serialize();
-    	
-    	if( d == '' )
+    	    	
+    	if( !$("[name='vip']").is(":checked") )
     	{
     		var arr = new Array();
     			arr[0] = '请选择VIP充值套餐';
@@ -465,6 +465,17 @@ function ExamObj()
     		$(".tollbox_all2").html('<font color="red">'+arr[i]+'</font>');return false;
     	}
     	
+    	var payimg1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAEyklEQVR4Xu2bXVLjRhCAu2VL7EMg7Fuqgl3wkMR+ivcEmBPEe4KYEyw5QcgJAifAN1hzAsQJQp7sTR4gNqnat5VNHjYapE6NZCour6T5lXGtTZVf8Mz09Nc93T0/RljzP1xz/WEDYOMBa07g2ZbA7S7sPn5R/Z7zr/7z+PtBAMFz2KJ0AFzRf7crhwhOhwD2AaEFgLvZylIABDcIcEcQ97ceouuywZQCgCsd7rg/EEEXENtGliXyEaHnTdllGTCsAkgV994Q0Em+lXVxUICAZ940PLcJwhqAYd19AwCn9hVfBEY8Vpw2RuxcF+V8P2MAg69gHz33LQC2bExIegwinxg7br6HO+k+GQ2NALyrVTqEzkX5Vs9TkQKk+Pi7cdTXhaANYFBzu4h4oSvYZj8iOm6OWU9nTC0A72ruBSF2dQSW1YcAfmmOwlPV8ZUBrJLlPwmPGp6gBCBd85W3qpSX2R4peq0SE6QBzKL9b88X8GQxUkAheyWbHaQBDOsuV365qU5W50/Xgt8YsyOZ7lIAhnWXV3a/ygy4Om3op8aInYnmIwSQbGZ23Fsbrk9E14jQdyLwv/2b3cxP7o+v3VZcgTYRdBDxUDRx8fcUbE3ZgahsFgIY1L1TBPhZLLCgBcElsfBEdl3yeAOu2zMFIZMaCwGYW58mSHFXJSrPY5xVmj0A/FLPAGIvKARgkvMJ4K9KRJ1FV1dVZLY0fF0IoiqxEMCw5l7p7edp4kTQNlX+CZYRBKLCjJALIHV/74OqxXh71WJERoZJEbY1DV/mBcNcANoCCS4b47Ajo5Rqm0HN9XUCY5FBcgEMakkU/lF1khSGB7LRXnXstBr1blX7QUznjXt2ktWvCIAybZ7nm2NmdgYo0E7HC4rmlQtgWHc/qBc/ctWXsgXnOuhVpRQ0RuylkgcM6x6pTtSJ6JWtyJ8ne7BXbaPjXKnOrTEKM42d+U/dDJAnRHWyovY6xlECYJuySCHV73UAUBwfNe8f/UVZmR6w9gDWfglwN9Fxs88mCKYA3EB9A7KyaXDSGLHMC9lNIZSbb9e9FNbfDBVvP1VT3nx73e251mZINxN8NtthrojOxiO1GAVOBEe2yuLZgciV+t6ET6V4e17akZgtCEbKc/0F12Uyh6J36unwaeWaXV+bX7/TZGvK9ouOxpd0LK72mCE5+HDdC73zyP/DpvGxOB9qdjRu4AVzcZzIB4R+Jaabb+4fr+cj/J971cPIwRYQdEwVn8UhofWTgC2TlvQOIWRGLq+NaO0/SZYCYJYRylMyb2SVozl5AOljqBv9gLgsEDShkLVkD2alAfDpa1eHy9Jd405CCcBsKazM46hFrrLrfr6fMoAEgo0bY8teIZPyskRqAVg1T9CxvHIWyKJnfn1t6gZm1+/SdUDRNG09ZlBFwVMdMNaVjfZ542svgcUB02IpeSyt+ZhBFgFNZo+lhe9/ZEa0BuCpbP64451g+lzeMgiaEODZi2l4Jnr3I6O4lRiQJ4jvHz5uu/yKnKdMowdPiasD9F48sL5NxUsFMA8m+RHFdqVN5LQJoYXpT2ZyvIMmxH8ywz8Y+95D5JehtHEdoOJihQF0r5pcpWddWdmSIRrHagwQCVvF7zcAVtEqy5zTxgOWSXsVZf0HCVeEXzyELycAAAAASUVORK5CYII=';
+    	
+    	if( !$("[name='pay']").is(":checked") )
+    	{
+    		$("#pay_errortxt").html('<img src="'+payimg1+'" width="14" height="14" align="absmiddle"/>请选择支付方式');return false;
+    	}	
+    	else
+    	{
+    		$("#pay_errortxt").html('');
+    	}	
+    	
     	$.ajax({
     		url:exam.hosturl,
     		type:'post',
@@ -473,8 +484,16 @@ function ExamObj()
     			var obj = eval("("+data+")");
     			if( obj.error == 0 )
     			{
-    				location.href = exam.hosturl+'/payments';
-  
+    				exam.closeImg();
+    				if( obj.txt == '1' )
+    				{
+    					location.href = exam.hosturl+'/payments'; 
+    				}	
+    				else if( obj.txt == '2' )
+    				{
+    					var html = '<iframe src="'+exam.hosturl+'/payments" width="500" height="400" frameborder="0" scrolling="no"></iframe>';
+    					exam.TollBox({content:html});
+    				}
     			}	
     			else
     			{
@@ -488,13 +507,16 @@ function ExamObj()
     	var flagid = $(t).attr('flagid');
 
     	$.post(this.hosturl,{'act':'tollbox_ps','flagid':flagid},function(data){
-    		
+
     		var obj = eval( "("+data+")" );
     		if( obj.error == 0 )
     		{	
     			exam.TollBox({content:obj.txt});
     		}
-    		
+    		else
+    		{
+    			alert( obj.txt );
+    		}	
     	});
     }   
     exam.LabelRadio=function(t)
