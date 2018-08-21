@@ -3,13 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <title>返回结果页面</title>
+<script src="<?php echo apth_url('subject/bim/js/jquery-1.11.2.min.js');?>"></script>
 </head>
 <body>
-<div style="margin:40px auto;border:1px solid red;padding:0;width:1200px;height:564px;">
-	<div style="border:1px solid red;width:800px;margin:auto;padding:10px 10px 0 10px;text-align:center;height:150px;line-height:240px;">
+<div style="margin:40px auto;padding:0;width:1200px;height:564px;">
+	<div style="width:800px;margin:auto;padding:10px 10px 0 10px;text-align:center;height:150px;line-height:240px;">
 		<img src="data:image/png;base64,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" width="40" height="40" align="absmiddle">
 		<span style="font-size:15px;font-family:Microsoft YaHei;color:#4caf50;">支付成功</span>
 	</div>
+	<div style="width:800px;margin:auto;padding:10px 10px 10px 10px;">		
+		<table width="100%" style="border:1px solid #ece8e8;padding:30px 5px;border-radius:4px;">
+			<tr height="42">
+				<td style="width:150px;text-align:right;font-family:Microsoft YaHei;color:#afa7a7;">名 &nbsp; 称：</td>
+				<td style="font-family:Microsoft YaHei;padding-left:10px;">
+					<img src="data:image/png;base64,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" width="25" height="25" align="absmiddle" />
+					<span style="font-size:15px;font-family:Microsoft YaHei;color:#ce9d0c;">全国注册咨询工程师（投资）执业资格考试</span>		
+				</td>
+			</tr>
+			<tr height="42">
+				<td style="width:150px;text-align:right;font-family:Microsoft YaHei;color:#afa7a7;">订单号：</td>
+				<td style="font-family:Microsoft YaHei;color:#6d6565;padding-left:10px;">
+					564646546546546	
+				</td>
+			</tr>
+			
+			<tr height="42">
+				<td style="width:150px;text-align:right;font-family:Microsoft YaHei;color:#afa7a7;">有效期：</td>
+				<td style="font-family:Microsoft YaHei;color:#6d6565;padding-left:10px;">
+					60 （天）
+				</td>
+			</tr>
+			
+			<tr height="42">
+				<td style="width:150px;text-align:right;font-family:Microsoft YaHei;color:#afa7a7;">订单时间：</td>
+				<td style="font-family:Microsoft YaHei;color:#6d6565;padding-left:10px;">
+					2018-08-21 08:55
+				</td>
+			</tr>
+			
+			<tr height="42">
+				<td style="width:150px;text-align:right;font-family:Microsoft YaHei;color:#afa7a7;">截止日期：</td>
+				<td style="font-family:Microsoft YaHei;color:#6d6565;padding-left:10px;">
+					2018-10-21 08:56
+				</td>
+			</tr>
+			
+			<tr height="42">
+				<td style="width:150px;text-align:right;font-family:Microsoft YaHei;color:#afa7a7;">特此声明：</td>
+				<td style="font-family:Microsoft YaHei;color:#fb2727;padding-left:10px;font-size:small;">
+					VIP付费考场，有效使用期限，即支付成功日起，订单时间至截止日期为止！
+				</td>
+			</tr>
+						
+		</table>
+		
+		<div class="examination_room" style="border:1px solid #ece8e8;width:100%;color:#f4f5fb;margin-top:20px;border-radius:4px;height:46px;line-height:46px;text-align:center;font-family:Microsoft YaHei;background: -webkit-linear-gradient(left top, #ffc107 , #2196F3);background: -o-linear-gradient(bottom right, #ffc107 , #2196F3);background: -moz-linear-gradient(bottom right, #ffc107 , #2196F3);background: linear-gradient(to bottom right, #ffc107 , #2196F3);cursor:pointer;">
+		进入考场
+		</div>
+		
+	</div>
+	
 </div>
+<script>
+	$(".examination_room").click(function(){
+		location.href = "<?php echo apth_url('index.php/rembershiproom/'.GetIndexValue(1));?>";
+	});
+	$(".examination_room").hover(function(){
+		$(this).css({"background":"-webkit-linear-gradient(left top, #FF9800 , #E91E63)","background":"-o-linear-gradient(bottom right, #FF9800 , #E91E63)","background":"-moz-linear-gradient(bottom right, #FF9800 , #E91E63)","background":"linear-gradient(to bottom right, #FF9800 , #E91E63)"});
+	},function(){
+		$(this).css({"background":"-webkit-linear-gradient(left top, #ffc107 , #2196F3)","background":"-o-linear-gradient(bottom right, #ffc107 , #2196F3)","background":"-moz-linear-gradient(bottom right, #ffc107 , #2196F3)","background":"linear-gradient(to bottom right, #ffc107 , #2196F3)"});
+	});	
+</script>
 </body>
 </html>

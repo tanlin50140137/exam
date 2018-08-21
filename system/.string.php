@@ -121,6 +121,10 @@ define("SHOWCENTRENO_20", "创建数据库失败");
 define("SHOWCENTRENO_21", "未查找到任何题目，或者没有导入；或者设置扩大揽题方式");
 define("SHOWCENTRENO_22", "火天信考试VIP套餐");
 define("SHOWCENTRENO_23", "未登录用户无法购买");
+define("SHOWCENTRENO_24", "未购买VIP或者已经到期");
+define("SHOWCENTRENO_25", "订单号并且用户名不能为空");
+define("SHOWCENTRENO_26", "没有查找到考场信息");
+define("SHOWCENTRENO_27", "规则未使用");
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

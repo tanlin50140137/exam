@@ -198,6 +198,7 @@ create table htx_paymentform(
 	ordertime int(11) unsigned not null default 0 comment '下单时间',
 	username varchar(255) not null default '' comment '用户名',
 	daystime int(11) unsigned not null default 0 comment 'VIP天数时间',
+	meals varchar(255) not null default '' comment '套餐标识',
 	paymenttime int(11) unsigned not null default 0 comment '支付时间',
 	state tinyint(10) unsigned not null default 0 comment '状态,0=未支付,1=已支付',
 	key key_centreno(centreno),

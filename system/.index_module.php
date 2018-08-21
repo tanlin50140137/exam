@@ -3288,6 +3288,7 @@ function send_pays()
 		$_SESSION['exam_infoify_id'] = $row['pid'];
 		$_SESSION['exam_infoify_flagpay'] = $_POST['pay'];
 		$_SESSION['exam_infoify_days'] = $days;
+		$_SESSION['exam_infoify_string'] = $string;
 		
 		echo json_encode(array("error"=>0,'txt'=>$_POST['pay']));
 	}
@@ -3328,29 +3329,32 @@ function payments()
 	$data['state'] = 0;
 	$data['methods'] = $_SESSION['exam_infoify_flagpay'];
 	$data['daystime'] = time()+(60*60*24*$_SESSION['exam_infoify_days']);
+	$data['meals'] = $_SESSION['exam_infoify_string'];
 	
 	if( $data['username'] != '' )
 	{
 		$row = db()->select('id,centreno,commodityname,price,ordernumber,ordertime,username,paymenttime,state')->from(PRE.'paymentform')->where(array('username'=>$data['username'],'centreno'=>$data['centreno']))->get()->array_row();
 		if( !empty( $row ) )
 		{
-			db()->update(PRE.'paymentform', array('price'=>$_SESSION['exam_pays'],'methods'=>$data['methods'],'daystime'=>$data['daystime']), array('username'=>$data['username'],'centreno'=>$data['centreno']));
+			db()->update(PRE.'paymentform', array('meals'=>$data['meals'],'price'=>$_SESSION['exam_pays'],'methods'=>$data['methods'],'daystime'=>$data['daystime']), array('username'=>$data['username'],'centreno'=>$data['centreno']));
+			$ordersn = $row['ordernumber'];
 		}
 		else 
 		{
 			db()->insert(PRE.'paymentform',$data);
+			$ordersn = $data['ordernumber'];
 		}
-		
-		//header('location:'.apth_url('index.php/callback_result'));	
+			
 		switch ( $data['methods'] )
 		{
 			case '1':
 				echo '支付宝支付<br/>';
-				print_r($data);
+				//print_r($data);
+				echo '<a href="'.apth_url('index.php/callback_result/'.$ordersn).'">支付成功后</a>';
 			break;
 			case '2':
 				echo '微信支付<br/>';
-				print_r($data);
+				echo '<a href="'.apth_url('index.php/callback_result/'.$ordersn).' target="_top">支付成功后</a>';
 			break;
 		}
 					
@@ -3366,7 +3370,7 @@ function callback_result()
 	
 	if( $paystate )
 	{
-		header('location:'.apth_url('index.php/payment_results'));
+		header('location:'.apth_url('index.php/payment_results/'.GetIndexValue(1)));
 	}
 	else 
 	{
@@ -3376,8 +3380,115 @@ function callback_result()
 function payment_results()
 {	
 	include( getThemeDir3() );
-	
+		
 	require( base_url_name( SHOWPHPEXCELS_7 ) );
+}
+function rembershiproom()
+{
+	include( getThemeDir3() );
+	
+	$username = GetUserName_index();	
+	$ordersn = GetIndexValue(1)==null?'1534758108946827':GetIndexValue(1);
+	
+	$flagstate = 0;/*0=未支付；1=已支付*/	
+	$where = ' ordernumber="'.$ordersn.'" and username="'.$username.'" and state='.$flagstate.' and FROM_UNIXTIME(daystime,"%Y-%m-%d %H:%i:%s")>="'.time().'" ';
+	$row1 = db()->select('*')->from(PRE.'paymentform')->where($where)->get()->array_row();
+	if( empty( $row1 ) )
+	{
+		echo '<script>alert("'.SHOWCENTRENO_24.'");location.href="'.apth_url('index.php/index_e').'";</script>';exit;
+	}
+	
+	$centreno = $row1['centreno'];
+		
+	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('centreno'=>$centreno))->get()->array_row();
+	if( !empty( $row ) )
+	{
+		$ify = db()->select('id,pid,title,sort,descri,publitime,state')->from(PRE.'classify')->where(array('id'=>$row['pid']))->get()->array_row();
+	}
+	if( !empty( $ify ) )
+	{
+		$ifyArr = UpwardsLookup3( $ify['pid'] );
+		if( !empty( $ifyArr ) )
+		{
+			foreach( $ifyArr as $k => $v )
+			{
+				$html .= ($html==null?'<a href="'.apth_url('index.php/index_e').'">'.HOME_PAGE_1.'</a> &gt; ':' &gt; ').'<a href="'.apth_url('index.php/exhibition/'.$v['id']).'">'.$v['title'].'</a>';
+			}
+		}
+	}
+
+	$bread = $html==null?'<a href="'.apth_url('index.php/index_e').'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
+	
+		
+	require( base_url_name( SHOWPHPEXCELS_8 ) );
+}
+function GetKaoShiVipModule()
+{	
+	$ordersn = htmlspecialchars($_POST['ordersn'],ENT_QUOTES);
+	$username = htmlspecialchars($_POST['user'],ENT_QUOTES);
+	
+	if( $ordersn!=null && $username!=null ) 
+	{
+		$flagstate = 0;/*0=未支付；1=已支付*/	
+		$where = ' ordernumber="'.$ordersn.'" and username="'.$username.'" and state='.$flagstate.' and FROM_UNIXTIME(daystime,"%Y-%m-%d %H:%i:%s")>="'.time().'" ';
+		$row1 = db()->select('*')->from(PRE.'paymentform')->where($where)->get()->array_row();
+		if( empty( $row1 ) )
+		{
+			echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_24));exit;
+		}
+		
+		$centreno = $row1['centreno'];
+		$meals = explode('-', $row1['meals']);
+		
+		$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('centreno'=>$centreno))->get()->array_row();
+		if(  empty( $row1 )  )
+		{
+			echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_26));exit;
+		}
+		
+		$rule2 = unserialize($row['rule2']);
+				
+		if( $rule2['roomsets'] != 1 )
+		{
+			echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_26));exit;			
+		}
+		
+		$times = $rule2['times'];
+		$solve = $row['solve'];
+		
+		if( $rule2['chouti'] == 0 )
+		{
+			echo $solve.' 随机抽题';
+		}
+		elseif( $rule2['chouti'] == 1 )
+		{
+			echo $solve.' 书本顺序';
+		}
+		
+		
+		
+	}
+	else
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_25));
+	}
+}
+function GetUserName_index()
+{
+	session_start();
+	
+	$username = '';
+	
+	if( isset( $_SESSION['log_on_user'] ) )
+	{
+		$username = $_SESSION['log_on_user'];
+	}
+	elseif( isset($_COOKIE['log_on_user']) )
+	{
+		$username = $_COOKIE['log_on_user'];
+	}
+	
+	return $username;
 }
 function free_sion()
 {		
