@@ -67,10 +67,10 @@
 					<div class="cloxe_xxx2">
 						<span>1</span>、考试时间： <input type="text" name="times" placeholder="2" value="" class="r_setvals" style="width:1rem;padding:0 0.2rem;"/> 小时&nbsp; <br/>
 						<span>2</span>、选择题型：
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="0" onclick="all_mixing2(this,0);" />单选题</label> &nbsp; 
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="1" onclick="all_mixing2(this,1);" />多选题</label> &nbsp; 
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="2" onclick="all_mixing2(this,2);" />判断题</label> &nbsp; 
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="3" onclick="all_mixing2(this,3);" />问答题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="1" onclick="all_mixing2(this,0);" />单选题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="2" onclick="all_mixing2(this,1);" />多选题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="3" onclick="all_mixing2(this,2);" />判断题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="4" onclick="all_mixing2(this,3);" />问答题</label> &nbsp; 
 						<label><input type="checkbox" class="allhunhes" onclick="all_mixing(this);" />全部混合</label> &nbsp; &nbsp;  <br/>
 						<span>3</span>、抽题数量：
 						单选题 <input type="text" name="extracts[]" placeholder="30" value="" disabled="disabled" class="r_setvals rs_eadonly" style="width:1rem;padding:0 0.2rem;"/> 题 ；&nbsp;  
@@ -80,8 +80,7 @@
 						<br/>
 						<span>4</span>、获取考题： 
 						<label><input type="radio" name="chouti" checked="checked" value="0"/>随机抽题</label> &nbsp; &nbsp; 
-						<label><input type="radio" name="chouti" value="1"/>书本顺序</label> &nbsp; &nbsp; 
-						<label><input type="radio" name="chouti" value="2"/>自由模式</label> &nbsp; &nbsp; <br/> 
+						<label><input type="radio" name="chouti" value="1"/>书本顺序</label> &nbsp; &nbsp; <br/>
 						<span>5</span>、考题总量： <input type="text" name="totalexam" placeholder="100" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 题&nbsp; <br/>
 					 	<span>6</span>、考题总分： <input type="text" name="totalscore" placeholder="100" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
 					 	<span>7</span>、及格分数： <input type="text" name="passscore" placeholder="90" value="" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>

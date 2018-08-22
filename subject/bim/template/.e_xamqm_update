@@ -75,10 +75,10 @@
 					<div class="cloxe_xxx2">
 						<span>1</span>、考试时间： <input type="text" name="times" placeholder="2" value="<?php echo $rule2['times'];?>" class="r_setvals" style="width:1rem;padding:0 0.2rem;"/> 小时&nbsp; <br/>
 						<span>2</span>、选择题型：			
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="0" onclick="all_mixing2(this,0);" <?php echo $rule2['typeofs'][0]==='0'?'checked="checked"':''?> />单选题</label> &nbsp; 
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="1" onclick="all_mixing2(this,1);" <?php echo $rule2['typeofs'][1]==1?'checked="checked"':''?> />多选题</label> &nbsp; 
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="2" onclick="all_mixing2(this,2);" <?php echo $rule2['typeofs'][2]==2?'checked="checked"':''?> />判断题</label> &nbsp; 
-						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="3" onclick="all_mixing2(this,3);" <?php echo $rule2['typeofs'][3]==3?'checked="checked"':''?> />问答题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="1" onclick="all_mixing2(this,0);" <?php echo $rule2['typeofs'][0]==='1'?'checked="checked"':''?> />单选题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="2" onclick="all_mixing2(this,1);" <?php echo $rule2['typeofs'][1]==2?'checked="checked"':''?> />多选题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="3" onclick="all_mixing2(this,2);" <?php echo $rule2['typeofs'][2]==3?'checked="checked"':''?> />判断题</label> &nbsp; 
+						<label><input type="checkbox" name="typeofs[]" class="typeofs_xuan" value="4" onclick="all_mixing2(this,3);" <?php echo $rule2['typeofs'][3]==4?'checked="checked"':''?> />问答题</label> &nbsp; 
 				<?php if($rule2['typeofs'][0]==='0' && $rule2['typeofs'][1]==1 && $rule2['typeofs'][2]==2 && $rule2['typeofs'][3]==3){ ?>		
 						<label><input type="checkbox" class="allhunhes" checked="checked" onclick="all_mixing(this);" />全部混合</label> &nbsp; &nbsp;  <br/>	
 				<?php }else{ ?>
@@ -92,8 +92,7 @@
 						<br/>
 						<span>4</span>、获取考题： 
 						<label><input type="radio" name="chouti" <?php echo $rule2['chouti']==='0'?'checked="checked"':'';?> value="0"/>随机抽题</label> &nbsp; &nbsp; 
-						<label><input type="radio" name="chouti" <?php echo $rule2['chouti']==1?'checked="checked"':'';?> value="1"/>书本顺序</label> &nbsp; &nbsp; 
-						<label><input type="radio" name="chouti" <?php echo $rule2['chouti']==2?'checked="checked"':'';?> value="2"/>自由模式</label> &nbsp; &nbsp; <br/> 
+						<label><input type="radio" name="chouti" <?php echo $rule2['chouti']==1?'checked="checked"':'';?> value="1"/>书本顺序</label> &nbsp; &nbsp; <br/> 
 						<span>5</span>、考题总量： <input type="text" name="totalexam" placeholder="100" value="<?php echo $rule2['totalexam'];?>" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 题&nbsp; <br/>
 					 	<span>6</span>、考题总分： <input type="text" name="totalscore" placeholder="100" value="<?php echo $rule2['totalscore'];?>" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>
 					 	<span>7</span>、及格分数： <input type="text" name="passscore" placeholder="90" value="<?php echo $rule2['passscore'];?>" class="r_setvals" style="width:1.8rem;padding:0 0.2rem;"/> 分&nbsp; <br/>

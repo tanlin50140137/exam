@@ -1776,6 +1776,7 @@ function ExamObj()
     	{
     		var ordersn = this.setting9.ordersn==undefined?'':this.setting9.ordersn;
     		var user = this.setting9.user==undefined?'':this.setting9.user;
+    		var type = this.setting9.type==undefined?'':this.setting9.type;
     	}
     	
     	var daojiImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAE8klEQVR4Xu1aTVoiSRB9geDW7hNMzwlaFxbLSU4gMzBr6ROoN7BPoJ6gcd3FNJ6AdEm5kD5BMycY2bZIzJf1o1V8hVT+AM5QtdGPyqyMfPEiMiIjCFv+0JbvHyUAJQO2HIHSBLacAKUTLE1gHSYQ/Cn2McMJCB8KrccYo4Ir76scFRpvMWgtDAha4hJEJ1pyMl95PXmqNcdg8FoAGLZEk4i6APYKyjhh5k69J/sFxxsPWwsAedLdtYVg0EC9I3Dj0JfSeBcWE0sALMAznnrfFO8ed3AMosutYMB9U3yYVnHMgABjH0Tv0uj9b01g2BLHRDgFaP9VuhAf5B15IVNq9LH2yN8P+vIh35c0jqpTvl30fhlNV+IDIgeHiwUbv2Vw6PBohjF2MFp03g/bok+gI2YeAzibPxWClvgCog7A0vNlY9lm8947BSC27YtIqNTDfM1AX/dYC9oNBdRvz19i7taecKa0/bJ5gBl/13uDYkHWHArOAAg3X8Ugo3Xm69oTzg/6UmlQ+1Hf/FlFV7HgZTKPmDEmomb82wTEwjRqdAKACnV5hm9EFGpBaYQq3DQVah6pVwIpq81HJ5DlE9P+R+LZmfF994mFqVNaJE4eG1ycHtYABG2haC9CwZmvvZ7M2r8lwPPTs3mFufNLvmsFQFqYVWk+D7/kdAgxB3+u+/LcFGdjAFRw81ilH4kjqk1539TZ6QofmsMOSSJ8jOzYPJcwBiBoiS6IjkPhZ/zJ+0uqbE/rGbbFeQXgQ19+1poIIDp1SJ0ue2uPA9KZHIBbzx9EPkDjcZENppVgygIjBrhY2AkA6qaJ6T72BTd1XyaxQWFVmALwjzr2bCIwFwCoXaajRc8faO9He0KG/hbXVs4A+EN0UKEvps5QG4DMObwgiyvCP2cApMwABgrRByCVoJhQLgHHFQCxGXD8XW2HbAyAjf0rYf+7ALRE6ABNj78VMSBKm5kfvJ58X8QEjUPhoN0wpltaMMcMeL430DVLExNwAkASzipQbLNHm6PQBAB1N6fCz5HnywMduq1qbNAW9/FFzMTzB5kL12VrmgBgTLdlwpi+tzFLfQBSSVBtyr+uKwNcBE4mKzW4j9AHIBt5nR36MixubOq5a4tTBl2E6xtkpdoAzN0DaAceroFKO0ATRmoDoDYwbDVGyWWEyaKuQEgrQ91I1XuD1wswOQsbARCkzGAd94CLAHNxKWMEQMyCMRF+Uf9vggVh10lyF7CJwkiGBRalKVNzyNxGGzg/41A4LXCmdMXc9Xryk+mGdOaly2K2OYmxCSiBYyekGpmi1hcLTRQFIMs8TGxvo60AiHxB2P/z7XkDzKdeT14V3ZDOuKAlTpKmCjWPmX/XLbjOr2cNgPrgnFaUZE7NIbfq7IhtTgDIA2FRTV9H4wnDAFwkhVfXpuYMACVYnOOr1rZUOxxLAl0e+oMbnc3ftRtHDFbdJemaw4TATZcdZU4BiB1jTk0/NNgHBlQm2aeKqujwJCmfh2c6aI9nrMrrTVK9RHN9RAy+2Z2i47rq7ByARMsxG1TR8qXDQ4cCL2NvCXzuUutpMVYGQLJI3CfcYVAziRyX4RA2WID7qKDrqsli0ZorByC9sIobfu6oNjkkSUvyN2qKZox2nzBa5x3DWgFYpvlNvC8B2ATqb2nNkgFvSRubkKVkwCZQf0trlgx4S9rYhCz/AmhewV8tCM+5AAAAAElFTkSuQmCC';
@@ -1791,39 +1792,7 @@ function ExamObj()
     		div3 += '<p class="exam_rembershp0">总共：56题 全部答对满分100</p>';
     		
     		div3 += '<dl class="exam_rembershdl5">';
-    		div3 += '<dd class="exam_rembershdd6">01</dd>';
-    		div3 += '<dd class="exam_rembershdd6">02</dd>';
-    		div3 += '<dd class="exam_rembershdd6">03</dd>';
-    		div3 += '<dd class="exam_rembershdd6">04</dd>';
-    		div3 += '<dd class="exam_rembershdd6">05</dd>';
-    		div3 += '<dd class="exam_rembershdd6">06</dd>';
-    		div3 += '<dd class="exam_rembershdd6">07</dd>';
-    		div3 += '<dd class="exam_rembershdd6">08</dd>';
-    		div3 += '<dd class="exam_rembershdd6">09</dd>';
-    		div3 += '<dd class="exam_rembershdd6">10</dd>';
-    		
-    		div3 += '<dd class="exam_rembershdd6">11</dd>';
-    		div3 += '<dd class="exam_rembershdd6">12</dd>';
-    		div3 += '<dd class="exam_rembershdd6">13</dd>';
-    		div3 += '<dd class="exam_rembershdd6">14</dd>';
-    		div3 += '<dd class="exam_rembershdd6">15</dd>';
-    		div3 += '<dd class="exam_rembershdd6">16</dd>';
-    		div3 += '<dd class="exam_rembershdd6">17</dd>';
-    		div3 += '<dd class="exam_rembershdd6">18</dd>';
-    		div3 += '<dd class="exam_rembershdd6">19</dd>';
-    		div3 += '<dd class="exam_rembershdd6">20</dd>';
-    		
-    		div3 += '<dd class="exam_rembershdd6">210</dd>';
-    		div3 += '<dd class="exam_rembershdd6">220</dd>';
-    		div3 += '<dd class="exam_rembershdd6">230</dd>';
-    		div3 += '<dd class="exam_rembershdd6">240</dd>';
-    		div3 += '<dd class="exam_rembershdd6">250</dd>';
-    		div3 += '<dd class="exam_rembershdd6">260</dd>';
-    		div3 += '<dd class="exam_rembershdd6">270</dd>';
-    		div3 += '<dd class="exam_rembershdd6">280</dd>';
-    		div3 += '<dd class="exam_rembershdd6">290</dd>';
-    		div3 += '<dd class="exam_rembershdd6">300</dd>';
-    		
+    		div3 += '<dd class="exam_rembershdd6">01</dd>';   		
     		div3 += '<dd style="clear:both;"></dd>';
     		div3 += '</dl>';
     		  		
@@ -1855,8 +1824,20 @@ function ExamObj()
     		div3 += '<input type="button" class="exam_rembershbtn0" value="交卷" />';
     		div3 += '</div>';
     	
-    	$.post(this.hosturl,{'act':'GetKaoShiVipModule','ordersn':ordersn,'user':user},function(data){
-    		console.log( data );	
+    	$.post(this.hosturl,{'act':'GetKaoShiVipModule','ordersn':ordersn,'user':user,'type':type,'tb':0},function(data){
+    		
+    		//console.log( data );return false;
+    		
+	    		var obj = eval( "("+data+")" );
+	    		if( obj.error == 0 )
+	    		{
+	    			div2.append(obj.txt);
+	    		}
+	    		else
+	    		{
+	    			div2.append(obj.txt);
+	    		}	
+	    		exam.CreateCss9();
     	});
     		
     	if( tFlag )
@@ -1864,9 +1845,7 @@ function ExamObj()
     		div0.append(div1);
     	}
     	div0.append(div2);
-    	
-    	div2.append(div3);
-    	   	
+    	    	   	
     	return div0;
     }
     exam.CreateCss9=function()
@@ -1901,7 +1880,7 @@ function ExamObj()
     	$(".exam_rembershdiv3").css({"margin":"0.5rem 0 1rem 0","padding":"1rem 0","text-align":"center","font-family":"Microsoft YaHei"});
     	$(".exam_rembershbtn0").css({"margin":"0 1rem 0 0","padding":"0px 1rem","border":"1px solid #ded7d7","height":"2.3rem","border-radius":"0.2rem","font-size":"14px","color":"#3a3838","cursor":"pointer","font-family":"Microsoft YaHei","outline":"none"});    
     	$(".exam_rembershdl5").css({"margin":"10px 0 0 0","padding":"0"});
-    	$(".exam_rembershdd6").css({"border":"1px solid #e4dede","margin":"10px 0 0 10px","padding":"0","width":"35px","height":"35px","float":"left","line-height":"35px","text-align":"center","font-family":"Microsoft YaHei","background":"#ded1d1","border-radius":"3px","cursor":"pointer","color":"#7b7b7a"});
+    	$(".exam_rembershdd6").css({"border":"1px solid #e4dede","margin":"10px 0 0 10px","padding":"0","width":"35px","height":"26px","float":"left","line-height":"26px","text-align":"center","font-family":"Microsoft YaHei","background":"#ded1d1","border-radius":"3px","cursor":"pointer","color":"#7b7b7a"});
     	$(".exam_rembershp3").css({"margin":"1rem 0 0 0","padding":"0","font-family":"Microsoft YaHei","color":"#1296db"});
     	$(".exam_rembershdiv1 a").hover(function(){
     		$(this).css({"color":"red","text-decoration":"underline"});
