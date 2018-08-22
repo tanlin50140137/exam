@@ -415,6 +415,29 @@ function SetUserNames()
 		}
 	}
 }
+function formatSeconds($value) 
+{
+        $secondTime = intval($value);
+        $minuteTime = 0;
+        $hourTime = 0;
+        if($secondTime > 60) {
+            $minuteTime = intval($secondTime / 60);
+            $secondTime = intval($secondTime % 60);
+            if($minuteTime > 60) {
+                $hourTime = intval($minuteTime / 60);
+                $minuteTime = intval($minuteTime % 60);
+            }
+        }
+        $result = "" . GetInts((intval($secondTime)));
+
+        if($minuteTime > 0) {
+            $result = "" . GetInts(intval($minuteTime)) . "：" . $result;
+        }
+        if($hourTime > 0) {
+            $result = "" . GetInts(intval($hourTime)) . "：" . $result;
+        }
+        return $result;
+}
 /**
  * 
  * @author TanLin Tel:18677197764 Email:50140137@qq.com  V.0727

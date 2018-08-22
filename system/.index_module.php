@@ -3418,8 +3418,7 @@ function rembershiproom()
 	}
 
 	$bread = $html==null?'<a href="'.apth_url('index.php/index_e').'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
-	
-		
+			
 	require( base_url_name( SHOWPHPEXCELS_8 ) );
 }
 function GetKaoShiVipModule()
@@ -3444,7 +3443,7 @@ function GetKaoShiVipModule()
 		$meals = explode('-', $row1['meals']);
 		
 		$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('centreno'=>$centreno))->get()->array_row();
-		if(  empty( $row1 )  )
+		if(  empty( $row )  )
 		{
 			echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_26));exit;
 		}
@@ -3459,7 +3458,7 @@ function GetKaoShiVipModule()
 		$totalexam = $rule2['totalexam'];
 		$totalscore = $rule2['totalscore'];
 		$passscore = $rule2['passscore'];
-		$times = intval($rule2['times']);		
+		$times = intval($rule2['times']);	
 		$solve = $row['solve'];
 		
 		$voidArr = array('E','C');
@@ -3467,7 +3466,7 @@ function GetKaoShiVipModule()
 		
 		$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
 		
-		$xb = md5($row['pid'].$flagtype.$solve);
+		$xb = md5($row['pid'].$type.$solve);
 		
 		if( !isset( $_SESSION['VIPKAOTIALLINFOINTHS_1'][$xb][$bel] ) || empty($_SESSION['VIPKAOTIALLINFOINTHS_1'][$xb][$bel]) )
 		{		
@@ -3570,7 +3569,14 @@ function GetKaoShiVipModule()
 		$timus = $_SESSION['VIPKAOTIALLINFOINTHS_1'][$xb][$bel];		
 		$tb = $_POST['tb']==null?'0':$_POST['tb'];
 		$count = count($timus['kaoti'][$type]);
-				
+		
+		if( !isset( $_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']] ) || empty($_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']]) )
+		{
+			$_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']] = date('Y/m/d H:i:s',time()+(60*60*$times));
+		}
+		
+		$his = strtotime($_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']])-time();
+		
 		if( !empty( $timus ) )
 		{
 			$daojiImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAE8klEQVR4Xu1aTVoiSRB9geDW7hNMzwlaFxbLSU4gMzBr6ROoN7BPoJ6gcd3FNJ6AdEm5kD5BMycY2bZIzJf1o1V8hVT+AM5QtdGPyqyMfPEiMiIjCFv+0JbvHyUAJQO2HIHSBLacAKUTLE1gHSYQ/Cn2McMJCB8KrccYo4Ir76scFRpvMWgtDAha4hJEJ1pyMl95PXmqNcdg8FoAGLZEk4i6APYKyjhh5k69J/sFxxsPWwsAedLdtYVg0EC9I3Dj0JfSeBcWE0sALMAznnrfFO8ed3AMosutYMB9U3yYVnHMgABjH0Tv0uj9b01g2BLHRDgFaP9VuhAf5B15IVNq9LH2yN8P+vIh35c0jqpTvl30fhlNV+IDIgeHiwUbv2Vw6PBohjF2MFp03g/bok+gI2YeAzibPxWClvgCog7A0vNlY9lm8947BSC27YtIqNTDfM1AX/dYC9oNBdRvz19i7taecKa0/bJ5gBl/13uDYkHWHArOAAg3X8Ugo3Xm69oTzg/6UmlQ+1Hf/FlFV7HgZTKPmDEmomb82wTEwjRqdAKACnV5hm9EFGpBaYQq3DQVah6pVwIpq81HJ5DlE9P+R+LZmfF994mFqVNaJE4eG1ycHtYABG2haC9CwZmvvZ7M2r8lwPPTs3mFufNLvmsFQFqYVWk+D7/kdAgxB3+u+/LcFGdjAFRw81ilH4kjqk1539TZ6QofmsMOSSJ8jOzYPJcwBiBoiS6IjkPhZ/zJ+0uqbE/rGbbFeQXgQ19+1poIIDp1SJ0ue2uPA9KZHIBbzx9EPkDjcZENppVgygIjBrhY2AkA6qaJ6T72BTd1XyaxQWFVmALwjzr2bCIwFwCoXaajRc8faO9He0KG/hbXVs4A+EN0UKEvps5QG4DMObwgiyvCP2cApMwABgrRByCVoJhQLgHHFQCxGXD8XW2HbAyAjf0rYf+7ALRE6ABNj78VMSBKm5kfvJ58X8QEjUPhoN0wpltaMMcMeL430DVLExNwAkASzipQbLNHm6PQBAB1N6fCz5HnywMduq1qbNAW9/FFzMTzB5kL12VrmgBgTLdlwpi+tzFLfQBSSVBtyr+uKwNcBE4mKzW4j9AHIBt5nR36MixubOq5a4tTBl2E6xtkpdoAzN0DaAceroFKO0ATRmoDoDYwbDVGyWWEyaKuQEgrQ91I1XuD1wswOQsbARCkzGAd94CLAHNxKWMEQMyCMRF+Uf9vggVh10lyF7CJwkiGBRalKVNzyNxGGzg/41A4LXCmdMXc9Xryk+mGdOaly2K2OYmxCSiBYyekGpmi1hcLTRQFIMs8TGxvo60AiHxB2P/z7XkDzKdeT14V3ZDOuKAlTpKmCjWPmX/XLbjOr2cNgPrgnFaUZE7NIbfq7IhtTgDIA2FRTV9H4wnDAFwkhVfXpuYMACVYnOOr1rZUOxxLAl0e+oMbnc3ftRtHDFbdJemaw4TATZcdZU4BiB1jTk0/NNgHBlQm2aeKqujwJCmfh2c6aI9nrMrrTVK9RHN9RAy+2Z2i47rq7ByARMsxG1TR8qXDQ4cCL2NvCXzuUutpMVYGQLJI3CfcYVAziRyX4RA2WID7qKDrqsli0ZorByC9sIobfu6oNjkkSUvyN2qKZox2nzBa5x3DWgFYpvlNvC8B2ATqb2nNkgFvSRubkKVkwCZQf0trlgx4S9rYhCz/AmhewV8tCM+5AAAAAElFTkSuQmCC';
@@ -3579,7 +3585,7 @@ function GetKaoShiVipModule()
 	    	$seImg = 'data:image/png;base64,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';
 	    			
 			$kaotimodule  = '<div class="exam_rembershdiv4"><img src="'.$lenImg.'" width="12" height="12" align="absmiddle"/>时长'.$times.'小时</div>'; 
-	    	$kaotimodule .= '<div class="exam_rembershdiv4-1"><b><img src="'.$daojiImg.'" width="16" height="16" align="absmiddle"/>计时考试：<span class="exam_lentime_dao">'.$times.'：0：0</span></b></div>'; 
+	    	$kaotimodule .= '<div class="exam_rembershdiv4-1"><b><img src="'.$daojiImg.'" width="16" height="16" align="absmiddle"/>计时考试：<span class="exam_lentime_dao">'.formatSeconds($his).'</span></b></div>'; 
 	    	$kaotimodule .= '<p class="exam_rembershp0">总共：'.$timus['count'].' 题 &nbsp; 全部答对满分（'.$totalscore.'）</p>';
 	    		
 	    	$kaotimodule .= '<dl class="exam_rembershdl5">';	    	
@@ -3591,7 +3597,7 @@ function GetKaoShiVipModule()
 	    	$kaotimodule .= '</dl>';
 	    		  		
 	    	$kaotimodule .= '<p class="exam_rembershp0">题型：<b>单选题</b> &nbsp; （ 共 <span class="exam_countall">'.$count.'</span> 题 ）<span class="exam_rembershpspan0">考场编号（'.$centreno.'）&nbsp; '.$row['title'].' &nbsp; <img src="'.$vipImg.'" width="21" height="21" align="absmiddle"/></span></p>';
-	    	$kaotimodule .= '<p class="exam_rembershp1"><span>'.($tb+1).'.</span> '.$timus['kaoti'][$type][$tb]['dry'].'</p>';
+	    	$kaotimodule .= '<p class="exam_rembershp1"><span class="exam_descrort">'.($tb+1).'.</span> '.$timus['kaoti'][$type][$tb]['dry'].'</p>';
 	    	$kaotimodule .= '<p class="exam_rembershp2">请选择答案：</p>';
 	    		
 	    	$kaotimodule .= '<form id="exam_rembershform0">';
@@ -3611,7 +3617,7 @@ function GetKaoShiVipModule()
 	    	$kaotimodule .= '</ul></form>';    		    		
 	    	$kaotimodule .= '<p class="exam_rembershp3"><img src="'.$seImg.'" width="20" height="20" align="absmiddle"> <font color="#00ce6d">请选择答案</font></p>';   		
 	    	$kaotimodule .= '<div class="exam_rembershdiv3" style="margin: 1.2rem 0px 1rem; padding: 1rem 0px; text-align: center; font-family: &quot;Microsoft YaHei&quot;;">';
-	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="确定" />'; 
+	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="确定" onclick="exam.ChargeEditionVIP();"/>'; 
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="放弃" />';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="上一题" />';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="下一题" />';
@@ -3619,12 +3625,56 @@ function GetKaoShiVipModule()
 	    	$kaotimodule .= '</div>';
 		}
     	
-		echo json_encode(array("error"=>0,'txt'=>$kaotimodule,'danticount'=>$count));
+		echo json_encode(array("error"=>0,'txt'=>$kaotimodule,'danticount'=>$count,'time'=>$_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']]));
 	}
 	else
 	{
 		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_25));
 	}
+}
+function ChargeEditionVIP()
+{
+	session_start();
+	
+	$ordersn = $_POST['ordersn'];
+    $username = $_POST['user'];
+    
+    $type = $_POST['type'];
+    $tb = $_POST['tb'];
+    
+	$flagstate = 0;/*0=未支付；1=已支付*/	
+	$where = ' ordernumber="'.$ordersn.'" and username="'.$username.'" and state='.$flagstate.' and FROM_UNIXTIME(daystime,"%Y-%m-%d %H:%i:%s")>="'.time().'" ';
+	$row1 = db()->select('*')->from(PRE.'paymentform')->where($where)->get()->array_row();
+	if( empty( $row1 ) )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_24));exit;
+	}
+		
+	$centreno = $row1['centreno'];
+		
+	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('centreno'=>$centreno))->get()->array_row();
+	if(  empty( $row )  )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_26));exit;
+	}
+    	
+    $rightkey = strtolower($_POST['rightkey']);   
+	if( $rightkey == null )
+    {
+    	echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_6));exit;
+    }
+    	
+	$voidArr = array('E','C');
+	$pcArr = array('P','J');
+	$solve = $row['solve'];	
+	$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
+	
+	$xb = md5($row['pid'].$type.$solve);
+	
+	$_SESSION['ChARGEEDITIONVIPS_1'][$xb][$bel][$row['pid']][$type][$tb-1] = $rightkey;	
+	$_SESSION['ChARGEEDITIONVIPS_2'][$xb][$bel][$row['pid']] = $type;	
+	$_SESSION['ChARGEEDITIONVIPS_3'][$xb][$bel][$row['pid']] = $tb-1;
+ 
 }
 function GetUserName_index()
 {
