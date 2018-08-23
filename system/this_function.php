@@ -428,13 +428,21 @@ function formatSeconds($value)
                 $minuteTime = intval($minuteTime % 60);
             }
         }
-        $result = "" . GetInts((intval($secondTime)));
+        $result = "" . (GetInts((intval($secondTime)))<=0?'00':GetInts((intval($secondTime))));
 
         if($minuteTime > 0) {
             $result = "" . GetInts(intval($minuteTime)) . "：" . $result;
         }
+		else 
+        {
+        	$result = "00：" . $result;
+        }
         if($hourTime > 0) {
             $result = "" . GetInts(intval($hourTime)) . "：" . $result;
+        }
+        else 
+        {
+        	$result = "00：" . $result;
         }
         return $result;
 }

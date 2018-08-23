@@ -3385,6 +3385,8 @@ function payment_results()
 }
 function rembershiproom()
 {
+	session_start();
+	
 	include( getThemeDir3() );
 	
 	$username = GetUserName_index();	
@@ -3418,7 +3420,23 @@ function rembershiproom()
 	}
 
 	$bread = $html==null?'<a href="'.apth_url('index.php/index_e').'">'.HOME_PAGE_1.'</a> &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>':$html.' &gt; <a href="'.apth_url('index.php/exhibition/'.$ify['id']).'">'.$ify['title'].'</a>';
-			
+
+	$voidArr = array('E','C');
+	$pcArr = array('P','J');
+	$solve = $row['solve'];	
+	$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
+	
+	$xb = md5($row['pid'].$ordersn.$solve);
+	
+	$type = $_SESSION['ChARGEEDITIONVIPS_2'][$xb][$bel][$row['pid']]==null?1:$_SESSION['ChARGEEDITIONVIPS_2'][$xb][$bel][$row['pid']];	
+	$tb = $_SESSION['ChARGEEDITIONVIPS_3'][$xb][$bel][$row['pid']]==null?0:$_SESSION['ChARGEEDITIONVIPS_3'][$xb][$bel][$row['pid']];
+	$index = $_SESSION['ChARGEEDITIONVIPS_index'][$xb][$bel][$row['pid']]==null?'1':$_SESSION['ChARGEEDITIONVIPS_index'][$xb][$bel][$row['pid']];
+	
+	if( !isset($_SESSION['ChARGEEDITIONVIPS_start'][$xb][$bel][$row['pid']]) || empty($_SESSION['ChARGEEDITIONVIPS_start'][$xb][$bel][$row['pid']]))
+	{
+		$_SESSION['ChARGEEDITIONVIPS_start'][$xb][$bel][$row['pid']] = time();
+	}
+		
 	require( base_url_name( SHOWPHPEXCELS_8 ) );
 }
 function GetKaoShiVipModule()
@@ -3428,7 +3446,7 @@ function GetKaoShiVipModule()
 	$ordersn = htmlspecialchars($_POST['ordersn'],ENT_QUOTES);
 	$username = htmlspecialchars($_POST['user'],ENT_QUOTES);	
 	$type = htmlspecialchars($_POST['type'],ENT_QUOTES);
-		
+	
 	if( $ordersn!=null && $username!=null ) 
 	{
 		$flagstate = 0;/*0=未支付；1=已支付*/	
@@ -3465,8 +3483,8 @@ function GetKaoShiVipModule()
 		$pcArr = array('P','J');
 		
 		$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
-		
-		$xb = md5($row['pid'].$type.$solve);
+				
+		$xb = md5($row['pid'].$ordersn.$solve);
 		
 		if( !isset( $_SESSION['VIPKAOTIALLINFOINTHS_1'][$xb][$bel] ) || empty($_SESSION['VIPKAOTIALLINFOINTHS_1'][$xb][$bel]) )
 		{		
@@ -3568,6 +3586,7 @@ function GetKaoShiVipModule()
 		
 		$timus = $_SESSION['VIPKAOTIALLINFOINTHS_1'][$xb][$bel];		
 		$tb = $_POST['tb']==null?'0':$_POST['tb'];
+		$_SESSION['ChARGEEDITIONVIPS_3'][$xb][$bel][$row['pid']] = $tb;
 		$count = count($timus['kaoti'][$type]);
 		
 		if( !isset( $_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']] ) || empty($_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']]) )
@@ -3576,6 +3595,8 @@ function GetKaoShiVipModule()
 		}
 		
 		$his = strtotime($_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']])-time();
+		
+		$_SESSION['ChARGEEDITIONVIPS_2'][$xb][$bel][$row['pid']] = $type;
 		
 		if( !empty( $timus ) )
 		{
@@ -3588,44 +3609,128 @@ function GetKaoShiVipModule()
 	    	$kaotimodule .= '<div class="exam_rembershdiv4-1"><b><img src="'.$daojiImg.'" width="16" height="16" align="absmiddle"/>计时考试：<span class="exam_lentime_dao">'.formatSeconds($his).'</span></b></div>'; 
 	    	$kaotimodule .= '<p class="exam_rembershp0">总共：'.$timus['count'].' 题 &nbsp; 全部答对满分（'.$totalscore.'）</p>';
 	    		
-	    	$kaotimodule .= '<dl class="exam_rembershdl5">';	    	
+	    	$kaotimodule .= '<dl class="exam_rembershdl5">';	
+
+	    	$index = $_SESSION['ChARGEEDITIONVIPS_4'][$xb][$bel][$row['pid']];
+	    	$rightkey = $_SESSION['ChARGEEDITIONVIPS_1'][$xb][$bel][$row['pid']][$type];	
+	    	
 	    	for($i=1;$i<=$timus['count'];$i++)
 	    	{
-	    		$kaotimodule .= '<dd class="exam_rembershdd6">'.$i.'</dd>';
+	    		if( $index[$i-1]['index'] == $i )
+		    	{
+		    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes">'.$i.'<span class="exam_rembershdd6_span">'.$index[$i-1]['rightkey'].'</span></dd>';
+		    	}
+		    	else 
+		    	{
+		    		$kaotimodule .= '<dd class="exam_rembershdd6">'.$i.'<span class="exam_rembershdd6_span"></span></dd>';
+		    	}
 	    	}
 	    	$kaotimodule .= '<dd style="clear:both;"></dd>';
 	    	$kaotimodule .= '</dl>';
 	    		  		
-	    	$kaotimodule .= '<p class="exam_rembershp0">题型：<b>单选题</b> &nbsp; （ 共 <span class="exam_countall">'.$count.'</span> 题 ）<span class="exam_rembershpspan0">考场编号（'.$centreno.'）&nbsp; '.$row['title'].' &nbsp; <img src="'.$vipImg.'" width="21" height="21" align="absmiddle"/></span></p>';
-	    	$kaotimodule .= '<p class="exam_rembershp1"><span class="exam_descrort">'.($tb+1).'.</span> '.$timus['kaoti'][$type][$tb]['dry'].'</p>';
+	    	$_SESSION['ChARGEEDITIONVIPS_index'][$xb][$bel][$row['pid']] = $_POST['index'];
+	    	
+	    	$kaotimodule .= '<p class="exam_rembershp0">'.TYPEOFS.'：<b>'.GetFourTypes2($type).'</b> &nbsp; （ 共 <span class="exam_countall">'.$count.'</span> 题 ）<span class="exam_rembershpspan0">考场编号（'.$centreno.'）&nbsp; '.$row['title'].' &nbsp; <img src="'.$vipImg.'" width="21" height="21" align="absmiddle"/></span></p>';
+	    	$kaotimodule .= '<p class="exam_rembershp1"><span class="exam_descrort">'.$_POST['index'].'.</span> '.$timus['kaoti'][$type][$tb]['dry'].'</p>';
 	    	$kaotimodule .= '<p class="exam_rembershp2">请选择答案：</p>';
 	    		
 	    	$kaotimodule .= '<form id="exam_rembershform0">';
-	    	$kaotimodule .= '<ul class="exam_rembershul0" style="margin: 0.6rem 0px 0px; padding: 0px; font-family: &quot;Microsoft YaHei&quot;;">';
+	    	$kaotimodule .= '<ul class="exam_rembershul0">';
 	    	
-	    	$optionsArr = explode('&', $timus['kaoti'][$type][$tb]['options']);	    	
-	    	if( !empty( $optionsArr ) )
+	    	if( $type == 1 )
 	    	{
-	    		foreach( $optionsArr as $k => $v )
+		    	$optionsArr = explode('&', $timus['kaoti'][$type][$tb]['options']);	    	
+		    	if( !empty( $optionsArr ) )
+		    	{
+		    		foreach( $optionsArr as $k => $v )
+		    		{		    			
+		    			$ds = mb_substr($v, 0, 1,'utf-8');
+				    	$kaotimodule .= '<li class="exam_rembershli0">';			    	
+				    	if( strtoupper($rightkey[$tb]) == $ds )
+				    	{
+				    		$kaotimodule .= '<label><input type="radio" name="rightkey" value="'.$ds.'" checked="checked">'.$v.'</label>';
+				    	}
+				    	else
+				    	{
+				    		$kaotimodule .= '<label><input type="radio" name="rightkey" value="'.$ds.'">'.$v.'</label>';
+				    	}
+				    	
+				    	$kaotimodule .= '</li>';
+		    		}
+		    	}
+	    	}
+	    	elseif( $type == 2 )
+	    	{
+	    		$optionsArr = explode('&', $timus['kaoti'][$type][$tb]['options']);	  		
+		    	if( !empty( $optionsArr ) )
+		    	{	    				    		
+		    		foreach( $optionsArr as $k => $v )
+		    		{				
+		    			$ds = mb_substr($v, 0, 1,'utf-8');
+				    	$kaotimodule .= '<li class="exam_rembershli0">';	    	
+				    	if( strstr($rightkey[$tb], strtolower($ds)) )
+				    	{
+				    		$kaotimodule .= '<label><input type="checkbox" name="rightkey" value="'.$ds.'" checked="checked">'.$v.'</label>';
+				    	}
+				    	else
+				    	{
+				    		$kaotimodule .= '<label><input type="checkbox" name="rightkey" value="'.$ds.'">'.$v.'</label>';
+				    	}
+				    	
+				    	$kaotimodule .= '</li>';
+		    		}
+		    	}
+	    	}
+			elseif( $type == 3 )
+	    	{
+	    		$optionsArr = explode('&', $timus['kaoti'][$type][$tb]['options']);	    	
+		    	if( !empty( $optionsArr ) )
+		    	{
+		    		foreach( $optionsArr as $k => $v )
+		    		{		    			
+				    	$kaotimodule .= '<li class="exam_rembershli0">';			    	
+				    	if( strstr($rightkey[$tb], $ds) )
+				    	{
+				    		$kaotimodule .= '<label><input type="checkbox" name="rightkey" value="'.$v.'" checked="checked">'.$v.'</label>';
+				    	}
+				    	else
+				    	{
+				    		$kaotimodule .= '<label><input type="checkbox" name="rightkey" value="'.$v.'">'.$v.'</label>';
+				    	}
+				    	
+				    	$kaotimodule .= '</li>';
+		    		}
+		    	}
+	    	}
+	    	
+	    	$kaotimodule .= '</ul></form>';	    		
+	    	$kaotimodule .= '<p class="exam_rembershp3">';
+	    	if( strtoupper($rightkey[$tb]) != null )
+	    	{	    
+	    		if( $rightkey[$tb] == SHOWCENTRENO_16 )
+	    		{	
+	    			$kaotimodule .= SHOWCENTRENO_9.'（<font color="red">'.strtoupper($rightkey[$tb]).'</font>）';
+	    		}
+	    		else 
 	    		{
-	    			$ds = mb_substr($v, 0, 1,'utf-8');
-			    	$kaotimodule .= '<li class="exam_rembershli0" style="margin: 0px; padding: 0px; font-family: &quot;Microsoft YaHei&quot;; list-style-type: none; line-height: 3rem; font-size: 13px; color: rgb(58, 56, 56);">';
-			    	$kaotimodule .= '<label><input type="radio" name="rightkey" value="'.$ds.'">'.$v.'</label>';
-			    	$kaotimodule .= '</li>';
+	    			$kaotimodule .= SHOWCENTRENO_9.'（'.strtoupper($rightkey[$tb]).'）';
 	    		}
 	    	}
-	    	$kaotimodule .= '</ul></form>';    		    		
-	    	$kaotimodule .= '<p class="exam_rembershp3"><img src="'.$seImg.'" width="20" height="20" align="absmiddle"> <font color="#00ce6d">请选择答案</font></p>';   		
-	    	$kaotimodule .= '<div class="exam_rembershdiv3" style="margin: 1.2rem 0px 1rem; padding: 1rem 0px; text-align: center; font-family: &quot;Microsoft YaHei&quot;;">';
+	    	else
+	    	{
+	    		$kaotimodule .= '<img src="'.$seImg.'" width="20" height="20" align="absmiddle"> <font color="#00ce6d">请选择答案</font>';
+	    	}
+	    	$kaotimodule .= '</p>';   		
+	    	$kaotimodule .= '<div class="exam_rembershdiv3">';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="确定" onclick="exam.ChargeEditionVIP();"/>'; 
-	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="放弃" />';
+	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="放弃" onclick="exam.giveupVIP();"/>';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="上一题" />';
-	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="下一题" />';
+	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="下一题" onclick="exam.NextQuestionVIP();"/>';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="交卷" />';
 	    	$kaotimodule .= '</div>';
 		}
     	
-		echo json_encode(array("error"=>0,'txt'=>$kaotimodule,'danticount'=>$count,'time'=>$_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']]));
+		echo json_encode(array("error"=>0,'txt'=>$kaotimodule,'danticount'=>$count,'time'=>$_SESSION['SETTIMESCHASHU_1'][$xb][$row['pid']],'totalrow'=>$timus['count']));
 	}
 	else
 	{
@@ -3641,6 +3746,7 @@ function ChargeEditionVIP()
     
     $type = $_POST['type'];
     $tb = $_POST['tb'];
+    $index = $_POST['index'];
     
 	$flagstate = 0;/*0=未支付；1=已支付*/	
 	$where = ' ordernumber="'.$ordersn.'" and username="'.$username.'" and state='.$flagstate.' and FROM_UNIXTIME(daystime,"%Y-%m-%d %H:%i:%s")>="'.time().'" ';
@@ -3669,12 +3775,53 @@ function ChargeEditionVIP()
 	$solve = $row['solve'];	
 	$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
 	
-	$xb = md5($row['pid'].$type.$solve);
+	$xb = md5($row['pid'].$ordersn.$solve);
 	
-	$_SESSION['ChARGEEDITIONVIPS_1'][$xb][$bel][$row['pid']][$type][$tb-1] = $rightkey;	
-	$_SESSION['ChARGEEDITIONVIPS_2'][$xb][$bel][$row['pid']] = $type;	
-	$_SESSION['ChARGEEDITIONVIPS_3'][$xb][$bel][$row['pid']] = $tb-1;
- 
+	$_SESSION['ChARGEEDITIONVIPS_1'][$xb][$bel][$row['pid']][$type][$tb] = $rightkey;	
+ 	$_SESSION['ChARGEEDITIONVIPS_4'][$xb][$bel][$row['pid']][$index-1] = array('index'=>$index,'rightkey'=>strtoupper($rightkey));
+ 	$_SESSION['ChARGEEDITIONVIPS_index'][$xb][$bel][$row['pid']] = $index;
+ 	
+ 	echo json_encode( array( 'error'=>0,'txt'=>SHOWCENTRENO_9.'（'.strtoupper($rightkey).'）','span'=>strtoupper($rightkey)) );
+}
+function giveupVIP()
+{
+	session_start();
+	
+	$ordersn = $_POST['ordersn'];
+    $username = $_POST['user'];
+    
+    $type = $_POST['type'];
+    $tb = $_POST['tb'];
+    $index = $_POST['index'];
+    
+	$flagstate = 0;/*0=未支付；1=已支付*/	
+	$where = ' ordernumber="'.$ordersn.'" and username="'.$username.'" and state='.$flagstate.' and FROM_UNIXTIME(daystime,"%Y-%m-%d %H:%i:%s")>="'.time().'" ';
+	$row1 = db()->select('*')->from(PRE.'paymentform')->where($where)->get()->array_row();
+	if( empty( $row1 ) )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_24));exit;
+	}
+		
+	$centreno = $row1['centreno'];
+		
+	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('centreno'=>$centreno))->get()->array_row();
+	if(  empty( $row )  )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_26));exit;
+	}
+       	
+	$voidArr = array('E','C');
+	$pcArr = array('P','J');
+	$solve = $row['solve'];	
+	$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
+	
+	$xb = md5($row['pid'].$ordersn.$solve);
+	
+	$_SESSION['ChARGEEDITIONVIPS_1'][$xb][$bel][$row['pid']][$type][$tb] = SHOWCENTRENO_16;		
+ 	$_SESSION['ChARGEEDITIONVIPS_4'][$xb][$bel][$row['pid']][$index-1] = array('index'=>$index,'rightkey'=>SHOWCENTRENO_16);
+ 	$_SESSION['ChARGEEDITIONVIPS_index'][$xb][$bel][$row['pid']] = $index;
+ 	
+ 	echo json_encode( array( 'error'=>0,'txt'=>SHOWCENTRENO_9.'（<font color="red">'.SHOWCENTRENO_16.'</font>）','span'=>SHOWCENTRENO_16) );
 }
 function GetUserName_index()
 {
