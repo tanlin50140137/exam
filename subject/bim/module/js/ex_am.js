@@ -1844,7 +1844,7 @@ function ExamObj()
     			{
     				$('.exam_rembershp3').html(obj.txt);
     				$(".exam_rembershdd6_span:eq("+(exam.index-1)+")").html('<font color="red"><b>'+obj.span+'</b></font>');
-    				$(".exam_rembershdd6:eq("+(exam.index-1)+")").css({"border":"1px solid #c57f16","background":"#cddc39","color":"#FFFFFF"});
+    				$(".exam_rembershdd6:eq("+(exam.index-1)+")").css({"border":"1px solid #2290e6","background":"#cddc39","color":"#FFFFFF"});
     				$("[name='rightkey']").removeAttr('checked');
     			}	
     			else
@@ -1853,6 +1853,11 @@ function ExamObj()
     			}	
     		}
     	});
+    }
+    
+    exam.PageNumberVIP=function(i)
+    {
+    	alert(i);
     }
     exam.ChargeEditionVIP=function()
     {
@@ -1894,7 +1899,7 @@ function ExamObj()
     			{
     				$('.exam_rembershp3').html(obj.txt);
     				$(".exam_rembershdd6_span:eq("+(exam.index-1)+")").html(obj.span);
-    				$(".exam_rembershdd6:eq("+(exam.index-1)+")").css({"border":"1px solid #c57f16","background":"#cddc39","color":"#FFFFFF"});
+    				$(".exam_rembershdd6:eq("+(exam.index-1)+")").css({"border":"1px solid #2290e6","background":"#cddc39","color":"#FFFFFF"});
     			}	
     			else
     			{
@@ -1911,9 +1916,7 @@ function ExamObj()
     	if( exam.index < 1 )
     	{	
     		exam.index = 1;
-    		if(exam.tb <= 0) exam.tb=0;
-    		
-    		layer.msg('作答完毕，请交卷'+exam.tb);
+    		if(exam.tb <= 0) exam.tb=0;    		
     		return false;
     	}
     	
@@ -1938,27 +1941,27 @@ function ExamObj()
 	    		{
 	    			$(".exam_rembershdiv2").append(obj.txt);
 	    		}	
-	    		exam.CreateCss9();	    			    		
+	    		exam.CreateCss9();
     	});  
     }
     exam.NextQuestionVIP=function()
     {
     	exam.index++;
     	exam.tb++;  
-    	    	    	
+    	
     	if( exam.index > exam.totalrow )
     	{	
     		exam.index = exam.totalrow;   
     		if(exam.tb>=exam.danticount) exam.tb=exam.danticount-1;
     		
-    		layer.msg('作答完毕，请交卷'+exam.tb);
+    		layer.msg('作答完毕，请交卷');
     		return false;
     	}
-    	
+    	      	
     	if( exam.danticount == exam.tb )
     	{
     		exam.type++;
-    		if( exam.type > 4 ) exam.type = 3;
+    		if( exam.type > 4 ) exam.type = 4;
     		exam.tb = 0;
     	}   	
    	   	   	    	
@@ -1976,7 +1979,7 @@ function ExamObj()
 	    		{
 	    			$(".exam_rembershdiv2").append(obj.txt);
 	    		}	
-	    		exam.CreateCss9();	    			    		
+	    		exam.CreateCss9();
     	});   	
     	
     }
@@ -2062,10 +2065,18 @@ function ExamObj()
     	$(".exam_rembershli0").css({"margin":"0","padding":"0","font-family":"Microsoft YaHei","list-style-type":"none","line-height":"3rem","font-size":"13px","color":"#3a3838"});    	
     	$(".exam_rembershdiv3").css({"margin":"0.5rem 0 1rem 0","padding":"1rem 0","text-align":"center","font-family":"Microsoft YaHei"});
     	$(".exam_rembershbtn0").css({"margin":"0 1rem 0 0","padding":"0px 1rem","border":"1px solid #ded7d7","height":"2.3rem","border-radius":"0.2rem","font-size":"14px","color":"#3a3838","cursor":"pointer","font-family":"Microsoft YaHei","outline":"none"});    
+    	if( exam.index <= 1 )
+    	{	
+    		$(".exam_rembershbtn0:eq(2)").hide();
+    	}
+    	else
+    	{
+    		$(".exam_rembershbtn0:eq(2)").show();
+    	}	
     	$(".exam_rembershdl5").css({"margin":"10px 0 0 0","padding":"0"});
     	$(".exam_rembershdd6").css({"border":"1px solid #e4dede","margin":"10px 0 0 10px","padding":"0","width":"35px","height":"26px","float":"left","line-height":"26px","text-align":"center","font-family":"Microsoft YaHei","background":"#ded1d1","border-radius":"3px","cursor":"pointer","color":"#7b7b7a","position":"relative","top":0,"left":0});
     	$(".exam_rembershdd6_yes").css({"background":"#CDDC39","color":"#ffffff"});
-    	$(".exam_rembershdd6_yes2").css({"border":"1px solid #c57f16","background":"#CDDC39","color":"#ffffff"});
+    	$(".exam_rembershdd6_yes2").css({"border":"1px solid #2290e6","background":"#CDDC39","color":"#ffffff"});
     	$(".exam_rembershdd6_up").css({"background":"#807070","color":"#ffffff"});
     	$(".exam_rembershp3").css({"margin":"1rem 0 0 0","padding":"0","font-family":"Microsoft YaHei","color":"#1296db"});
     	$(".exam_rembershdd6_span").css({"display":"block","position":"absolute","top":"0","right":"0","font-size":"12px","height":"15px","line-height":"12px","color":"#141415"});
@@ -2074,7 +2085,11 @@ function ExamObj()
     	},function(){
     		$(this).css({"color":"#3e3c3c","text-decoration":"none"});
     	});
-    	
+    	$(".exam_rembershbtn0").hover(function(){   		
+    		$(this).css({"border":"1px solid #4450d2"});
+    	},function(){
+    		$(this).css({"border":"1px solid #ded7d7"});
+    	});
     }
     exam.rembershiproom=function(hobj,Sett,func)
     {

@@ -3620,7 +3620,7 @@ function GetKaoShiVipModule()
 		    	{
 		    		if( $index[$i-1]['index'] == $i )
 			    	{
-			    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes">'.$i;
+			    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes" onclick="exam.PageNumberVIP('.$i.');">'.$i;
 			    		if( $index[$i-1]['rightkey'] == '放弃' )
 			    		{
 			    			$kaotimodule .= '<span class="exam_rembershdd6_span"><font color="red"><b>'.$index[$i-1]['rightkey'].'</b></font></span>';
@@ -3640,7 +3640,7 @@ function GetKaoShiVipModule()
 		    	{
 		    		if( $index[$i-1]['index'] == $i )
 			    	{
-			    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes2">'.$i;
+			    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes2" onclick="exam.PageNumberVIP('.$i.');">'.$i;
 			    		if( $index[$i-1]['rightkey'] == '放弃' )
 			    		{
 			    			$kaotimodule .= '<span class="exam_rembershdd6_span"><font color="red"><b>'.$index[$i-1]['rightkey'].'</b></font></span>';
