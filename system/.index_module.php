@@ -3616,13 +3616,52 @@ function GetKaoShiVipModule()
 	    	
 	    	for($i=1;$i<=$timus['count'];$i++)
 	    	{
-	    		if( $index[$i-1]['index'] == $i )
+	    		if( $index[$i-1]['index'] != $_POST['index'] )
 		    	{
-		    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes">'.$i.'<span class="exam_rembershdd6_span">'.$index[$i-1]['rightkey'].'</span></dd>';
+		    		if( $index[$i-1]['index'] == $i )
+			    	{
+			    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes">'.$i;
+			    		if( $index[$i-1]['rightkey'] == '放弃' )
+			    		{
+			    			$kaotimodule .= '<span class="exam_rembershdd6_span"><font color="red"><b>'.$index[$i-1]['rightkey'].'</b></font></span>';
+			    		}
+			    		else 
+			    		{
+			    			$kaotimodule .= '<span class="exam_rembershdd6_span">'.$index[$i-1]['rightkey'].'</span>';
+			    		}
+			    		$kaotimodule .= '</dd>';
+			    	}
+			    	else 
+			    	{
+			    		$kaotimodule .= '<dd class="exam_rembershdd6">'.$i.'<span class="exam_rembershdd6_span"></span></dd>';
+			    	}
 		    	}
 		    	else 
 		    	{
-		    		$kaotimodule .= '<dd class="exam_rembershdd6">'.$i.'<span class="exam_rembershdd6_span"></span></dd>';
+		    		if( $index[$i-1]['index'] == $i )
+			    	{
+			    		$kaotimodule .= '<dd class="exam_rembershdd6 exam_rembershdd6_yes2">'.$i;
+			    		if( $index[$i-1]['rightkey'] == '放弃' )
+			    		{
+			    			$kaotimodule .= '<span class="exam_rembershdd6_span"><font color="red"><b>'.$index[$i-1]['rightkey'].'</b></font></span>';
+			    		}
+			    		else 
+			    		{
+			    			if( $index[$i-1]['index'] == $_POST['index'] )
+			    			{
+			    				$kaotimodule .= '<span class="exam_rembershdd6_span">'.$index[$i-1]['rightkey'].'</span>';
+			    			}
+			    			else 
+			    			{
+			    				$kaotimodule .= '<span class="exam_rembershdd6_span">'.$index[$i-1]['rightkey'].'</span>';
+			    			}
+			    		}
+			    		$kaotimodule .= '</dd>';
+			    	}
+			    	else 
+			    	{
+			    		$kaotimodule .= '<dd class="exam_rembershdd6">'.$i.'<span class="exam_rembershdd6_span"></span></dd>';
+			    	}
 		    	}
 	    	}
 	    	$kaotimodule .= '<dd style="clear:both;"></dd>';
@@ -3683,19 +3722,19 @@ function GetKaoShiVipModule()
 	    	}
 			elseif( $type == 3 )
 	    	{
-	    		$optionsArr = explode('&', $timus['kaoti'][$type][$tb]['options']);	    	
+	    		$optionsArr = explode('&', $timus['kaoti'][$type][$tb]['options']);		    		
 		    	if( !empty( $optionsArr ) )
 		    	{
 		    		foreach( $optionsArr as $k => $v )
 		    		{		    			
 				    	$kaotimodule .= '<li class="exam_rembershli0">';			    	
-				    	if( strstr($rightkey[$tb], $ds) )
+				    	if( $rightkey[$tb] == $v )
 				    	{
-				    		$kaotimodule .= '<label><input type="checkbox" name="rightkey" value="'.$v.'" checked="checked">'.$v.'</label>';
+				    		$kaotimodule .= '<label><input type="radio" name="rightkey" value="'.$v.'" checked="checked">'.$v.'</label>';
 				    	}
 				    	else
 				    	{
-				    		$kaotimodule .= '<label><input type="checkbox" name="rightkey" value="'.$v.'">'.$v.'</label>';
+				    		$kaotimodule .= '<label><input type="radio" name="rightkey" value="'.$v.'">'.$v.'</label>';
 				    	}
 				    	
 				    	$kaotimodule .= '</li>';
@@ -3709,11 +3748,11 @@ function GetKaoShiVipModule()
 	    	{	    
 	    		if( $rightkey[$tb] == SHOWCENTRENO_16 )
 	    		{	
-	    			$kaotimodule .= SHOWCENTRENO_9.'（<font color="red">'.strtoupper($rightkey[$tb]).'</font>）';
+	    			$kaotimodule .= SHOWCENTRENO_9.'<font color="red">（'.strtoupper($rightkey[$tb]).'）</font>';
 	    		}
 	    		else 
 	    		{
-	    			$kaotimodule .= SHOWCENTRENO_9.'（'.strtoupper($rightkey[$tb]).'）';
+	    			$kaotimodule .= SHOWCENTRENO_9.'<font color="#141415">（'.strtoupper($rightkey[$tb]).'）</font>';
 	    		}
 	    	}
 	    	else
@@ -3724,7 +3763,7 @@ function GetKaoShiVipModule()
 	    	$kaotimodule .= '<div class="exam_rembershdiv3">';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="确定" onclick="exam.ChargeEditionVIP();"/>'; 
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="放弃" onclick="exam.giveupVIP();"/>';
-	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="上一题" />';
+	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="上一题" onclick="exam.LastQuestionVIP();"/>';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="下一题" onclick="exam.NextQuestionVIP();"/>';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="交卷" />';
 	    	$kaotimodule .= '</div>';
@@ -3781,7 +3820,7 @@ function ChargeEditionVIP()
  	$_SESSION['ChARGEEDITIONVIPS_4'][$xb][$bel][$row['pid']][$index-1] = array('index'=>$index,'rightkey'=>strtoupper($rightkey));
  	$_SESSION['ChARGEEDITIONVIPS_index'][$xb][$bel][$row['pid']] = $index;
  	
- 	echo json_encode( array( 'error'=>0,'txt'=>SHOWCENTRENO_9.'（'.strtoupper($rightkey).'）','span'=>strtoupper($rightkey)) );
+ 	echo json_encode( array( 'error'=>0,'txt'=>SHOWCENTRENO_9.'<font color="#141415">（'.strtoupper($rightkey).'）</font>','span'=>strtoupper($rightkey)) );
 }
 function giveupVIP()
 {
@@ -3821,7 +3860,7 @@ function giveupVIP()
  	$_SESSION['ChARGEEDITIONVIPS_4'][$xb][$bel][$row['pid']][$index-1] = array('index'=>$index,'rightkey'=>SHOWCENTRENO_16);
  	$_SESSION['ChARGEEDITIONVIPS_index'][$xb][$bel][$row['pid']] = $index;
  	
- 	echo json_encode( array( 'error'=>0,'txt'=>SHOWCENTRENO_9.'（<font color="red">'.SHOWCENTRENO_16.'</font>）','span'=>SHOWCENTRENO_16) );
+ 	echo json_encode( array( 'error'=>0,'txt'=>SHOWCENTRENO_9.'<font color="red">（<b>'.SHOWCENTRENO_16.'</b>）</font>','span'=>SHOWCENTRENO_16) );
 }
 function GetUserName_index()
 {
