@@ -1855,9 +1855,28 @@ function ExamObj()
     	});
     }
     
-    exam.PageNumberVIP=function(i)
+    exam.PageNumberVIP=function(t,b,i)
     {
-    	alert(i);
+    	exam.type = t;
+    	exam.tb = b;
+    	exam.index = i;
+   	
+    	$.post(this.hosturl,{'act':'GetKaoShiVipModule','ordersn':exam.ordersn,'user':exam.user,'type':exam.type,'tb':exam.tb,'index':exam.index},function(data){
+    		   		
+    		var obj = eval( "("+data+")" );
+    		if( obj.error == 0 )
+    		{
+    			$(".exam_rembershdiv2").empty(); 
+    			$(".exam_rembershdiv2").append(obj.txt);
+    			exam.ts = obj.time;
+    			exam.danticount = obj.danticount;
+    		}
+    		else
+    		{
+    			$(".exam_rembershdiv2").append(obj.txt);
+    		}	
+    		exam.CreateCss9();
+    	}); 
     }
     exam.ChargeEditionVIP=function()
     {
@@ -1927,6 +1946,8 @@ function ExamObj()
     		exam.tb = exam.danticount-1;
     	}
     	
+    	console.log(exam.type+'---------'+exam.tb+'-----------'+exam.index);
+    	
     	$.post(this.hosturl,{'act':'GetKaoShiVipModule','ordersn':exam.ordersn,'user':exam.user,'type':exam.type,'tb':exam.tb,'index':exam.index},function(data){
 	    		
 	    		var obj = eval( "("+data+")" );
@@ -1964,7 +1985,9 @@ function ExamObj()
     		if( exam.type > 4 ) exam.type = 4;
     		exam.tb = 0;
     	}   	
-   	   	   	    	
+    	
+    	console.log(exam.type+'---------'+exam.tb+'-----------'+exam.index);
+    	
     	$.post(this.hosturl,{'act':'GetKaoShiVipModule','ordersn':exam.ordersn,'user':exam.user,'type':exam.type,'tb':exam.tb,'index':exam.index},function(data){
 	    		
 	    		var obj = eval( "("+data+")" );
