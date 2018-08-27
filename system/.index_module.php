@@ -3764,7 +3764,7 @@ function GetKaoShiVipModule()
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="放弃" onclick="exam.giveupVIP();"/>';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="上一题" onclick="exam.LastQuestionVIP();"/>';
 	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="下一题" onclick="exam.NextQuestionVIP();"/>';
-	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="交卷" />';
+	    	$kaotimodule .= '<input type="button" class="exam_rembershbtn0" value="交卷" onclick="exam.HandOver();"/>';
 	    	$kaotimodule .= '</div>';
 		}
     	
@@ -3774,6 +3774,77 @@ function GetKaoShiVipModule()
 	{
 		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_25));
 	}
+}
+function ReviewResults()
+{	
+	session_start();
+	
+	$ordersn = htmlspecialchars(GetIndexValue(1),ENT_QUOTES);
+    $username = htmlspecialchars(GetIndexValue(2),ENT_QUOTES);
+    
+    $flagstate = 0;/*0=未支付；1=已支付*/	
+	$where = ' ordernumber="'.$ordersn.'" and username="'.$username.'" and state='.$flagstate.' and FROM_UNIXTIME(daystime,"%Y-%m-%d %H:%i:%s")>="'.time().'" ';
+	$row1 = db()->select('*')->from(PRE.'paymentform')->where($where)->get()->array_row();
+	if( empty( $row1 ) )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_24));exit;
+	}
+		
+	$centreno = $row1['centreno'];
+		
+	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('centreno'=>$centreno))->get()->array_row();
+	if(  empty( $row )  )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_26));exit;
+	}
+    
+	$voidArr = array('E','C');
+	$pcArr = array('P','J');
+	$solve = $row['solve'];	
+	$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
+	
+	$xb = md5($row['pid'].$ordersn.$solve);
+	
+	$timus = $_SESSION['VIPKAOTIALLINFOINTHS_1'][$xb][$bel];
+	//echo $timus['count'].'<br/>';
+	$countArr = $_SESSION['ChARGEEDITIONVIPS_4'][$xb][$bel][$row['pid']];	
+	//echo count($countArr);
+	
+	require( base_url_name( SHOWPHPEXCELS_9 ) );
+}
+function GetHandOver()
+{
+	session_start();
+	
+	$ordersn = htmlspecialchars($_POST['ordersn'],ENT_QUOTES);
+    $username = htmlspecialchars($_POST['user'],ENT_QUOTES);
+    
+	$flagstate = 0;/*0=未支付；1=已支付*/	
+	$where = ' ordernumber="'.$ordersn.'" and username="'.$username.'" and state='.$flagstate.' and FROM_UNIXTIME(daystime,"%Y-%m-%d %H:%i:%s")>="'.time().'" ';
+	$row1 = db()->select('*')->from(PRE.'paymentform')->where($where)->get()->array_row();
+	if( empty( $row1 ) )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_24));exit;
+	}
+		
+	$centreno = $row1['centreno'];
+		
+	$row = db()->select('id,pid,reluser,title,centreno,solve,sort,tariff,descri,roomsets,typeofs,rule1,rule2,publitime,counts,state')->from(PRE.'createroom')->where(array('centreno'=>$centreno))->get()->array_row();
+	if(  empty( $row )  )
+	{
+		echo json_encode(array("error"=>1,'txt'=>SHOWCENTRENO_26));exit;
+	}
+    
+	$voidArr = array('E','C');
+	$pcArr = array('P','J');
+	$solve = $row['solve'];	
+	$bel = $voidArr[$row['tariff']].$pcArr[$row['roomsets']];
+	
+	$xb = md5($row['pid'].$ordersn.$solve);
+	
+	$countArr = $_SESSION['ChARGEEDITIONVIPS_4'][$xb][$bel][$row['pid']];
+	
+	echo count($countArr);
 }
 function ChargeEditionVIP()
 {

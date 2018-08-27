@@ -1800,6 +1800,30 @@ function ExamObj()
     	 }
     	 return i;
     }
+    exam.HandOver=function()
+    { 
+    	$.post(this.hosturl,{'act':'GetHandOver','ordersn':exam.ordersn,'user':exam.user},function(data){
+    			if( data == exam.totalrow )
+    			{
+    				//layer.msg('答题完毕，请交卷!!!');
+    				var html = '<iframe src="'+exam.hosturl+'/ReviewResults/'+exam.ordersn+'/'+exam.user+'" frameborder="0" width="100%" height="790"></iframe>';
+    				$(".exam_rembershdiv2").empty(); 
+        			$(".exam_rembershdiv2").append(html);
+        			exam.CreateCss9();
+    			}
+    			else
+    			{
+    				layer.confirm('<b>您还有'+(exam.totalrow-data)+'题未完成，是否现在提交试卷？</b>', {
+    					  title:false,
+    					  btn: ['确定','继续'] 
+    					}, function(){
+    					  layer.msg('交卷成功', {icon: 1});
+    					}, function(){
+    					  
+    				});
+    			}	
+    	});
+    }
     exam.CountDownTime=function()
     {
     	function runs()
@@ -1819,7 +1843,8 @@ function ExamObj()
     		
     		if( (tarr[1][0]+tarr[1][1]+tarr[1][2]) <= 0 )
 	    	{
-    			alert('时间到了，请交卷!!!');return false;
+    			layer.msg('时间到了，请交卷!!!');
+    			return false;
 	    	}
     		   		   	    		
 	    	if( (tarr[1][0]+tarr[1][1]+tarr[1][2]) > 0 )
@@ -1853,8 +1878,7 @@ function ExamObj()
     			}	
     		}
     	});
-    }
-    
+    }   
     exam.PageNumberVIP=function(t,b,i)
     {
     	exam.type = t;
@@ -1946,8 +1970,6 @@ function ExamObj()
     		exam.tb = exam.danticount-1;
     	}
     	
-    	console.log(exam.type+'---------'+exam.tb+'-----------'+exam.index);
-    	
     	$.post(this.hosturl,{'act':'GetKaoShiVipModule','ordersn':exam.ordersn,'user':exam.user,'type':exam.type,'tb':exam.tb,'index':exam.index},function(data){
 	    		
 	    		var obj = eval( "("+data+")" );
@@ -1984,9 +2006,7 @@ function ExamObj()
     		exam.type++;
     		if( exam.type > 4 ) exam.type = 4;
     		exam.tb = 0;
-    	}   	
-    	
-    	console.log(exam.type+'---------'+exam.tb+'-----------'+exam.index);
+    	}
     	
     	$.post(this.hosturl,{'act':'GetKaoShiVipModule','ordersn':exam.ordersn,'user':exam.user,'type':exam.type,'tb':exam.tb,'index':exam.index},function(data){
 	    		
